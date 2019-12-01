@@ -1,4 +1,4 @@
-package io.jenkins.plugins.forensics.util;
+package io.jenkins.plugins.util;
 
 import java.io.File;
 import java.util.Arrays;

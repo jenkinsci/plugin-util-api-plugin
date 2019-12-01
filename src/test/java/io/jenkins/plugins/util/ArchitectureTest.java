@@ -1,4 +1,4 @@
-package io.jenkins.plugins.forensics.util;
+package io.jenkins.plugins.util;
 
 import com.tngtech.archunit.core.domain.JavaModifier;
 import com.tngtech.archunit.junit.AnalyzeClasses;
@@ -18,7 +18,7 @@ import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.*;
  * @author Ullrich Hafner
  */
 @SuppressWarnings("hideutilityclassconstructor")
-@AnalyzeClasses(packages = "io.jenkins.plugins.forensics..")
+@AnalyzeClasses(packages = "io.jenkins.plugins..")
 class ArchitectureTest {
     @ArchTest
     static final ArchRule NO_PUBLIC_TEST_CLASSES =

@@ -538,7 +538,7 @@
         </executions>
         <configuration>
           <packages>
-            <package>io.jenkins.plugins.forensics</package>
+            <package>io.jenkins.plugins.util</package>
           </packages>
           <excludes>
             <exclude>.*ITest</exclude>

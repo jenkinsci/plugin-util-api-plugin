@@ -1,4 +1,4 @@
-package io.jenkins.plugins.forensics.util;
+package io.jenkins.plugins.util;
 
 import com.google.common.annotations.VisibleForTesting;
 import com.tngtech.archunit.base.DescribedPredicate;

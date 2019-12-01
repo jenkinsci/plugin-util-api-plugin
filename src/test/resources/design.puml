@@ -6,12 +6,6 @@ skinparam component {
   BackgroundColor #f8f8f8
 }
 
-[Blamer] <<..blame..>>
-[Miner] <<..miner>>
-
 [Utilities] <<..util>>
-
-[Blamer] --> [Utilities]
-[Miner] --> [Utilities]
 
 @enduml

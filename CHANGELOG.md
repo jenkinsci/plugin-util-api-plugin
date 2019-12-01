@@ -1,6 +1,6 @@
 # Changelog 
 
 All notable changes of this project will be automatically logged by release drafter in 
-[GitHub releases](https://github.com/jenkinsci/forensics-api-plugin/releases). 
+[GitHub releases](https://github.com/jenkinsci/plugin-util-api-plugin/releases). 
 
 This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).

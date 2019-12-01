@@ -21,9 +21,9 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/jenkinsci/forensics-api-plugin.git"
+    "url": "git+https://github.com/jenkinsci/plugin-util-api-plugin.git"
   },
   "author": "Ullrich Hafner",
   "license": "MIT",
-  "homepage": "https://github.com/jenkinsci/forensics-api-plugin#readme"
+  "homepage": "https://github.com/jenkinsci/plugin-util-api-plugin#readme"
 }
