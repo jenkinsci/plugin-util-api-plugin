@@ -33,6 +33,7 @@ import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.javascript.JavaScriptErrorListener;
 
 import edu.hm.hafner.util.PathUtil;
+import edu.hm.hafner.util.ResourceTest;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition;

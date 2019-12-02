@@ -6,6 +6,14 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.converters.Converter;
+import com.thoughtworks.xstream.converters.MarshallingContext;
+import com.thoughtworks.xstream.converters.UnmarshallingContext;
+import com.thoughtworks.xstream.io.HierarchicalStreamReader;
+import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
+
+import edu.hm.hafner.util.TreeString;
+import edu.hm.hafner.util.TreeStringBuilder;
 
 import hudson.XmlFile;
 import hudson.util.XStream2;
@@ -40,12 +48,22 @@ public abstract class AbstractXmlStream<T> {
      */
     protected abstract T createDefaultValue();
 
+    private XStream2 createStream() {
+        XStream2 xStream2 = new XStream2();
+        xStream2.registerConverter(new TreeStringConverter());
+        configureXStream(xStream2);
+        return xStream2;
+    }
+
     /**
-     * Creates a new {@link XStream2} to serialize an entity of the given type.
+     * Configures the {@link XStream} instance with custom converters or alias definitions. This default implementation
+     * is empty.
      *
-     * @return the stream
+     * @param xStream the {@link XStream} instance
      */
-    protected abstract XStream2 createStream();
+    protected void configureXStream(final XStream2 xStream) {
+        // empty default implementation
+    }
 
     /**
      * Reads the specified {@code file} and creates a new instance of the given type.
@@ -95,5 +113,32 @@ public abstract class AbstractXmlStream<T> {
             LOGGER.log(Level.SEVERE, "Failed to load " + dataFile, exception);
         }
         return defaultValue; // fallback
+    }
+
+    /**
+     * Default {@link Converter} implementation for XStream that does interning scoped to one unmarshalling.
+     */
+    private static final class TreeStringConverter implements Converter {
+        @Override
+        public void marshal(final Object source, final HierarchicalStreamWriter writer,
+                final MarshallingContext context) {
+            writer.setValue(source == null ? null : source.toString());
+        }
+
+        @Override
+        public Object unmarshal(final HierarchicalStreamReader reader, final UnmarshallingContext context) {
+            TreeStringBuilder builder = (TreeStringBuilder) context.get(TreeStringBuilder.class);
+            if (builder == null) {
+                builder = new TreeStringBuilder();
+                context.put(TreeStringBuilder.class, builder);
+                context.addCompletionCallback(builder::dedup, 0);
+            }
+            return builder.intern(reader.getValue());
+        }
+
+        @Override
+        public boolean canConvert(final Class type) {
+            return type == TreeString.class;
+        }
     }
 }
