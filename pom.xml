@@ -12,7 +12,7 @@
   <artifactId>plugin-util-api</artifactId>
   <groupId>io.jenkins.plugins</groupId>
   <packaging>hpi</packaging>
-  <name>Jenkins Plugin Utilities API Plugin</name>
+  <name>Plugin Utilities API Plugin</name>
   <version>${revision}${changelist}</version>
   <description>Jenkins plug-that provides several utility classes that can be used to accelerate plugin development.</description>
 
