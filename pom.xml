@@ -17,7 +17,7 @@
   <description>Jenkins plug-that provides several utility classes that can be used to accelerate plugin development.</description>
 
   <properties>
-    <revision>0.1.0</revision>
+    <revision>0.1.0-beta1</revision>
     <changelist>-SNAPSHOT</changelist>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <jenkins.version>2.138.4</jenkins.version>
