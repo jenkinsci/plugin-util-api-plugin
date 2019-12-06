@@ -13,7 +13,7 @@ import static org.mockito.Mockito.*;
  *
  * @author Ullrich Hafner
  */
-class ToolLoggerTest {
+class PluginLoggerTest {
     private static final String LOG_MESSAGE = "Hello ToolLogger!";
     private static final String TOOL_NAME = "test";
     private static final String EXPECTED_TOOL_PREFIX = "[test]";
