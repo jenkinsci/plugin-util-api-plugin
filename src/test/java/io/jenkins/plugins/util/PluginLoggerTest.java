@@ -9,7 +9,7 @@ import static java.util.Collections.*;
 import static org.mockito.Mockito.*;
 
 /**
- * Tests the class {@link LogHandler.PluginLogger}.
+ * Tests the class {@link PluginLogger}.
  *
  * @author Ullrich Hafner
  */
@@ -24,13 +24,13 @@ class PluginLoggerTest {
     @SuppressWarnings("PMD.CloseResource")
     void shouldLogSingleAndMultipleLines() {
         PrintStream printStream = mock(PrintStream.class);
-        LogHandler.PluginLogger logger = new LogHandler.PluginLogger(printStream, TOOL_NAME);
+        PluginLogger logger = new PluginLogger(printStream, TOOL_NAME);
 
         logger.log(LOG_MESSAGE);
 
         verify(printStream).println(EXPECTED_TOOL_PREFIX + " " + LOG_MESSAGE);
 
-        LogHandler.PluginLogger loggerWithBraces = new LogHandler.PluginLogger(printStream, EXPECTED_TOOL_PREFIX);
+        PluginLogger loggerWithBraces = new PluginLogger(printStream, EXPECTED_TOOL_PREFIX);
 
         loggerWithBraces.log(LOG_MESSAGE);
 
