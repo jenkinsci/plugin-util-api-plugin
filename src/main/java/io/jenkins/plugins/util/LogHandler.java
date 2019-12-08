@@ -1,0 +1,168 @@
+package io.jenkins.plugins.util;
+
+import java.io.PrintStream;
+import java.util.Collection;
+import java.util.List;
+
+import com.google.errorprone.annotations.FormatMethod;
+
+import edu.hm.hafner.util.FilteredLog;
+
+import hudson.model.TaskListener;
+
+/**
+ * Handles logging of issues log and error messages to a {@link TaskListener} instance.
+ *
+ * @author Ullrich Hafner
+ */
+@SuppressWarnings("PMD.LoggerIsNotStaticFinal")
+public class LogHandler {
+    private final PluginLogger errorLogger;
+    private final PluginLogger infoLogger;
+
+    private int infoPosition;
+    private int errorPosition;
+
+    /**
+     * Creates a new {@link LogHandler}.
+     *
+     * @param listener
+     *         the task listener that will print all log messages
+     * @param name
+     *         the name of the logger
+     */
+    public LogHandler(final TaskListener listener, final String name) {
+        this(listener, name, 0, 0);
+    }
+
+    /**
+     * Creates a new {@link LogHandler}.
+     *
+     * @param listener
+     *         the task listener that will print all log messages
+     * @param name
+     *         the name of the logger
+     * @param logger
+     *         the logger that contains the actual log messages
+     */
+    public LogHandler(final TaskListener listener, final String name, final FilteredLog logger) {
+        this(listener, name, logger.getInfoMessages().size(), logger.getErrorMessages().size());
+    }
+
+    private LogHandler(final TaskListener listener, final String name, final int infoPosition,
+            final int errorPosition) {
+        infoLogger = createLogger(listener, name);
+        errorLogger = createErrorLogger(listener, name);
+        this.infoPosition = infoPosition;
+        this.errorPosition = errorPosition;
+    }
+
+    private PluginLogger createErrorLogger(final TaskListener listener, final String name) {
+        return createLogger(listener, String.format("[%s] [-ERROR-]", name));
+    }
+
+    private PluginLogger createLogger(final TaskListener listener, final String name) {
+        return new PluginLogger(listener.getLogger(), name);
+    }
+
+    /**
+     * Log all info and error messages that are stored in the set of issues. Note that subsequent calls to this method
+     * will only log messages that have not yet been logged.
+     *
+     * @param logger
+     *         the logger with the collected messages
+     */
+    public void log(final FilteredLog logger) {
+        logErrorMessages(logger);
+        logInfoMessages(logger);
+    }
+
+    /**
+     * Logs the specified message.
+     *
+     * @param format
+     *         A <a href="../util/Formatter.html#syntax">format string</a>
+     * @param args
+     *         Arguments referenced by the format specifiers in the format string.  If there are more arguments than
+     *         format specifiers, the extra arguments are ignored.  The number of arguments is variable and may be
+     *         zero.
+     */
+    @FormatMethod
+    public void log(final String format, final Object... args) {
+        infoLogger.log(format, args);
+    }
+
+    // TODO: extract to method
+    private void logErrorMessages(final FilteredLog logger) {
+        List<String> errorMessages = logger.getErrorMessages();
+        if (errorPosition < errorMessages.size()) {
+            errorLogger.logEachLine(errorMessages.subList(errorPosition, errorMessages.size()));
+            errorPosition = errorMessages.size();
+        }
+    }
+
+    private void logInfoMessages(final FilteredLog logger) {
+        List<String> infoMessages = logger.getInfoMessages();
+        if (infoPosition < infoMessages.size()) {
+            infoLogger.logEachLine(infoMessages.subList(infoPosition, infoMessages.size()));
+            infoPosition = infoMessages.size();
+        }
+    }
+
+    /**
+     * A simple logger that prefixes each message with the name of a plugin.
+     *
+     * @author Ullrich Hafner
+     */
+    static class PluginLogger {
+        private final String pluginName;
+        private final PrintStream delegate;
+
+        /**
+         * Creates a new {@link PluginLogger}.
+         *
+         * @param logger
+         *         the logger to create
+         * @param pluginName
+         *         the name of the plugin
+         */
+        PluginLogger(final PrintStream logger, final String pluginName) {
+            if (pluginName.contains("[")) {
+                this.pluginName = pluginName + " ";
+            }
+            else {
+                this.pluginName = String.format("[%s] ", pluginName);
+            }
+            delegate = logger;
+        }
+
+        /**
+         * Logs the specified message.
+         *
+         * @param format
+         *         A <a href="../util/Formatter.html#syntax">format string</a>
+         * @param args
+         *         Arguments referenced by the format specifiers in the format string.  If there are more arguments than
+         *         format specifiers, the extra arguments are ignored.  The number of arguments is variable and may be
+         *         zero.
+         */
+        @FormatMethod
+        public void log(final String format, final Object... args) {
+            print(String.format(format, args));
+        }
+
+        /**
+         * Logs the specified messages.
+         *
+         * @param lines
+         *         the messages to log
+         */
+        public void logEachLine(final Collection<String> lines) {
+            lines.forEach(this::print);
+        }
+
+        private void print(final String line) {
+            delegate.println(pluginName + line);
+        }
+    }
+}
