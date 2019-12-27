@@ -112,11 +112,11 @@ public abstract class BuildAction<T> implements LastBuildAction, RunAction2, Ser
         lock.lock();
         try {
             if (resultReference == null) {
-                return readStatistics();
+                return readResult();
             }
             T result = this.resultReference.get();
             if (result == null) {
-                return readStatistics();
+                return readResult();
             }
             return result;
         }
@@ -125,7 +125,7 @@ public abstract class BuildAction<T> implements LastBuildAction, RunAction2, Ser
         }
     }
 
-    private T readStatistics() {
+    private T readResult() {
         T statistics = createXmlStream().read(getResultXmlPath());
         resultReference = new WeakReference<>(statistics);
         return statistics;
