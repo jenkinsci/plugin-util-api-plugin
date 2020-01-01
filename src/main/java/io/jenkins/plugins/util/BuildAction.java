@@ -43,7 +43,7 @@ public abstract class BuildAction<T> implements LastBuildAction, RunAction2, Ser
      * @param result
      *         the result to persist with this action
      */
-    public BuildAction(final Run<?, ?> owner, final T result) {
+    protected BuildAction(final Run<?, ?> owner, final T result) {
         this(owner, result, true);
     }
 

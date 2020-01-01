@@ -30,7 +30,7 @@ public abstract class JobAction<T extends BuildAction<?>> implements Action {
      * @param buildActionClass
      *         the type of the action to find
      */
-    public JobAction(final Job<?, ?> owner, final Class<T> buildActionClass) {
+    protected JobAction(final Job<?, ?> owner, final Class<T> buildActionClass) {
         this.owner = owner;
         this.buildActionClass = buildActionClass;
     }
