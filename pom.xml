@@ -23,7 +23,7 @@
     <jenkins-test-harness.version>2.49</jenkins-test-harness.version>
     <java.level>8</java.level>
     <spotbugs.failOnError>false</spotbugs.failOnError>
-    <codingstyle.version>0.3.1</codingstyle.version>
+    <codingstyle.version>0.3.2</codingstyle.version>
 
     <module.name>${project.groupId}.plugin.util.api</module.name>
 
