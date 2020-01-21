@@ -14,8 +14,11 @@
   <packaging>hpi</packaging>
   <name>Plugin Utilities API Plugin</name>
   <version>${revision}${changelist}</version>
-  <description>Jenkins plug-that provides several utility classes that can be used to accelerate plugin development.
+
+  <description>
+    Jenkins plug-that provides several utility classes that can be used to accelerate plugin development.
   </description>
+  <url>https://github.com/jenkinsci/plugin-util-api-plugin</url>
 
   <properties>
     <revision>0.1.0-beta6</revision>
@@ -23,10 +26,7 @@
 
     <module.name>${project.groupId}.plugin.util.api</module.name>
 
-    <!-- Library Dependencies Versions -->
     <commons.lang.version>3.9</commons.lang.version>
-    <spotbugs.annotations>3.1.12</spotbugs.annotations>
-
   </properties>
 
   <licenses>
@@ -51,8 +51,6 @@
       <artifactId>codingstyle</artifactId>
       <version>${codingstyle.version}</version>
     </dependency>
-
-    <!-- Project Dependencies -->
     <dependency>
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-lang3</artifactId>
