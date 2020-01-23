@@ -1,5 +1,7 @@
-addReviewers: false
+addReviewers: true
 addAssignees: true
 
+reviewers:
+  - uhafner
 assignees:
   - uhafner
