@@ -26,6 +26,7 @@
     <module.name>${project.groupId}.plugin.util.api</module.name>
 
     <commons.lang.version>3.9</commons.lang.version>
+    <codingstyle.library.version>0.3.3</codingstyle.library.version>
   </properties>
 
   <licenses>
@@ -48,7 +49,7 @@
     <dependency>
       <groupId>edu.hm.hafner</groupId>
       <artifactId>codingstyle</artifactId>
-      <version>${codingstyle.version}</version>
+      <version>${codingstyle.library.version}</version>
     </dependency>
     <dependency>
       <groupId>org.apache.commons</groupId>
@@ -75,7 +76,7 @@
     <dependency>
       <groupId>edu.hm.hafner</groupId>
       <artifactId>codingstyle</artifactId>
-      <version>${codingstyle.version}</version>
+      <version>${codingstyle.library.version}</version>
       <scope>test</scope>
       <type>test-jar</type>
     </dependency>
