@@ -8,7 +8,6 @@ import java.net.URL;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.logging.Level;
@@ -244,12 +243,7 @@ public abstract class IntegrationTest extends ResourceTest {
      * @return the workspace
      */
     protected String getAbsolutePathOfWorkspaceFile(final TopLevelItem job, final String fileName) {
-        try {
-            return new PathUtil().toString(Paths.get(getWorkspace(job).child(fileName).getRemote()));
-        }
-        catch (IOException e) {
-            throw new AssertionError(e);
-        }
+        return new PathUtil().createAbsolutePath(getWorkspace(job).getRemote(), fileName);
     }
 
     /**
@@ -511,7 +505,7 @@ public abstract class IntegrationTest extends ResourceTest {
         return new CpsFlowDefinition(script, true);
     }
 
-   /**
+    /**
      * Schedules a build for the specified job and waits for the job to finish. After the build has been finished the
      * builds result is checked to be equals to {@link Result#SUCCESS}.
      *
