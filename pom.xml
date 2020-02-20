@@ -50,6 +50,7 @@
       <groupId>edu.hm.hafner</groupId>
       <artifactId>codingstyle</artifactId>
       <version>${codingstyle.library.version}</version>
+      <scope>provided</scope> <!-- all classes will be extracted -->
     </dependency>
     <dependency>
       <groupId>org.apache.commons</groupId>
@@ -85,6 +86,26 @@
 
   <build>
     <plugins>
+      <!-- Unpack and copy classes of codingstyle so that these classes are part of this plugin -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>unpack-dependencies</id>
+            <phase>generate-resources</phase>
+            <goals>
+              <goal>unpack-dependencies</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>${project.build.directory}/classes</outputDirectory>
+              <includeArtifactIds>codingstyle</includeArtifactIds>
+              <excludeTypes>test-jar</excludeTypes>
+              <excludes>META-INF/**/*</excludes>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-jar-plugin</artifactId>
