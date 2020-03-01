@@ -103,6 +103,19 @@
               <excludes>META-INF/**/*</excludes>
             </configuration>
           </execution>
+          <execution>
+            <id>unpack-test-dependencies</id>
+            <phase>generate-resources</phase>
+            <goals>
+              <goal>unpack-dependencies</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>${project.build.directory}/test-classes</outputDirectory>
+              <includeArtifactIds>codingstyle</includeArtifactIds>
+              <excludeTypes>jar</excludeTypes>
+              <includes>edu/**/*</includes>
+            </configuration>
+          </execution>
         </executions>
       </plugin>
       <plugin>
