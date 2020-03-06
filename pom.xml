@@ -24,7 +24,7 @@
     <module.name>${project.groupId}.plugin.util.api</module.name>
 
     <commons.lang.version>3.9</commons.lang.version>
-    <codingstyle.library.version>1.0.2</codingstyle.library.version>
+    <codingstyle.library.version>${codingstyle.config.version}</codingstyle.library.version>
   </properties>
 
   <licenses>
