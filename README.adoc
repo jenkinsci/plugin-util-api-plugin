@@ -94,5 +94,5 @@ https://github.com/jenkinsci/warnings-ng-plugin[Warnings Next Generation plugin]
 or the https://github.com/jenkinsci/warnings-ng-plugin[Forensics plugin].
 
 image:https://ci.jenkins.io/job/Plugins/job/plugin-util-api-plugin/job/master/badge/icon[Jenkins, link={https://ci.jenkins.io/job/Plugins/job/plugin-util-api-plugin/job/master/}]
-image:https://github.com/jenkinsci/plugin-util-api-plugin/workflows/GitHub%20Actions/badge.svg[GitHub Actions, link={https://github.com/jenkinsci/plugin-util-api-plugin/actions}]
+image:https://github.com/jenkinsci/plugin-util-api-plugin/workflows/CI%20on%20all%20platforms/badge.svg?branch=master[GitHub Actions, link={https://github.com/jenkinsci/plugin-util-api-plugin/actions}]
 image:https://img.shields.io/github/issues-pr/jenkinsci/plugin-util-api-plugin.svg[GitHub pull requests, link={https://github.com/jenkinsci/plugin-util-api-plugin/pulls}]
