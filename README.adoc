@@ -2,10 +2,10 @@
 
 = Jenkins Plugin Utilities
 
-image:https://img.shields.io/jenkins/plugin/v/plugin-util-api.svg?label=latest%20version[Jenkins Plugin, link={https://plugins.jenkins.io/plugin-util-api}]
-image:https://img.shields.io/badge/Jenkins-2.204.4-green.svg?label=min.%20Jenkins[Jenkins Version, link={https://jenkins.io/download/lts}]
+image:https://img.shields.io/jenkins/plugin/v/plugin-util-api.svg?label=latest%20version[Jenkins Plugin, link=https://plugins.jenkins.io/plugin-util-api]
+image:https://img.shields.io/badge/Jenkins-2.204.4-green.svg?label=min.%20Jenkins[Jenkins Version, link=https://jenkins.io/download/lts]
 image:https://img.shields.io/badge/jdk-8-yellow.svg?label=min.%20JDK[JDK8]
-image:https://img.shields.io/badge/license-MIT-yellow.svg[License: MIT, link={https://opensource.org/licenses/MIT}]
+image:https://img.shields.io/badge/license-MIT-yellow.svg[License: MIT, link=https://opensource.org/licenses/MIT]
 
 This Jenkins plug-in provides utility classes that can be used to accelerate plugin development.
 
@@ -93,6 +93,6 @@ You can find several examples of Jenkins plugins that use this library, e.g.  th
 https://github.com/jenkinsci/warnings-ng-plugin[Warnings Next Generation plugin]
 or the https://github.com/jenkinsci/warnings-ng-plugin[Forensics plugin].
 
-image:https://ci.jenkins.io/job/Plugins/job/plugin-util-api-plugin/job/master/badge/icon[Jenkins, link={https://ci.jenkins.io/job/Plugins/job/plugin-util-api-plugin/job/master/}]
-image:https://github.com/jenkinsci/plugin-util-api-plugin/workflows/CI%20on%20all%20platforms/badge.svg?branch=master[GitHub Actions, link={https://github.com/jenkinsci/plugin-util-api-plugin/actions}]
-image:https://img.shields.io/github/issues-pr/jenkinsci/plugin-util-api-plugin.svg[GitHub pull requests, link={https://github.com/jenkinsci/plugin-util-api-plugin/pulls}]
+image:https://ci.jenkins.io/job/Plugins/job/plugin-util-api-plugin/job/master/badge/icon[Jenkins, link=https://ci.jenkins.io/job/Plugins/job/plugin-util-api-plugin/job/master/]
+image:https://github.com/jenkinsci/plugin-util-api-plugin/workflows/CI%20on%20all%20platforms/badge.svg?branch=master[GitHub Actions, link=https://github.com/jenkinsci/plugin-util-api-plugin/actions]
+image:https://img.shields.io/github/issues-pr/jenkinsci/plugin-util-api-plugin.svg[GitHub pull requests, link=https://github.com/jenkinsci/plugin-util-api-plugin/pulls]
