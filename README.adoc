@@ -3,7 +3,7 @@
 = Jenkins Plugin Utilities
 
 image:https://img.shields.io/jenkins/plugin/v/plugin-util-api.svg?label=latest%20version[Jenkins Plugin, link={https://plugins.jenkins.io/plugin-util-api}]
-image:https://img.shields.io/badge/Jenkins-2.138.4-green.svg?label=min.%20Jenkins[Jenkins Version, link={https://jenkins.io/download/lts}]
+image:https://img.shields.io/badge/Jenkins-2.204.4-green.svg?label=min.%20Jenkins[Jenkins Version, link={https://jenkins.io/download/lts}]
 image:https://img.shields.io/badge/jdk-8-yellow.svg?label=min.%20JDK[JDK8]
 image:https://img.shields.io/badge/license-MIT-yellow.svg[License: MIT, link={https://opensource.org/licenses/MIT}]
 
