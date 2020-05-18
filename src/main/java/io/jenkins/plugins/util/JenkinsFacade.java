@@ -10,6 +10,7 @@ import org.acegisecurity.AccessDeniedException;
 import org.apache.commons.lang3.StringUtils;
 
 import org.kohsuke.stapler.Stapler;
+import org.kohsuke.stapler.StaplerRequest;
 import hudson.DescriptorExtensionList;
 import hudson.ExtensionPoint;
 import hudson.model.AbstractItem;
@@ -122,7 +123,7 @@ public class JenkinsFacade implements Serializable {
      * @return the absolute URL
      */
     public String getImagePath(final BallColor color) {
-        return color.getImageOf("16x16");
+        return getContextPath() + "/images/16x16/" + color;
     }
 
     /**
@@ -134,7 +135,15 @@ public class JenkinsFacade implements Serializable {
      * @return the absolute URL
      */
     public String getImagePath(final String icon) {
-        return Stapler.getCurrentRequest().getContextPath() + Jenkins.RESOURCE_PATH + icon;
+        return getContextPath() + Jenkins.RESOURCE_PATH + icon;
+    }
+
+    private String getContextPath() {
+        StaplerRequest currentRequest = Stapler.getCurrentRequest();
+        if (currentRequest != null) {
+            return currentRequest.getContextPath();
+        }
+        return StringUtils.EMPTY;
     }
 
     /**
