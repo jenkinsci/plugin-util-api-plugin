@@ -123,7 +123,7 @@ public class JenkinsFacade implements Serializable {
      * @return the absolute URL
      */
     public String getImagePath(final BallColor color) {
-        return getContextPath() + "/images/16x16/" + color;
+        return getContextPath() + "/images/16x16/" + color.getImage();
     }
 
     /**
