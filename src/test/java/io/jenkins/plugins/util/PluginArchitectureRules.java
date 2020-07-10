@@ -3,11 +3,12 @@ package io.jenkins.plugins.util;
 import com.tngtech.archunit.core.domain.JavaModifier;
 import com.tngtech.archunit.lang.ArchRule;
 
+import org.kohsuke.stapler.DataBoundConstructor;
+import org.kohsuke.stapler.DataBoundSetter;
+import org.kohsuke.stapler.bind.JavaScriptMethod;
 import jenkins.model.Jenkins;
 
-import static com.tngtech.archunit.base.DescribedPredicate.*;
 import static com.tngtech.archunit.core.domain.JavaClass.Predicates.*;
-import static com.tngtech.archunit.lang.conditions.ArchPredicates.*;
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.*;
 
 /**
@@ -32,8 +33,9 @@ public final class PluginArchitectureRules {
     /** Junit 5 test classes should not be public. */
     public static final ArchRule NO_PUBLIC_TEST_CLASSES =
             noClasses().that().haveSimpleNameEndingWith("Test")
+                    .and().haveSimpleNameNotContaining("_jmh")
                     .and().doNotHaveModifier(JavaModifier.ABSTRACT)
-                    .and(doNot(have(simpleNameEndingWith("ITest"))))
+                    .and().haveSimpleNameNotEndingWith("ITest")
                     .should().bePublic();
 
     /** Some packages that are transitive dependencies of Jenkins should not be used at all. */
@@ -47,6 +49,28 @@ public final class PluginArchitectureRules {
             "junit..",
             "org.hamcrest..",
             "com.google.common.."));
+
+    /**
+     * Methods that are used as AJAX end points must be in public classes.
+     */
+    public static final ArchRule AJAX_PROXY_METHOD_MUST_BE_IN_PUBLIC_CLASS =
+            methods().that().areAnnotatedWith(JavaScriptMethod.class)
+                    .should().bePublic()
+                    .andShould().beDeclaredInClassesThat().arePublic();
+
+    /**
+     * Methods that use data binding must be in public classes.
+     */
+    static final ArchRule DATA_BOUND_CONSTRUCTOR_MUST_BE_IN_PUBLIC_CLASS =
+            constructors().that().areAnnotatedWith(DataBoundConstructor.class)
+                    .should().beDeclaredInClassesThat().arePublic();
+
+    /**
+     * Methods that use data binding must be in public classes.
+     */
+    static final ArchRule DATA_BOUND_SETTER_MUST_BE_IN_PUBLIC_CLASS =
+            methods().that().areAnnotatedWith(DataBoundSetter.class)
+                    .should().beDeclaredInClassesThat().arePublic();
 
     private PluginArchitectureRules() {
         // prevents instantiation
