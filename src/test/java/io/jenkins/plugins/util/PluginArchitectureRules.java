@@ -61,14 +61,14 @@ public final class PluginArchitectureRules {
     /**
      * Methods that use data binding must be in public classes.
      */
-    static final ArchRule DATA_BOUND_CONSTRUCTOR_MUST_BE_IN_PUBLIC_CLASS =
+    public static final ArchRule DATA_BOUND_CONSTRUCTOR_MUST_BE_IN_PUBLIC_CLASS =
             constructors().that().areAnnotatedWith(DataBoundConstructor.class)
                     .should().beDeclaredInClassesThat().arePublic();
 
     /**
      * Methods that use data binding must be in public classes.
      */
-    static final ArchRule DATA_BOUND_SETTER_MUST_BE_IN_PUBLIC_CLASS =
+    public static final ArchRule DATA_BOUND_SETTER_MUST_BE_IN_PUBLIC_CLASS =
             methods().that().areAnnotatedWith(DataBoundSetter.class)
                     .should().beDeclaredInClassesThat().arePublic();
 
