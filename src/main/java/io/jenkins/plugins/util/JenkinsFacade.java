@@ -163,7 +163,7 @@ public class JenkinsFacade implements Serializable {
         try {
             String rootUrl = getJenkins().getRootUrl();
             if (rootUrl != null) {
-                return rootUrl + "/" + url;
+                return rootUrl + url;
             }
         }
         catch (IllegalStateException ignored) {
