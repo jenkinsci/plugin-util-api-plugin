@@ -26,10 +26,6 @@ public class GlobalConfigurationItem extends GlobalConfiguration {
     protected GlobalConfigurationItem() {
         super();
 
-        activatePersistence();
-    }
-
-    private void activatePersistence() {
         actualLoad = super::load;
         actualSave = super::save;
     }
@@ -54,7 +50,8 @@ public class GlobalConfigurationItem extends GlobalConfiguration {
      * @return this
      */
     protected Object readResolve() {
-        activatePersistence();
+        actualLoad = super::load;
+        actualSave = super::save;
 
         return this;
     }

@@ -14,6 +14,7 @@ import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 
 import edu.hm.hafner.util.TreeString;
 import edu.hm.hafner.util.TreeStringBuilder;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import hudson.XmlFile;
 import hudson.util.XStream2;
@@ -26,6 +27,7 @@ import hudson.util.XStream2;
  *
  * @author Ullrich Hafner
  */
+@SuppressFBWarnings(value = "CRLF_INJECTION_LOGS", justification = "Filename is always safe")
 public abstract class AbstractXmlStream<T> {
     private static final Logger LOGGER = Logger.getLogger(AbstractXmlStream.class.getName());
 
