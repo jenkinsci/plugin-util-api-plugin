@@ -70,8 +70,6 @@ public abstract class IntegrationTest extends ResourceTest {
     private static final String FILE_NAME_PATTERN = "%s-issues.txt";
     private static final Charset UTF_8 = StandardCharsets.UTF_8;
 
-    /** Step to publish a set of issues. Uses defaults for all options. */
-    protected static final String PUBLISH_ISSUES_STEP = "publishIssues issues:[issues]";
     private static final String WINDOWS_FILE_ACCESS_READ_ONLY = "RX";
     private static final String WINDOWS_FILE_DENY = "/deny";
 
@@ -141,6 +139,23 @@ public abstract class IntegrationTest extends ResourceTest {
             child.copyFrom(new ByteArrayInputStream(content.getBytes(UTF_8)));
         }
         catch (IOException | InterruptedException e) {
+            throw new AssertionError(e);
+        }
+    }
+
+    /**
+     * Returns the console log as a String.
+     *
+     * @param build
+     *         the build to get the log for
+     *
+     * @return the console log
+     */
+    protected String getConsoleLog(final Run<?, ?> build) {
+        try {
+            return JenkinsRule.getLog(build);
+        }
+        catch (IOException e) {
             throw new AssertionError(e);
         }
     }
