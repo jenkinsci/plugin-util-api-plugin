@@ -11,7 +11,9 @@ import com.gargoylesoftware.htmlunit.html.HtmlPage;
  *
  * @author Ullrich Hafner
  * @see <a href="https://martinfowler.com/bliki/PageObject.html">Page Object pattern</a>
+ * @deprecated UI tests should use ATH plugin tests
  */
+@Deprecated
 public class PageObject {
     private final HtmlPage page;
 
@@ -38,6 +40,14 @@ public class PageObject {
         return getPage().asText();
     }
 
+    /**
+     * Clicks the selected element.
+     *
+     * @param element
+     *         the element to click
+     *
+     * @return the resulting HTML page
+     */
     public static HtmlPage clickOnElement(final DomElement element) {
         try {
             return element.click();
@@ -47,6 +57,9 @@ public class PageObject {
         }
     }
 
+    /**
+     * Reloads the current page.
+     */
     public void refresh() {
         try {
             getPage().refresh();
