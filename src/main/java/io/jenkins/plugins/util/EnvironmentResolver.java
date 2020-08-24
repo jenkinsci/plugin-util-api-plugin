@@ -3,7 +3,7 @@ package io.jenkins.plugins.util;
 import org.apache.commons.lang3.StringUtils;
 
 import edu.hm.hafner.util.VisibleForTesting;
-import edu.umd.cs.findbugs.annotations.Nullable;
+import edu.umd.cs.findbugs.annotations.CheckForNull;
 
 import hudson.EnvVars;
 import hudson.Util;
@@ -42,7 +42,7 @@ public class EnvironmentResolver {
      *
      * @return the expanded value
      */
-    public String expandEnvironmentVariables(@Nullable final EnvVars environment, final String nonExpandedValue) {
+    public String expandEnvironmentVariables(@CheckForNull final EnvVars environment, final String nonExpandedValue) {
         String expanded = nonExpandedValue;
         if (environment != null && !environment.isEmpty()) {
             for (int i = 0; i < resolveVariablesDepth && StringUtils.isNotBlank(expanded); i++) {
