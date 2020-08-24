@@ -9,7 +9,7 @@ import java.util.Optional;
 import java.util.concurrent.locks.ReentrantLock;
 
 import edu.hm.hafner.util.VisibleForTesting;
-import edu.umd.cs.findbugs.annotations.Nullable;
+import edu.umd.cs.findbugs.annotations.CheckForNull;
 
 import hudson.model.Action;
 import hudson.model.Run;
@@ -32,7 +32,7 @@ public abstract class BuildAction<T> implements LastBuildAction, RunAction2, Ser
     private transient Run<?, ?> owner;
     private transient ReentrantLock lock = new ReentrantLock();
 
-    @Nullable
+    @CheckForNull
     private transient WeakReference<T> resultReference;
 
     /**
@@ -152,7 +152,7 @@ public abstract class BuildAction<T> implements LastBuildAction, RunAction2, Ser
      * @return the next available {@link BuildAction}, or an empty result if there is no such action
      */
     public static <T extends BuildAction<?>> Optional<T> getBuildActionFromHistoryStartingFrom(
-            @Nullable final Run<?, ?> baseline, final Class<T> buildActionClass) {
+            @CheckForNull final Run<?, ?> baseline, final Class<T> buildActionClass) {
         for (Run<?, ?> run = baseline; run != null; run = run.getPreviousBuild()) {
             T action = run.getAction(buildActionClass);
             if (action != null) {
