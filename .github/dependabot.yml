@@ -6,6 +6,19 @@ updates:
     interval: daily
   open-pull-requests-limit: 10
   ignore:
-  - dependency-name: org.ow2.asm:asm
+  - dependency-name: org.eclipse.collections:eclipse-collections
     versions:
-    - "> 5.0.4"
+    - ">= 10.a"
+  - dependency-name: org.eclipse.collections:eclipse-collections-api
+    versions:
+    - ">= 10.a"
+  - dependency-name: org.jenkins-ci.plugins:jackson2-api
+    versions:
+    - "> 2.11.1"
+  - dependency-name: com.fasterxml.jackson.core:jackson-databind
+    versions:
+    - "> 2.11.1"
+- package-ecosystem: "github-actions"
+  directory: "/"
+  schedule:
+    interval: "daily"
