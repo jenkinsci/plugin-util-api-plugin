@@ -6,7 +6,6 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import org.acegisecurity.AccessDeniedException;
 import org.apache.commons.lang3.StringUtils;
 
 import org.kohsuke.stapler.Stapler;
@@ -91,8 +90,12 @@ public class JenkinsFacade implements Serializable {
         try {
             return Optional.ofNullable(getJenkins().getItemByFullName(name, Job.class));
         }
-        catch (AccessDeniedException ignore) {
-            return Optional.empty();
+        catch (RuntimeException x) { // TODO switch to simple catch (AccessDeniedException) when baseline includes Spring Security
+            if (x.getClass().getSimpleName().startsWith("AccessDeniedException")) {
+                return Optional.empty();
+            } else {
+                throw x;
+            }
         }
     }
 
@@ -108,10 +111,13 @@ public class JenkinsFacade implements Serializable {
         try {
             return Optional.ofNullable(Run.fromExternalizableId(id));
         }
-        catch (AccessDeniedException ignore) {
-            // ignore
+        catch (RuntimeException x) { // TODO switch to simple catch (AccessDeniedException) when baseline includes Spring Security
+            if (x.getClass().getSimpleName().startsWith("AccessDeniedException")) {
+                return Optional.empty();
+            } else {
+                throw x;
+            }
         }
-        return Optional.empty();
     }
 
     /**
