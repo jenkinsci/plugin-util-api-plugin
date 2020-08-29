@@ -85,7 +85,7 @@ public class JenkinsFacade implements Serializable {
      *
      * @return the selected job, if it exists under the given full name and if it is accessible
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({"unchecked", "checkstyle:IllegalCatch"})
     public Optional<Job<?, ?>> getJob(final String name) {
         try {
             return Optional.ofNullable(getJenkins().getItemByFullName(name, Job.class));
@@ -93,7 +93,8 @@ public class JenkinsFacade implements Serializable {
         catch (RuntimeException x) { // TODO switch to simple catch (AccessDeniedException) when baseline includes Spring Security
             if (x.getClass().getSimpleName().startsWith("AccessDeniedException")) {
                 return Optional.empty();
-            } else {
+            }
+            else {
                 throw x;
             }
         }
@@ -107,6 +108,7 @@ public class JenkinsFacade implements Serializable {
      *
      * @return the selected build, if it exists with the given ID and if it is accessible
      */
+    @SuppressWarnings("checkstyle:IllegalCatch")
     public Optional<Run<?, ?>> getBuild(final String id) {
         try {
             return Optional.ofNullable(Run.fromExternalizableId(id));
@@ -114,7 +116,8 @@ public class JenkinsFacade implements Serializable {
         catch (RuntimeException x) { // TODO switch to simple catch (AccessDeniedException) when baseline includes Spring Security
             if (x.getClass().getSimpleName().startsWith("AccessDeniedException")) {
                 return Optional.empty();
-            } else {
+            }
+            else {
                 throw x;
             }
         }
