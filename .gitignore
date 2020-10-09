@@ -3,4 +3,6 @@ target
 *.iml
 .classpath
 pom.xml.versionsBackup
+release.properties
+pom.xml.releaseBackup
 .DS_Store
