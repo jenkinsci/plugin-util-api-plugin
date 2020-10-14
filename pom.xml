@@ -49,12 +49,12 @@
       <artifactId>codingstyle</artifactId>
       <version>${codingstyle.library.version}</version>
       <exclusions>
-        <!-- Remove once once on at least 2.249 baseline -->
+        <!-- Remove once on at least 2.249 baseline -->
         <exclusion>
           <groupId>com.github.spotbugs</groupId>
           <artifactId>spotbugs-annotations</artifactId>
         </exclusion>
-        <!-- Remove once once on at least the baseline after 2.249 -->
+        <!-- Remove once on at least the baseline after 2.249 -->
         <exclusion>
           <groupId>commons-io</groupId>
           <artifactId>commons-io</artifactId>
@@ -182,4 +182,3 @@
   </pluginRepositories>
 
 </project>
-
