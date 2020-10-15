@@ -89,6 +89,18 @@
       <version>${codingstyle.library.version}</version>
       <scope>test</scope>
       <type>test-jar</type>
+      <exclusions>
+        <!-- Remove once on at least 2.249 baseline -->
+        <exclusion>
+          <groupId>com.github.spotbugs</groupId>
+          <artifactId>spotbugs-annotations</artifactId>
+        </exclusion>
+        <!-- Remove once on at least the baseline after 2.249 -->
+        <exclusion>
+          <groupId>commons-io</groupId>
+          <artifactId>commons-io</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
 
   </dependencies>
