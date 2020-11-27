@@ -1,0 +1,10 @@
+<?jelly escape-by-default='true'?>
+<j:jelly xmlns:j="jelly:core" xmlns:f="/lib/form" xmlns:st="jelly:stapler">
+
+  <st:documentation>
+    Provides a combobox field that uses POST for validation.
+  </st:documentation>
+
+  <f:combobox checkMethod="post"/>
+
+</j:jelly>

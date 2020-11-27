@@ -1,11 +1,21 @@
 package io.jenkins.plugins.util;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import com.tngtech.archunit.base.DescribedPredicate;
+import com.tngtech.archunit.core.domain.JavaClass;
 import com.tngtech.archunit.core.domain.JavaModifier;
 import com.tngtech.archunit.lang.ArchRule;
 
 import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.DataBoundSetter;
 import org.kohsuke.stapler.bind.JavaScriptMethod;
+import org.kohsuke.stapler.verb.POST;
+import hudson.model.AbstractProject;
+import hudson.model.Descriptor;
+import hudson.util.FormValidation;
 import jenkins.model.Jenkins;
 
 import static com.tngtech.archunit.core.domain.JavaClass.Predicates.*;
@@ -72,7 +82,37 @@ public final class PluginArchitectureRules {
             methods().that().areAnnotatedWith(DataBoundSetter.class)
                     .should().beDeclaredInClassesThat().arePublic();
 
+    /**
+     * Methods that are used as AJAX end points must be in public classes.
+     */
+    public static final ArchRule USE_POST_FOR_VALIDATION_END_POINTS =
+            methods().that().areDeclaredInClassesThat().areAssignableTo(Descriptor.class)
+                    .and().haveNameMatching("do[A-Z].*")
+                    .and().haveRawReturnType(FormValidation.class)
+                    .and().haveRawParameterTypes(new FormValidationSignaturePredicate())
+                    .should().beAnnotatedWith(POST.class)
+                    .andShould().bePublic();
+
     private PluginArchitectureRules() {
         // prevents instantiation
+    }
+
+    private static class FormValidationSignaturePredicate extends DescribedPredicate<List<JavaClass>> {
+        FormValidationSignaturePredicate() {
+            super("do* method signatures that should be guarded by @POST");
+        }
+
+        @Override
+        public boolean apply(final List<JavaClass> input) {
+            List<String> qualifiedNames = input.stream()
+                    .map(JavaClass::getFullName).collect(Collectors.toList());
+            return qualifiedNames.equals(asList(String.class))
+                    || qualifiedNames.equals(asList(String.class, AbstractProject.class))
+                    || qualifiedNames.equals(asList(AbstractProject.class, String.class));
+        }
+
+        private List<String> asList(final Class<?>... parameterClasses) {
+            return Arrays.stream(parameterClasses).map(Class::getName).collect(Collectors.toList());
+        }
     }
 }
