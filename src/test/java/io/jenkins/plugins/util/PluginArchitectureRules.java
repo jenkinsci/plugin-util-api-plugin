@@ -110,13 +110,13 @@ public final class PluginArchitectureRules {
                     .and().haveRawReturnType(ofAllowedClasses(ComboBoxModel.class, ListBoxModel.class))
                     .should().beAnnotatedWith(POST.class)
                     .andShould().bePublic()
-                    .andShould(havePermissionCHeck());
+                    .andShould(checkPermissions());
 
     private static FormValidationSignaturePredicate ofAllowedValidationMethodSignatures() {
         return new FormValidationSignaturePredicate();
     }
 
-    private static HavePermissionCheck havePermissionCHeck() {
+    private static HavePermissionCheck checkPermissions() {
         return new HavePermissionCheck();
     }
 
@@ -139,7 +139,7 @@ public final class PluginArchitectureRules {
 
             if (callsFromSelf.stream().anyMatch(
                     javaCall -> javaCall.getTarget().getOwner().getFullName().equals(JenkinsFacade.class.getName())
-                            && javaCall.getTarget().getName().equals("hasPermission"))) {
+                            && "hasPermission".equals(javaCall.getTarget().getName()))) {
                 return;
             }
             events.add(SimpleConditionEvent.violated(item,
@@ -149,17 +149,17 @@ public final class PluginArchitectureRules {
     }
 
     private static class AllowedClasses extends DescribedPredicate<JavaClass> {
-        private final List<String> allowedClasses;
+        private final List<String> allowedClassNames;
 
         AllowedClasses(final Class<?>... classes) {
             super("raw return type of any of %s", Arrays.toString(classes));
 
-            allowedClasses = Arrays.stream(classes).map(Class::getName).collect(Collectors.toList());
+            allowedClassNames = Arrays.stream(classes).map(Class::getName).collect(Collectors.toList());
         }
 
         @Override
         public boolean apply(final JavaClass input) {
-            return allowedClasses.contains(input.getFullName());
+            return allowedClassNames.contains(input.getFullName());
         }
     }
 
