@@ -2,12 +2,18 @@ package io.jenkins.plugins.util;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import com.tngtech.archunit.base.DescribedPredicate;
+import com.tngtech.archunit.core.domain.JavaCall;
 import com.tngtech.archunit.core.domain.JavaClass;
+import com.tngtech.archunit.core.domain.JavaMethod;
 import com.tngtech.archunit.core.domain.JavaModifier;
+import com.tngtech.archunit.lang.ArchCondition;
 import com.tngtech.archunit.lang.ArchRule;
+import com.tngtech.archunit.lang.ConditionEvents;
+import com.tngtech.archunit.lang.SimpleConditionEvent;
 
 import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.DataBoundSetter;
@@ -15,7 +21,9 @@ import org.kohsuke.stapler.bind.JavaScriptMethod;
 import org.kohsuke.stapler.verb.POST;
 import hudson.model.AbstractProject;
 import hudson.model.Descriptor;
+import hudson.util.ComboBoxModel;
 import hudson.util.FormValidation;
+import hudson.util.ListBoxModel;
 import jenkins.model.Jenkins;
 
 import static com.tngtech.archunit.core.domain.JavaClass.Predicates.*;
@@ -89,12 +97,70 @@ public final class PluginArchitectureRules {
             methods().that().areDeclaredInClassesThat().areAssignableTo(Descriptor.class)
                     .and().haveNameMatching("do[A-Z].*")
                     .and().haveRawReturnType(FormValidation.class)
-                    .and().haveRawParameterTypes(new FormValidationSignaturePredicate())
+                    .and().haveRawParameterTypes(ofAllowedValidationMethodSignatures())
                     .should().beAnnotatedWith(POST.class)
                     .andShould().bePublic();
 
+    /**
+     * List model methods that are used as AJAX end points must use @POST and have a permission check.
+     */
+    public static final ArchRule USE_POST_FOR_LIST_AND_COMBOBOX_FILL =
+            methods().that().areDeclaredInClassesThat().areAssignableTo(Descriptor.class)
+                    .and().haveNameMatching("doFill[A-Z].*")
+                    .and().haveRawReturnType(ofAllowedClasses(ComboBoxModel.class, ListBoxModel.class))
+                    .should().beAnnotatedWith(POST.class)
+                    .andShould().bePublic()
+                    .andShould(checkPermissions());
+
+    private static FormValidationSignaturePredicate ofAllowedValidationMethodSignatures() {
+        return new FormValidationSignaturePredicate();
+    }
+
+    private static HavePermissionCheck checkPermissions() {
+        return new HavePermissionCheck();
+    }
+
+    private static DescribedPredicate<JavaClass> ofAllowedClasses(final Class<?>... classes) {
+        return new AllowedClasses(classes);
+    }
+
     private PluginArchitectureRules() {
         // prevents instantiation
+    }
+
+    private static class HavePermissionCheck extends ArchCondition<JavaMethod> {
+        HavePermissionCheck() {
+            super("should have a permission check");
+        }
+
+        @Override
+        public void check(final JavaMethod item, final ConditionEvents events) {
+            Set<JavaCall<?>> callsFromSelf = item.getCallsFromSelf();
+
+            if (callsFromSelf.stream().anyMatch(
+                    javaCall -> javaCall.getTarget().getOwner().getFullName().equals(JenkinsFacade.class.getName())
+                            && "hasPermission".equals(javaCall.getTarget().getName()))) {
+                return;
+            }
+            events.add(SimpleConditionEvent.violated(item,
+                    String.format("JenkinsFacade not called in %s in %s",
+                            item.getDescription(), item.getSourceCodeLocation())));
+        }
+    }
+
+    private static class AllowedClasses extends DescribedPredicate<JavaClass> {
+        private final List<String> allowedClassNames;
+
+        AllowedClasses(final Class<?>... classes) {
+            super("raw return type of any of %s", Arrays.toString(classes));
+
+            allowedClassNames = Arrays.stream(classes).map(Class::getName).collect(Collectors.toList());
+        }
+
+        @Override
+        public boolean apply(final JavaClass input) {
+            return allowedClassNames.contains(input.getFullName());
+        }
     }
 
     private static class FormValidationSignaturePredicate extends DescribedPredicate<List<JavaClass>> {
