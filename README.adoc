@@ -12,7 +12,7 @@ This Jenkins plug-in provides utility classes that can be used to accelerate plu
 
 == How to use the plugin
 
-In order to use this JS library, add a maven dependency to your pom:
+In order to use this small library, add a maven dependency to your pom:
 
 [source,xml]
 ----
