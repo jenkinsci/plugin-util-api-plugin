@@ -95,11 +95,12 @@ public final class PluginArchitectureRules {
      */
     public static final ArchRule USE_POST_FOR_VALIDATION_END_POINTS =
             methods().that().areDeclaredInClassesThat().areAssignableTo(Descriptor.class)
-                    .and().haveNameMatching("do[A-Z].*")
+                    .and().haveNameMatching("doCheck[A-Z].*")
                     .and().haveRawReturnType(FormValidation.class)
                     .and().haveRawParameterTypes(ofAllowedValidationMethodSignatures())
                     .should().beAnnotatedWith(POST.class)
-                    .andShould().bePublic();
+                    .andShould().bePublic()
+                    .andShould(checkPermissions());
 
     /**
      * List model methods that are used as AJAX end points must use @POST and have a permission check.
