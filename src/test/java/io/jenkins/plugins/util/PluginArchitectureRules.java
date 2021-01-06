@@ -2,11 +2,9 @@ package io.jenkins.plugins.util;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import com.tngtech.archunit.base.DescribedPredicate;
-import com.tngtech.archunit.core.domain.JavaCall;
 import com.tngtech.archunit.core.domain.JavaClass;
 import com.tngtech.archunit.core.domain.JavaMethod;
 import com.tngtech.archunit.core.domain.JavaModifier;
@@ -130,19 +128,17 @@ public final class PluginArchitectureRules {
 
         @Override
         public void check(final JavaMethod item, final ConditionEvents events) {
-            Set<JavaCall<?>> callsFromSelf = item.getCallsFromSelf();
-
             if (item.getModifiers().contains(JavaModifier.SYNTHETIC)) {
                 return;
             }
 
-            if (callsFromSelf.stream().anyMatch(
+            if (item.getCallsFromSelf().stream().anyMatch(
                     javaCall -> javaCall.getTarget().getOwner().getFullName().equals(JenkinsFacade.class.getName())
                             && "hasPermission".equals(javaCall.getTarget().getName()))) {
                 return;
             }
             events.add(SimpleConditionEvent.violated(item,
-                    String.format("JenkinsFacade not called in %s in %s",
+                    String.format("JenkinsFacade.hasPermission() not called in %s in %s",
                             item.getDescription(), item.getSourceCodeLocation())));
         }
     }
