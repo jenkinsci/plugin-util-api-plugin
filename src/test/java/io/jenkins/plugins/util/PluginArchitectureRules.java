@@ -19,7 +19,6 @@ import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.DataBoundSetter;
 import org.kohsuke.stapler.bind.JavaScriptMethod;
 import org.kohsuke.stapler.verb.POST;
-import hudson.model.AbstractProject;
 import hudson.model.Descriptor;
 import hudson.util.ComboBoxModel;
 import hudson.util.FormValidation;
@@ -97,7 +96,6 @@ public final class PluginArchitectureRules {
             methods().that().areDeclaredInClassesThat().areAssignableTo(Descriptor.class)
                     .and().haveNameMatching("doCheck[A-Z].*")
                     .and().haveRawReturnType(FormValidation.class)
-                    .and().haveRawParameterTypes(ofAllowedValidationMethodSignatures())
                     .should().beAnnotatedWith(POST.class)
                     .andShould().bePublic()
                     .andShould(checkPermissions());
@@ -112,10 +110,6 @@ public final class PluginArchitectureRules {
                     .should().beAnnotatedWith(POST.class)
                     .andShould().bePublic()
                     .andShould(checkPermissions());
-
-    private static FormValidationSignaturePredicate ofAllowedValidationMethodSignatures() {
-        return new FormValidationSignaturePredicate();
-    }
 
     private static HavePermissionCheck checkPermissions() {
         return new HavePermissionCheck();
@@ -137,6 +131,10 @@ public final class PluginArchitectureRules {
         @Override
         public void check(final JavaMethod item, final ConditionEvents events) {
             Set<JavaCall<?>> callsFromSelf = item.getCallsFromSelf();
+
+            if (item.getModifiers().contains(JavaModifier.SYNTHETIC)) {
+                return;
+            }
 
             if (callsFromSelf.stream().anyMatch(
                     javaCall -> javaCall.getTarget().getOwner().getFullName().equals(JenkinsFacade.class.getName())
@@ -161,25 +159,6 @@ public final class PluginArchitectureRules {
         @Override
         public boolean apply(final JavaClass input) {
             return allowedClassNames.contains(input.getFullName());
-        }
-    }
-
-    private static class FormValidationSignaturePredicate extends DescribedPredicate<List<JavaClass>> {
-        FormValidationSignaturePredicate() {
-            super("do* method signatures that should be guarded by @POST");
-        }
-
-        @Override
-        public boolean apply(final List<JavaClass> input) {
-            List<String> qualifiedNames = input.stream()
-                    .map(JavaClass::getFullName).collect(Collectors.toList());
-            return qualifiedNames.equals(asList(String.class))
-                    || qualifiedNames.equals(asList(String.class, AbstractProject.class))
-                    || qualifiedNames.equals(asList(AbstractProject.class, String.class));
-        }
-
-        private List<String> asList(final Class<?>... parameterClasses) {
-            return Arrays.stream(parameterClasses).map(Class::getName).collect(Collectors.toList());
         }
     }
 }
