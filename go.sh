@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 JENKINS_HOME=../docker/volumes/jenkins-home
 
 mvn clean install || { echo "Build failed"; exit 1; }
