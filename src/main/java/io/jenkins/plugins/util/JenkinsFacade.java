@@ -77,6 +77,20 @@ public class JenkinsFacade implements Serializable {
     }
 
     /**
+     * Checks if the current security principal has this permission for the specified project.
+     *
+     * @param permission
+     *         the permission to check for
+     * @param project
+     *         the project to check the permissions for
+     *
+     * @return {@code false} if the user doesn't have the permission
+     */
+    public boolean hasPermission(final Permission permission, final Job<?, ?> project) {
+        return getJenkins().getAuthorizationStrategy().getACL(project).hasPermission(permission);
+    }
+
+    /**
      * Gets a {@link Job} by its full name. Full names are like path names, where each name of {@link Item} is combined
      * by '/'.
      *
