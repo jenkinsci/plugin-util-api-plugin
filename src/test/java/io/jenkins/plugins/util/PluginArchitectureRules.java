@@ -4,10 +4,14 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+
 import com.tngtech.archunit.base.DescribedPredicate;
 import com.tngtech.archunit.core.domain.JavaClass;
 import com.tngtech.archunit.core.domain.JavaMethod;
 import com.tngtech.archunit.core.domain.JavaModifier;
+import com.tngtech.archunit.junit.ArchTest;
 import com.tngtech.archunit.lang.ArchCondition;
 import com.tngtech.archunit.lang.ArchRule;
 import com.tngtech.archunit.lang.ConditionEvents;
@@ -52,6 +56,19 @@ public final class PluginArchitectureRules {
                     .and().doNotHaveModifier(JavaModifier.ABSTRACT)
                     .and().haveSimpleNameNotEndingWith("ITest")
                     .should().bePublic();
+
+    /** Junit 5 test methods should not be public. */
+    public static final ArchRule NO_PUBLIC_TEST_METHODS =
+            methods().that().areAnnotatedWith(Test.class)
+                    .or().areAnnotatedWith(ParameterizedTest.class)
+                    .and().areDeclaredInClassesThat()
+                    .haveSimpleNameEndingWith("Test")
+                    .should().notBePublic();
+
+    /** ArchUnit tests should not be public. */
+    public static final ArchRule NO_PUBLIC_ARCHITECTURE_TESTS =
+            fields().that().areAnnotatedWith(ArchTest.class)
+                    .should().notBePublic();
 
     /** Some packages that are transitive dependencies of Jenkins should not be used at all. */
     public static final ArchRule NO_FORBIDDEN_PACKAGE_ACCESSED
