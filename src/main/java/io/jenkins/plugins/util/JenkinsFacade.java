@@ -8,6 +8,8 @@ import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
 
+import edu.umd.cs.findbugs.annotations.CheckForNull;
+
 import org.kohsuke.stapler.Stapler;
 import org.kohsuke.stapler.StaplerRequest;
 import hudson.DescriptorExtensionList;
@@ -86,7 +88,10 @@ public class JenkinsFacade implements Serializable {
      *
      * @return {@code false} if the user doesn't have the permission
      */
-    public boolean hasPermission(final Permission permission, final Job<?, ?> project) {
+    public boolean hasPermission(final Permission permission, @CheckForNull final Job<?, ?> project) {
+        if (project == null) {
+            return hasPermission(permission);
+        }
         return getJenkins().getAuthorizationStrategy().getACL(project).hasPermission(permission);
     }
 
