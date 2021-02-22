@@ -4,7 +4,7 @@
   <parent>
     <groupId>org.jvnet.hudson.plugins</groupId>
     <artifactId>analysis-pom</artifactId>
-    <version>4.7.0</version>
+    <version>5.0.0-beta-1</version>
     <relativePath />
   </parent>
 
@@ -18,13 +18,15 @@
   <url>https://github.com/jenkinsci/plugin-util-api-plugin</url>
 
   <properties>
-    <revision>1.8.0</revision>
+    <revision>2.0.0</revision>
     <changelist>-SNAPSHOT</changelist>
 
     <module.name>${project.groupId}.plugin.util.api</module.name>
 
-    <commons.lang.version>3.11</commons.lang.version>
-    <codingstyle.library.version>1.6.0</codingstyle.library.version>
+    <codingstyle.library.version>2.0.5</codingstyle.library.version>
+    <error-prone.version>2.5.1</error-prone.version>
+    <javax.annotation-api.version>1.3.2</javax.annotation-api.version>
+
   </properties>
 
   <licenses>
@@ -48,13 +50,12 @@
       <groupId>edu.hm.hafner</groupId>
       <artifactId>codingstyle</artifactId>
       <version>${codingstyle.library.version}</version>
+      <scope>provided</scope>
       <exclusions>
-        <!-- Remove once on at least 2.249 baseline -->
         <exclusion>
           <groupId>com.github.spotbugs</groupId>
           <artifactId>spotbugs-annotations</artifactId>
         </exclusion>
-        <!-- Remove once on at least the baseline after 2.249 -->
         <exclusion>
           <groupId>commons-io</groupId>
           <artifactId>commons-io</artifactId>
@@ -62,9 +63,16 @@
       </exclusions>
     </dependency>
     <dependency>
-      <groupId>org.apache.commons</groupId>
-      <artifactId>commons-lang3</artifactId>
-      <version>${commons.lang.version}</version>
+      <groupId>com.google.errorprone</groupId>
+      <artifactId>error_prone_annotations</artifactId>
+      <version>${error-prone.version}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>javax.annotation</groupId>
+      <artifactId>javax.annotation-api</artifactId>
+      <version>${javax.annotation-api.version}</version>
+      <scope>provided</scope>
     </dependency>
 
     <!-- Test Plugin Dependencies -->
@@ -90,12 +98,10 @@
       <scope>test</scope>
       <type>test-jar</type>
       <exclusions>
-        <!-- Remove once on at least 2.249 baseline -->
         <exclusion>
           <groupId>com.github.spotbugs</groupId>
           <artifactId>spotbugs-annotations</artifactId>
         </exclusion>
-        <!-- Remove once on at least the baseline after 2.249 -->
         <exclusion>
           <groupId>commons-io</groupId>
           <artifactId>commons-io</artifactId>
@@ -120,7 +126,7 @@
             </goals>
             <configuration>
               <outputDirectory>${project.build.directory}/classes</outputDirectory>
-              <includeArtifactIds>codingstyle</includeArtifactIds>
+              <includeArtifactIds>codingstyle,error_prone_annotations,javax.annotation-api</includeArtifactIds>
               <excludeTypes>test-jar</excludeTypes>
               <excludes>META-INF/**/*</excludes>
             </configuration>
