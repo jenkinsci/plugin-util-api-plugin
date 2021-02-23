@@ -120,6 +120,13 @@
 
   <build>
     <plugins>
+      <plugin>
+        <groupId>com.github.spotbugs</groupId>
+        <artifactId>spotbugs-maven-plugin</artifactId>
+        <configuration combine.children="append">
+          <includeFilterFile>etc/spotbugs-inclusion-filter.xml</includeFilterFile>
+        </configuration>
+      </plugin>
       <!-- Unpack and copy classes of codingstyle so that these classes are part of this plugin -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
