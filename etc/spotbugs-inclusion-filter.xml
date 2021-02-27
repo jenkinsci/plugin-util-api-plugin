@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ${project.groupId}:${project.artifactId}:${project.version} -->
+<FindBugsFilter>
+  <Match>
+      <Package name="io.jenkins.plugins.util" />
+  </Match>
+</FindBugsFilter>
