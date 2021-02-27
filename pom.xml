@@ -12,7 +12,7 @@
   <groupId>io.jenkins.plugins</groupId>
   <packaging>hpi</packaging>
   <name>Plugin Utilities API Plugin</name>
-  <version>${revision}${changelist}</version>
+  <version>2.0.0</version>
 
   <description>Provides several utility classes that can be used to accelerate plugin development.</description>
   <url>https://github.com/jenkinsci/plugin-util-api-plugin</url>
@@ -198,7 +198,7 @@
     <connection>scm:git:git://github.com/jenkinsci/${project.artifactId}-plugin.git</connection>
     <developerConnection>scm:git:git@github.com:jenkinsci/${project.artifactId}-plugin.git</developerConnection>
     <url>https://github.com/jenkinsci/${project.artifactId}-plugin</url>
-    <tag>${scmTag}</tag>
+    <tag>v2.0.0</tag>
   </scm>
 
   <repositories>
