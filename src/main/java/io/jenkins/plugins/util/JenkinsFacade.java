@@ -21,6 +21,9 @@ import hudson.model.Descriptor;
 import hudson.model.Item;
 import hudson.model.Job;
 import hudson.model.Run;
+import hudson.model.View;
+import hudson.model.ViewGroup;
+import hudson.security.AuthorizationStrategy;
 import hudson.security.Permission;
 import jenkins.model.Jenkins;
 
@@ -92,7 +95,62 @@ public class JenkinsFacade implements Serializable {
         if (project == null) {
             return hasPermission(permission);
         }
-        return getJenkins().getAuthorizationStrategy().getACL(project).hasPermission(permission);
+        return getAuthorizationStrategy().getACL(project).hasPermission(permission);
+    }
+
+    /**
+     * Checks if the current security principal has this permission for the specified view.
+     *
+     * @param permission
+     *         the permission to check for
+     * @param view
+     *         the view to check the permissions for
+     *
+     * @return {@code false} if the user doesn't have the permission
+     */
+    public boolean hasPermission(final Permission permission, @CheckForNull final View view) {
+        if (view == null) {
+            return hasPermission(permission);
+        }
+        return getAuthorizationStrategy().getACL(view).hasPermission(permission);
+    }
+
+    /**
+     * Checks if the current security principal has this permission for the specified view group.
+     *
+     * @param permission
+     *         the permission to check for
+     * @param viewGroup
+     *         the view group to check the permissions for
+     *
+     * @return {@code false} if the user doesn't have the permission
+     */
+    public boolean hasPermission(final Permission permission, @CheckForNull final ViewGroup viewGroup) {
+        if (viewGroup instanceof AbstractItem) {
+            return getAuthorizationStrategy().getACL((AbstractItem) viewGroup).hasPermission(permission);
+        }
+        return hasPermission(permission);
+    }
+
+    /**
+     * Checks if the current security principal has this permission for the specified item.
+     *
+     * @param permission
+     *         the permission to check for
+     * @param item
+     *         the item to check the permissions for
+     *
+     * @return {@code false} if the user doesn't have the permission
+     */
+    public boolean hasPermission(final Permission permission, @CheckForNull final AbstractItem item) {
+        if (item == null) {
+            return hasPermission(permission);
+        }
+        return getAuthorizationStrategy().getACL(item).hasPermission(permission);
+    }
+
+    private AuthorizationStrategy getAuthorizationStrategy() {
+        return getJenkins().getAuthorizationStrategy();
     }
 
     /**
