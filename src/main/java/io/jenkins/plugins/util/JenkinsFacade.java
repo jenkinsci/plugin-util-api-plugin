@@ -22,7 +22,7 @@ import hudson.model.Item;
 import hudson.model.Job;
 import hudson.model.Run;
 import hudson.model.View;
-import hudson.model.ViewGroup;
+import hudson.security.AccessControlled;
 import hudson.security.AuthorizationStrategy;
 import hudson.security.Permission;
 import jenkins.model.Jenkins;
@@ -116,18 +116,18 @@ public class JenkinsFacade implements Serializable {
     }
 
     /**
-     * Checks if the current security principal has this permission for the specified view group.
+     * Checks if the current security principal has this permission for the specified access controlled object.
      *
      * @param permission
      *         the permission to check for
-     * @param viewGroup
-     *         the view group to check the permissions for
+     * @param accessControlled
+     *         the access controlled object to check the permissions for
      *
      * @return {@code false} if the user doesn't have the permission
      */
-    public boolean hasPermission(final Permission permission, @CheckForNull final ViewGroup viewGroup) {
-        if (viewGroup instanceof AbstractItem) {
-            return getAuthorizationStrategy().getACL((AbstractItem) viewGroup).hasPermission(permission);
+    public boolean hasPermission(final Permission permission, @CheckForNull final AccessControlled accessControlled) {
+        if (accessControlled != null) {
+            return accessControlled.hasPermission(permission);
         }
         return hasPermission(permission);
     }
