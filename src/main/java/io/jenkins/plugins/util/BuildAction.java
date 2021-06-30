@@ -17,7 +17,7 @@ import jenkins.model.RunAction2;
 import jenkins.tasks.SimpleBuildStep.LastBuildAction;
 
 /**
- * Controls the live cycle of the results in a build. This action persists the results of a build and displays a summary
+ * Controls the life cycle of the results in a build. This action persists the results of a build and displays a summary
  * on the build page. The actual visualization of the results is defined in the matching {@code summary.jelly} file.
  * This action also provides access to the detail views: these are rendered using a new view instance.
  *
