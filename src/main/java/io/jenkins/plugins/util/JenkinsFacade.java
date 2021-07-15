@@ -207,7 +207,10 @@ public class JenkinsFacade implements Serializable {
      *         the color
      *
      * @return the absolute URL
+     * @deprecated BallColor should not be used anymore, use the {@code icon} tag in jelly views or the icon class name
+     *         of {@link BallColor}
      */
+    @Deprecated
     public String getImagePath(final BallColor color) {
         return getContextPath() + "/images/16x16/" + color.getImage();
     }
