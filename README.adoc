@@ -2,7 +2,7 @@
 
 = Jenkins Plugin Utilities
 
-image:https://img.shields.io/badge/Jenkins-2.249.1-green.svg?label=min.%20Jenkins[Jenkins Version, link=https://jenkins.io/download/lts]
+image:https://img.shields.io/badge/Jenkins-2.263.1-green.svg?label=min.%20Jenkins[Jenkins Version, link=https://jenkins.io/download/lts]
 image:https://ci.jenkins.io/job/Plugins/job/plugin-util-api-plugin/job/master/badge/icon?subject=Jenkins%20CI[Jenkins, link=https://ci.jenkins.io/job/Plugins/job/plugin-util-api-plugin/job/master/]
 image:https://github.com/jenkinsci/plugin-util-api-plugin/workflows/GitHub%20CI/badge.svg?branch=master[GitHub Actions, link=https://github.com/jenkinsci/plugin-util-api-plugin/actions]
 
