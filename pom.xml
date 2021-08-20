@@ -24,7 +24,7 @@
     <module.name>${project.groupId}.plugin.util.api</module.name>
 
     <codingstyle.library.version>2.8.0</codingstyle.library.version>
-    <error-prone.version>2.8.1</error-prone.version>
+    <error-prone.version>2.9.0</error-prone.version>
     <javax.annotation-api.version>1.3.2</javax.annotation-api.version>
     <commons.lang.version>3.12.0</commons.lang.version>
     <commons-text.version>1.9</commons-text.version>
