@@ -9,7 +9,6 @@ import hudson.model.Run;
  *
  * @author Ullrich Hafner
  */
-// FIXME: move to plugin-util or echarts
 public class BuildResultNavigator {
     private static final String SLASH = "/";
 
