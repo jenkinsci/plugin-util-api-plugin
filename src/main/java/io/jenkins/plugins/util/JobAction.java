@@ -64,8 +64,9 @@ public abstract class JobAction<T extends BuildAction<?>> implements Action {
         Optional<T> action = getLatestAction();
         if (action.isPresent()) {
             T buildAction = action.get();
-            response.sendRedirect2(String.format("../../../%s%s",
-                    buildAction.getOwner().getUrl(), buildAction.getUrlName()));
+            response.sendRedirect2(String.format("../%d/%s",
+                    buildAction.getOwner().getNumber(),
+                    buildAction.getUrlName()));
         }
     }
 
