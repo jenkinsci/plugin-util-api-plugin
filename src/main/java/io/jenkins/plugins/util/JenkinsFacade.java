@@ -70,6 +70,37 @@ public class JenkinsFacade implements Serializable {
     }
 
     /**
+     * Works just like {@link #getDescriptor(Class)} but don't take no for an answer.
+     *
+     * @param describableType
+     *         the base type that represents the descriptor of the describable
+     *
+     * @return the discovered descriptor
+     * @throws AssertionError
+     *         If the descriptor is missing.
+     */
+    @SuppressWarnings("rawtypes")
+    public Descriptor getDescriptorOrDie(final Class<? extends Describable> describableType) {
+        return getJenkins().getDescriptorOrDie(describableType);
+    }
+
+    /**
+     * Gets the {@link Descriptor} that corresponds to the given {@link Describable} type.
+     * <p>
+     * If you have an instance of {@code type} and call {@link Describable#getDescriptor()}, you'll get the same
+     * instance that this method returns.
+     *
+     * @param describableType
+     *         the base type that represents the descriptor of the describable
+     * @return the discovered descriptor, or {@code null} if no such descriptor has been found
+     */
+    @SuppressWarnings("rawtypes")
+    @CheckForNull
+    public Descriptor getDescriptor(final Class<? extends Describable> describableType) {
+        return getJenkins().getDescriptor(describableType);
+    }
+
+    /**
      * Checks if the current security principal has this permission.
      *
      * @param permission
