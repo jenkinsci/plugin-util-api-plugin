@@ -86,12 +86,15 @@ public class JenkinsFacade implements Serializable {
 
     /**
      * Gets the {@link Descriptor} that corresponds to the given {@link Describable} type.
+     *
      * <p>
      * If you have an instance of {@code type} and call {@link Describable#getDescriptor()}, you'll get the same
      * instance that this method returns.
+     * </p>
      *
      * @param describableType
      *         the base type that represents the descriptor of the describable
+     *
      * @return the discovered descriptor, or {@code null} if no such descriptor has been found
      */
     @SuppressWarnings("rawtypes")
