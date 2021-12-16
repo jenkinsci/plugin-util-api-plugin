@@ -10,6 +10,7 @@ import java.util.concurrent.locks.ReentrantLock;
 
 import edu.hm.hafner.util.VisibleForTesting;
 import edu.umd.cs.findbugs.annotations.CheckForNull;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import hudson.model.Action;
 import hudson.model.Run;
@@ -57,6 +58,7 @@ public abstract class BuildAction<T> implements LastBuildAction, RunAction2, Ser
      * @param canSerialize
      *         determines whether the result should be persisted in the build folder
      */
+    @SuppressFBWarnings(value = "MC", justification = "getResultXmlPath() is a factory method and overridable by design")
     @VisibleForTesting
     public BuildAction(final Run<?, ?> owner, final T result, final boolean canSerialize) {
         this.owner = owner;
@@ -67,6 +69,13 @@ public abstract class BuildAction<T> implements LastBuildAction, RunAction2, Ser
         }
     }
 
+    /**
+     * Creates the XML stream to read the results. This method is invoked by the constructor in this {@link BuildAction}
+     * so this instance is not yet fully initialized when this factory method is called. So just return the stream
+     * instance without accessing any fields.
+     *
+     * @return the XML stream
+     */
     protected abstract AbstractXmlStream<T> createXmlStream();
 
     public Run<?, ?> getOwner() {
@@ -146,9 +155,9 @@ public abstract class BuildAction<T> implements LastBuildAction, RunAction2, Ser
      *         the baseline to start the search with
      * @param buildActionClass
      *         the type of the action to find
-     *
      * @param <T>
      *         type of the results
+     *
      * @return the next available {@link BuildAction}, or an empty result if there is no such action
      */
     public static <T extends BuildAction<?>> Optional<T> getBuildActionFromHistoryStartingFrom(
