@@ -1,11 +1,12 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
     <groupId>org.jvnet.hudson.plugins</groupId>
     <artifactId>analysis-pom</artifactId>
     <version>5.17.0</version>
-    <relativePath />
+    <relativePath/>
   </parent>
 
   <artifactId>plugin-util-api</artifactId>
@@ -28,6 +29,7 @@
     <javax.annotation-api.version>1.3.2</javax.annotation-api.version>
     <commons.lang.version>3.12.0</commons.lang.version>
     <commons-text.version>1.9</commons-text.version>
+    <j2html.version>1.4.0</j2html.version>
 
   </properties>
 
@@ -88,6 +90,12 @@
       <version>${commons-text.version}</version>
       <scope>provided</scope>
     </dependency>
+    <dependency>
+      <groupId>com.j2html</groupId>
+      <artifactId>j2html</artifactId>
+      <version>${j2html.version}</version>
+      <scope>provided</scope>
+    </dependency>
     <!-- Test Plugin Dependencies -->
     <dependency>
       <groupId>org.jenkins-ci.plugins.workflow</groupId>
@@ -146,7 +154,7 @@
             </goals>
             <configuration>
               <outputDirectory>${project.build.directory}/classes</outputDirectory>
-              <includeArtifactIds>codingstyle,error_prone_annotations,javax.annotation-api,commons-lang3,commons-text</includeArtifactIds>
+              <includeArtifactIds>codingstyle,error_prone_annotations,javax.annotation-api,commons-lang3,commons-text,j2html</includeArtifactIds>
               <excludeTypes>test-jar</excludeTypes>
               <excludes>META-INF/**/*</excludes>
             </configuration>
