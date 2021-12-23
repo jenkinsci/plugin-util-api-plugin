@@ -25,7 +25,6 @@
 
     <codingstyle.library.version>2.14.0</codingstyle.library.version>
     <error-prone.version>2.10.0</error-prone.version>
-    <javax.annotation-api.version>1.3.2</javax.annotation-api.version>
     <commons.lang.version>3.12.0</commons.lang.version>
     <commons-text.version>1.9</commons-text.version>
     <j2html.version>1.4.0</j2html.version>
@@ -69,12 +68,6 @@
       <groupId>com.google.errorprone</groupId>
       <artifactId>error_prone_annotations</artifactId>
       <version>${error-prone.version}</version>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>javax.annotation</groupId>
-      <artifactId>javax.annotation-api</artifactId>
-      <version>${javax.annotation-api.version}</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
@@ -153,7 +146,7 @@
             </goals>
             <configuration>
               <outputDirectory>${project.build.directory}/classes</outputDirectory>
-              <includeArtifactIds>codingstyle,error_prone_annotations,javax.annotation-api,commons-lang3,commons-text,j2html</includeArtifactIds>
+              <includeArtifactIds>codingstyle,error_prone_annotations,commons-lang3,commons-text,j2html</includeArtifactIds>
               <excludeTypes>test-jar</excludeTypes>
               <excludes>META-INF/**/*</excludes>
             </configuration>
