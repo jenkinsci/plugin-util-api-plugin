@@ -111,6 +111,7 @@
       <scope>test</scope>
       <type>test-jar</type>
       <exclusions>
+        <!-- Provided by Jenkins core -->
         <exclusion>
           <groupId>com.github.spotbugs</groupId>
           <artifactId>spotbugs-annotations</artifactId>
@@ -118,6 +119,10 @@
         <exclusion>
           <groupId>commons-io</groupId>
           <artifactId>commons-io</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>javax.annotation</groupId>
+          <artifactId>javax.annotation-api</artifactId>
         </exclusion>
       </exclusions>
     </dependency>
