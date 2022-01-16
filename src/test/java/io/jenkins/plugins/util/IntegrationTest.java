@@ -9,11 +9,13 @@ import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Objects;
 import java.util.logging.Level;
 
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.junit.AssumptionViolatedException;
 import org.junit.jupiter.api.Tag;
 import org.jvnet.hudson.test.JenkinsRule;
 import org.jvnet.hudson.test.JenkinsRule.JSONWebResponse;
@@ -21,6 +23,10 @@ import org.jvnet.hudson.test.JenkinsRule.WebClient;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
+import com.cloudbees.plugins.credentials.CredentialsScope;
+import com.cloudbees.plugins.credentials.SystemCredentialsProvider;
+import com.cloudbees.plugins.credentials.domains.Domain;
+import com.cloudbees.plugins.credentials.impl.UsernamePasswordCredentialsImpl;
 import com.gargoylesoftware.htmlunit.NicelyResynchronizingAjaxController;
 import com.gargoylesoftware.htmlunit.ScriptException;
 import com.gargoylesoftware.htmlunit.ScriptResult;
@@ -38,6 +44,7 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition;
 import org.jenkinsci.plugins.workflow.flow.FlowDefinition;
 import org.jenkinsci.plugins.workflow.job.WorkflowJob;
+import org.jenkinsci.test.acceptance.docker.DockerContainer;
 import hudson.FilePath;
 import hudson.Functions;
 import hudson.model.Action;
@@ -48,7 +55,10 @@ import hudson.model.Run;
 import hudson.model.Slave;
 import hudson.model.TopLevelItem;
 import hudson.model.labels.LabelAtom;
+import hudson.plugins.sshslaves.SSHLauncher;
 import hudson.slaves.DumbSlave;
+import hudson.slaves.EnvironmentVariablesNodeProperty;
+import hudson.slaves.EnvironmentVariablesNodeProperty.Entry;
 import hudson.tasks.BatchFile;
 import hudson.tasks.Builder;
 import hudson.tasks.Shell;
@@ -72,6 +82,37 @@ public abstract class IntegrationTest extends ResourceTest {
 
     private static final String WINDOWS_FILE_ACCESS_READ_ONLY = "RX";
     private static final String WINDOWS_FILE_DENY = "/deny";
+
+    /**
+     * Creates a docker container agent.
+     *
+     * @param dockerContainer
+     *         the docker container of the agent
+     *
+     * @return A docker container agent.
+     */
+    @SuppressWarnings({"PMD.AvoidCatchingThrowable", "IllegalCatch"})
+    protected DumbSlave createDockerContainerAgent(final DockerContainer dockerContainer) {
+        try {
+            SystemCredentialsProvider.getInstance().getDomainCredentialsMap().put(Domain.global(),
+                    Collections.singletonList(
+                            new UsernamePasswordCredentialsImpl(CredentialsScope.SYSTEM, "dummyCredentialId",
+                                    null, "test", "test")
+                    )
+            );
+            DumbSlave agent = new DumbSlave("docker", "/home/test",
+                    new SSHLauncher(dockerContainer.ipBound(22), dockerContainer.port(22), "dummyCredentialId"));
+            agent.setNodeProperties(Collections.singletonList(new EnvironmentVariablesNodeProperty(
+                    new Entry("JAVA_HOME", "/usr/lib/jvm/java-8-openjdk-amd64/jre"))));
+            getJenkins().jenkins.addNode(agent);
+            getJenkins().waitOnline(agent);
+
+            return agent;
+        }
+        catch (Throwable e) {
+            throw new AssumptionViolatedException("Failed to create docker container", e);
+        }
+    }
 
     /** Determines whether JavaScript is enabled in the {@link WebClient}. */
     public enum JavaScriptSupport {
