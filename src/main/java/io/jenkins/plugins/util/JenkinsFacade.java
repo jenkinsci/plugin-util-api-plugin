@@ -338,6 +338,16 @@ public class JenkinsFacade implements Serializable {
         return getJenkins().getPlugin(pluginId) != null;
     }
 
+    /**
+     * Returns the unique identifier of this Jenkins that has been historically used to identify this Jenkins to
+     * the outside world.
+     *
+     * @return legacy instance id of this Jenkins
+     */
+    public String getLegacyInstanceId() {
+        return getJenkins().getLegacyInstanceId();
+    }
+
     private Jenkins getJenkins() {
         return Jenkins.get();
     }
