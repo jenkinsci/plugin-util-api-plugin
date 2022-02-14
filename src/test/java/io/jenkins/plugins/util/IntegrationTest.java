@@ -1,39 +1,27 @@
 package io.jenkins.plugins.util;
 
+import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
-import java.net.MalformedURLException;
+import java.io.Reader;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.Objects;
-import java.util.logging.Level;
+import java.util.function.Function;
 
-import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Tag;
 import org.jvnet.hudson.test.JenkinsRule;
 import org.jvnet.hudson.test.JenkinsRule.JSONWebResponse;
-import org.jvnet.hudson.test.JenkinsRule.WebClient;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
-import com.gargoylesoftware.htmlunit.NicelyResynchronizingAjaxController;
-import com.gargoylesoftware.htmlunit.ScriptException;
-import com.gargoylesoftware.htmlunit.ScriptResult;
-import com.gargoylesoftware.htmlunit.SilentCssErrorHandler;
-import com.gargoylesoftware.htmlunit.html.DomElement;
-import com.gargoylesoftware.htmlunit.html.HtmlForm;
-import com.gargoylesoftware.htmlunit.html.HtmlFormUtil;
-import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import com.gargoylesoftware.htmlunit.javascript.JavaScriptErrorListener;
-
 import edu.hm.hafner.util.PathUtil;
 import edu.hm.hafner.util.ResourceTest;
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition;
 import org.jenkinsci.plugins.workflow.flow.FlowDefinition;
@@ -42,7 +30,6 @@ import hudson.FilePath;
 import hudson.Functions;
 import hudson.model.Action;
 import hudson.model.FreeStyleProject;
-import hudson.model.Item;
 import hudson.model.Result;
 import hudson.model.Run;
 import hudson.model.Slave;
@@ -66,20 +53,10 @@ import static org.assertj.core.api.Assumptions.*;
 @Tag("IntegrationTest")
 @SuppressWarnings({"ClassDataAbstractionCoupling", "ClassFanOutComplexity", "SameParameterValue", "PMD.SystemPrintln", "PMD.GodClass", "PMD.ExcessiveClassLength", "PMD.ExcessiveImports", "PMD.CouplingBetweenObjects", "PMD.CyclomaticComplexity"})
 public abstract class IntegrationTest extends ResourceTest {
-    /** Issue log files will be renamed to mach this pattern. */
-    private static final String FILE_NAME_PATTERN = "%s-issues.txt";
     private static final Charset UTF_8 = StandardCharsets.UTF_8;
 
     private static final String WINDOWS_FILE_ACCESS_READ_ONLY = "RX";
     private static final String WINDOWS_FILE_DENY = "/deny";
-
-    /** Determines whether JavaScript is enabled in the {@link WebClient}. */
-    public enum JavaScriptSupport {
-        /** JavaScript is disabled. */
-        JS_ENABLED,
-        /** JavaScript is enabled. */
-        JS_DISABLED
-    }
 
     /**
      * Returns the Jenkins rule to manage the Jenkins instance.
@@ -89,36 +66,12 @@ public abstract class IntegrationTest extends ResourceTest {
     protected abstract JenkinsRule getJenkins();
 
     /**
-     * Returns a {@link WebClient} to access the HTML pages of Jenkins.
+     * Returns whether the OS under test is Windows or Unix.
      *
-     * @param javaScriptSupport
-     *         determines whether JavaScript is enabled in the {@link WebClient}
-     *
-     * @return the web client to use
+     * @return {@code true} if the OS is Windows, {@code false} otherwise
      */
-    protected abstract WebClient getWebClient(JavaScriptSupport javaScriptSupport);
-
-    @SuppressFBWarnings(value = "LG", justification = "Setting the logger here helps to clean up the console log for tests")
-    static WebClient create(final JenkinsRule jenkins, final boolean isJavaScriptEnabled) {
-        WebClient webClient = jenkins.createWebClient();
-        webClient.setCssErrorHandler(new SilentCssErrorHandler());
-        java.util.logging.Logger.getLogger("com.gargoylesoftware.htmlunit").setLevel(Level.SEVERE);
-        webClient.setIncorrectnessListener((s, o) -> {
-        });
-
-        webClient.setJavaScriptEnabled(isJavaScriptEnabled);
-        webClient.setJavaScriptErrorListener(new IntegrationTestJavaScriptErrorListener());
-        webClient.setAjaxController(new NicelyResynchronizingAjaxController());
-        webClient.getCookieManager().setCookiesEnabled(isJavaScriptEnabled);
-        webClient.getOptions().setCssEnabled(isJavaScriptEnabled);
-
-        webClient.getOptions().setDownloadImages(false);
-        webClient.getOptions().setUseInsecureSSL(true);
-        webClient.getOptions().setThrowExceptionOnFailingStatusCode(false);
-        webClient.getOptions().setThrowExceptionOnScriptError(false);
-        webClient.getOptions().setPrintContentOnFailingStatusCode(false);
-
-        return webClient;
+    protected boolean isWindows() {
+        return Functions.isWindows();
     }
 
     /**
@@ -141,6 +94,65 @@ public abstract class IntegrationTest extends ResourceTest {
         catch (IOException | InterruptedException e) {
             throw new AssertionError(e);
         }
+    }
+
+    /**
+     * Copies the specified files to the workspace. The copied files will have the same file name in the workspace.
+     *
+     * @param job
+     *         the job to get the workspace for
+     * @param fileNames
+     *         the files to copy
+     */
+    protected void copyMultipleFilesToWorkspace(final TopLevelItem job, final String... fileNames) {
+        copyWorkspaceFiles(job, fileNames, file -> Paths.get(file).getFileName().toString());
+    }
+
+    /**
+     * Copies the specified file to the workspace.
+     *
+     * @param job
+     *         the job to get the workspace for
+     * @param fileName
+     *         the file to copy
+     */
+    protected void copySingleFileToWorkspace(final TopLevelItem job, final String fileName) {
+        FilePath workspace = getWorkspace(job);
+
+        copySingleFileToWorkspace(workspace, fileName, fileName);
+    }
+
+    /**
+     * Copies the specified files to the workspace. Uses the specified new file name in the workspace.
+     *
+     * @param job
+     *         the job to get the workspace for
+     * @param from
+     *         the file to copy
+     * @param to
+     *         the file name in the workspace
+     */
+    protected void copySingleFileToWorkspace(final TopLevelItem job, final String from, final String to) {
+        FilePath workspace = getWorkspace(job);
+
+        copySingleFileToWorkspace(workspace, from, to);
+    }
+
+    /**
+     * Copies the specified files to the workspace. The file names of the copied files will be determined by the
+     * specified mapper.
+     *
+     * @param job
+     *         the job to get the workspace for
+     * @param fileNames
+     *         the files to copy
+     * @param fileNameMapper
+     *         maps input file names to output file names
+     */
+    protected void copyWorkspaceFiles(final TopLevelItem job, final String[] fileNames,
+            final Function<String, String> fileNameMapper) {
+        Arrays.stream(fileNames)
+                .forEach(fileName -> copySingleFileToWorkspace(job, fileName, fileNameMapper.apply(fileName)));
     }
 
     /**
@@ -261,6 +273,16 @@ public abstract class IntegrationTest extends ResourceTest {
         return new PathUtil().createAbsolutePath(getWorkspace(job).getRemote(), fileName);
     }
 
+    private void copySingleFileToWorkspace(final FilePath workspace, final String from, final String to) {
+        try {
+            workspace.child(to).copyFrom(asInputStream(from));
+            System.out.format("Copying file '%s' as workspace file '%s'%n (workspace '%s')", from, to, workspace);
+        }
+        catch (IOException | InterruptedException e) {
+            throw new AssertionError(e);
+        }
+    }
+
     /**
      * Creates an {@link DumbSlave agent} with the specified label.
      *
@@ -368,18 +390,6 @@ public abstract class IntegrationTest extends ResourceTest {
     }
 
     /**
-     * Creates a pre-defined filename for a workspace file.
-     *
-     * @param fileNamePrefix
-     *         prefix of the filename
-     *
-     * @return the whole file name of the workspace file
-     */
-    protected String createWorkspaceFileName(final String fileNamePrefix) {
-        return String.format(FILE_NAME_PATTERN, FilenameUtils.getBaseName(fileNamePrefix));
-    }
-
-    /**
      * Creates a new {@link FreeStyleProject freestyle job}. The job will get a generated name.
      *
      * @return the created job
@@ -470,9 +480,7 @@ public abstract class IntegrationTest extends ResourceTest {
     }
 
     /**
-     * Creates an empty pipeline job and populates the workspace of that job with copies of the specified files. In
-     * order to simplify the scanner pattern, all files follow the filename pattern in {@link
-     * IntegrationTest#createWorkspaceFileName(String)}.
+     * Creates an empty pipeline job and populates the workspace of that job with copies of the specified files.
      *
      * @param fileNames
      *         the files to copy to the workspace
@@ -534,6 +542,22 @@ public abstract class IntegrationTest extends ResourceTest {
     }
 
     /**
+     * Asserts that the builds result is equal to {@link Result#SUCCESS}.
+     *
+     * @param run
+     *         the run to check
+     */
+    @SuppressWarnings("checkstyle:IllegalCatch")
+    protected void assertSuccessfulBuild(final Run<?, ?> run) {
+        try {
+            getJenkins().assertBuildStatus(Result.SUCCESS, run);
+        }
+        catch (Exception exception) {
+            throw new AssertionError(exception);
+        }
+    }
+
+    /**
      * Schedules a build for the specified job and waits for the job to finish. After the build has been finished the
      * builds result is checked to be equals to {@code expectedResult}.
      *
@@ -569,105 +593,20 @@ public abstract class IntegrationTest extends ResourceTest {
     }
 
     /**
-     * Clicks the specified DOM element and returns the HTML page content of the page that is the target of the link.
+     * Prints the console log of the specified build to StdOut.
      *
-     * @param element
-     *         the element that receives the click event
-     *
-     * @return the HTML page
-     */
-    protected HtmlPage clickOnLink(final DomElement element) {
-        try {
-            return element.click();
-        }
-        catch (IOException e) {
-            throw new AssertionError(e);
-        }
-    }
-
-    /**
-     * Returns the HTML page content of the specified URL for a given job.
-     *
-     * @param javaScriptSupport
-     *         determines whether JavaScript is enabled in the {@link WebClient}
-     * @param job
-     *         the job that owns the URL
-     * @param relativeUrl
-     *         the relative URL within the job
-     *
-     * @return the HTML page
-     */
-    protected HtmlPage getWebPage(final JavaScriptSupport javaScriptSupport, final Item job, final String relativeUrl) {
-        try {
-            return getWebClient(javaScriptSupport).getPage(job, relativeUrl);
-        }
-        catch (SAXException | IOException e) {
-            throw new AssertionError(e);
-        }
-    }
-
-    /**
-     * Returns the HTML page content of the specified job.
-     *
-     * @param javaScriptSupport
-     *         determines whether JavaScript is enabled in the {@link WebClient}
-     * @param job
-     *         the job to show the page for
-     *
-     * @return the HTML page
-     */
-    protected HtmlPage getWebPage(final JavaScriptSupport javaScriptSupport, final Item job) {
-        return getWebPage(javaScriptSupport, job, StringUtils.EMPTY);
-    }
-
-    /**
-     * Returns the HTML page content of the specified build.
-     *
-     * @param javaScriptSupport
-     *         determines whether JavaScript is enabled in the {@link WebClient}
      * @param build
-     *         the build to show the page for
-     *
-     * @return the HTML page
+     *         the build
      */
-    protected HtmlPage getWebPage(final JavaScriptSupport javaScriptSupport, final Run<?, ?> build) {
-        return getWebPage(javaScriptSupport, build, StringUtils.EMPTY);
-    }
-
-    /**
-     * Returns the HTML page content of the specified URL for a given build.
-     *
-     * @param javaScriptSupport
-     *         determines whether JavaScript is enabled in the {@link WebClient}
-     * @param build
-     *         the build to show the page for
-     * @param relativeUrl
-     *         the relative URL within the job
-     *
-     * @return the HTML page
-     */
-    protected HtmlPage getWebPage(final JavaScriptSupport javaScriptSupport, final Run<?, ?> build,
-            final String relativeUrl) {
-        try {
-            return getWebClient(javaScriptSupport).getPage(build, relativeUrl);
+    protected void printConsoleLog(final Run<?, ?> build) {
+        System.out.println("----- Console Log -----");
+        try (Reader reader = build.getLogReader()) {
+            try (BufferedReader bufferedReader = new BufferedReader(reader)) {
+                bufferedReader.lines().forEach(System.out::println);
+            }
         }
-        catch (SAXException | IOException e) {
-            throw new AssertionError(e);
-        }
-    }
-
-    /**
-     * Submit the supplied {@link HtmlForm}. Locates the submit element/button on the form.
-     *
-     * @param form
-     *         the {@link HtmlForm}
-     */
-    protected void submit(final HtmlForm form) {
-        try {
-            HtmlFormUtil.submit(form);
-        }
-        catch (IOException e) {
-            throw new AssertionError(e);
+        catch (IOException exception) {
+            throw new AssertionError(exception);
         }
     }
 
@@ -796,24 +735,6 @@ public abstract class IntegrationTest extends ResourceTest {
     }
 
     /**
-     * Returns the model of a chart in the specified HTML page.
-     *
-     * @param page
-     *         the HTML page that contains the chart
-     * @param id
-     *         the element ID of the chart placeholder (that has the EChart instance attached in property @{@code
-     *         echart}
-     *
-     * @return the model (as JSON representation)
-     */
-    protected String getChartModel(final HtmlPage page, final String id) {
-        ScriptResult scriptResult = page.executeJavaScript(
-                String.format("JSON.stringify(document.getElementById(\"%s\").echart.getOption());", id));
-
-        return scriptResult.getJavaScriptResult().toString();
-    }
-
-    /**
      * Calls Jenkins remote API with the specified URL. Calls the JSON format.
      *
      * @param url
@@ -844,80 +765,6 @@ public abstract class IntegrationTest extends ResourceTest {
         }
         catch (IOException | SAXException e) {
             throw new AssertionError(e);
-        }
-    }
-
-    @SuppressWarnings({"PMD.AvoidPrintStackTrace", "PMD.SystemPrintln"})
-    private static class IntegrationTestJavaScriptErrorListener implements JavaScriptErrorListener {
-        /**
-         * Informs about a javascript exceptions.
-         *
-         * @param page
-         *         the page that causes the problem
-         * @param scriptException
-         *         the occurred script exception
-         */
-        @Override
-        public void scriptException(final HtmlPage page, final ScriptException scriptException) {
-            System.out.println("A JavaScript exception occurred at: " + page.toString());
-            scriptException.printStackTrace();
-        }
-
-        /**
-         * Informs about a javascript timeout error.
-         *
-         * @param page
-         *         the page that causes the problem
-         * @param allowedTime
-         *         the max time allowed for the execution
-         * @param executionTime
-         *         the already consumed time
-         */
-        @Override
-        public void timeoutError(final HtmlPage page, final long allowedTime, final long executionTime) {
-            System.out.println("A JavaScript timeout occurred at: " + page.toString() + ". Allowed: "
-                    + allowedTime + " timed out after: " + executionTime);
-        }
-
-        /**
-         * Informs about a malformed url referencing to to script.
-         *
-         * @param page
-         *         the page that causes the problem
-         * @param url
-         *         the malformed url
-         * @param malformedURLException
-         *         the occurred exception
-         */
-        @Override
-        public void malformedScriptURL(final HtmlPage page, final String url,
-                final MalformedURLException malformedURLException) {
-            System.out.println("A JavaScript exception occurred at: " + page.toString()
-                    + ", due to the malformed URL: " + url);
-            malformedURLException.printStackTrace();
-        }
-
-        /**
-         * Informs about an exception during load of a javascript file refereed from a page.
-         *
-         * @param page
-         *         the page that causes the problem
-         * @param scriptUrl
-         *         the url to load the script from
-         * @param exception
-         *         the occurred exception
-         */
-        @Override
-        public void loadScriptError(final HtmlPage page, final URL scriptUrl, final Exception exception) {
-            System.out.println("A JavaScript exception occured at: " + page.toString()
-                    + ", while loading the file from the URL: " + scriptUrl.toString());
-            exception.printStackTrace();
-        }
-
-        @Override
-        public void warn(final String message, final String sourceName, final int line, final String lineSource,
-                final int lineOffset) {
-            // ignore warnings
         }
     }
 }
