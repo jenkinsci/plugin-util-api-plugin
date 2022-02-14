@@ -66,15 +66,6 @@ public abstract class IntegrationTest extends ResourceTest {
     protected abstract JenkinsRule getJenkins();
 
     /**
-     * Returns whether the OS under test is Windows or Unix.
-     *
-     * @return {@code true} if the OS is Windows, {@code false} otherwise
-     */
-    protected boolean isWindows() {
-        return Functions.isWindows();
-    }
-
-    /**
      * Creates a file with the specified content in the workspace.
      *
      * @param job
