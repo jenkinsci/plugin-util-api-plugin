@@ -68,7 +68,7 @@ import static org.assertj.core.api.Assumptions.*;
  * @author Ullrich Hafner
  */
 @Tag("IntegrationTest")
-@SuppressWarnings({"ClassDataAbstractionCoupling", "ClassFanOutComplexity", "SameParameterValue", "PMD.SystemPrintln", "PMD.GodClass", "PMD.ExcessiveClassLength", "PMD.ExcessiveImports", "PMD.CouplingBetweenObjects", "PMD.CyclomaticComplexity"})
+@SuppressWarnings({"ClassDataAbstractionCoupling", "ClassFanOutComplexity", "SameParameterValue", "PMD.SystemPrintln", "PMD.GodClass", "PMD.ExcessiveClassLength", "PMD.ExcessiveImports", "PMD.CouplingBetweenObjects", "PMD.CyclomaticComplexity", "unused"})
 public abstract class IntegrationTest extends ResourceTest {
     private static final Charset UTF_8 = StandardCharsets.UTF_8;
 
