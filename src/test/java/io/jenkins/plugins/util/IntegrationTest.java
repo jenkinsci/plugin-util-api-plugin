@@ -839,10 +839,13 @@ public abstract class IntegrationTest extends ResourceTest {
     }
 
     /**
-     * Docker container to be used as Jenkins build agent.
+     * Docker container to be used as Jenkins build agent. Provides tools like make, gcc, java 11, or maven.
      */
     public static class AgentContainer extends GenericContainer<AgentContainer> {
-        AgentContainer() {
+        /**
+         * Creates a new container that exposes port {@link #SSH_PORT} for SSH connections.
+         */
+        public AgentContainer() {
             super(new ImageFromDockerfile(SSH_AGENT_NAME, false)
                     .withFileFromClasspath(SSH_AUTHORIZED_KEYS, "/" + SSH_AUTHORIZED_KEYS)
                     .withFileFromClasspath(SSH_KEY_PATH, "/" + SSH_KEY_PATH)
