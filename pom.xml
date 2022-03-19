@@ -4,7 +4,7 @@
   <parent>
     <groupId>org.jvnet.hudson.plugins</groupId>
     <artifactId>analysis-pom</artifactId>
-    <version>5.18.0</version>
+    <version>5.19.0</version>
     <relativePath />
   </parent>
 
@@ -18,16 +18,17 @@
   <url>https://github.com/jenkinsci/plugin-util-api-plugin</url>
 
   <properties>
-    <revision>2.15.0</revision>
+    <revision>2.16.0</revision>
     <changelist>-SNAPSHOT</changelist>
 
     <module.name>${project.groupId}.plugin.util.api</module.name>
 
-    <codingstyle.library.version>2.14.0</codingstyle.library.version>
+    <codingstyle.library.version>2.17.0</codingstyle.library.version>
     <error-prone.version>2.11.0</error-prone.version>
     <commons.lang.version>3.12.0</commons.lang.version>
     <commons-text.version>1.9</commons-text.version>
     <j2html.version>1.4.0</j2html.version>
+    <streamex.version>0.8.1</streamex.version>
     <testcontainers.version>1.16.3</testcontainers.version>
 
   </properties>
@@ -91,6 +92,12 @@
       <groupId>com.j2html</groupId>
       <artifactId>j2html</artifactId>
       <version>${j2html.version}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>one.util</groupId>
+      <artifactId>streamex</artifactId>
+      <version>${streamex.version}</version>
       <scope>provided</scope>
     </dependency>
     <!-- Test Plugin Dependencies -->
@@ -178,7 +185,7 @@
             </goals>
             <configuration>
               <outputDirectory>${project.build.directory}/classes</outputDirectory>
-              <includeArtifactIds>codingstyle,error_prone_annotations,commons-lang3,commons-text,j2html</includeArtifactIds>
+              <includeArtifactIds>codingstyle,error_prone_annotations,commons-lang3,commons-text,streamex,j2html</includeArtifactIds>
               <excludeTypes>test-jar</excludeTypes>
               <excludes>META-INF/**/*</excludes>
             </configuration>
