@@ -28,6 +28,7 @@
     <commons.lang.version>3.12.0</commons.lang.version>
     <commons-text.version>1.9</commons-text.version>
     <j2html.version>1.4.0</j2html.version>
+    <streamex.version>0.8.1</streamex.version>
 
   </properties>
 
@@ -90,6 +91,12 @@
       <groupId>com.j2html</groupId>
       <artifactId>j2html</artifactId>
       <version>${j2html.version}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>one.util</groupId>
+      <artifactId>streamex</artifactId>
+      <version>${streamex.version}</version>
       <scope>provided</scope>
     </dependency>
     <!-- Test Plugin Dependencies -->
@@ -155,7 +162,7 @@
             </goals>
             <configuration>
               <outputDirectory>${project.build.directory}/classes</outputDirectory>
-              <includeArtifactIds>codingstyle,error_prone_annotations,commons-lang3,commons-text,j2html</includeArtifactIds>
+              <includeArtifactIds>codingstyle,error_prone_annotations,commons-lang3,commons-text,streamex,j2html</includeArtifactIds>
               <excludeTypes>test-jar</excludeTypes>
               <excludes>META-INF/**/*</excludes>
             </configuration>
