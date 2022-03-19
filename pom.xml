@@ -48,6 +48,15 @@
     </developer>
   </developers>
 
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>net.bytebuddy</groupId>
+        <artifactId>byte-buddy</artifactId>
+        <version>1.12.8</version>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
   <dependencies>
 
     <dependency>
@@ -226,6 +235,7 @@
             <package>io.jenkins.plugins.util</package>
           </packages>
           <excludes combine.children="append">
+            <exclude>.*IntegrationTestAgentContainer.*</exclude>
           </excludes>
           <entryPointClassPackage>io.jenkins.plugins.util.assertions</entryPointClassPackage>
         </configuration>

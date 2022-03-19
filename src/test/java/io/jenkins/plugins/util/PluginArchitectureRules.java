@@ -72,21 +72,21 @@ public final class PluginArchitectureRules {
     public static final ArchRule AJAX_PROXY_METHOD_MUST_BE_IN_PUBLIC_CLASS =
             methods().that().areAnnotatedWith(JavaScriptMethod.class)
                     .should().bePublic()
-                    .andShould().beDeclaredInClassesThat().arePublic();
+                    .andShould().beDeclaredInClassesThat().arePublic().allowEmptyShould(true);
 
     /**
      * Methods that use data binding must be in public classes.
      */
     public static final ArchRule DATA_BOUND_CONSTRUCTOR_MUST_BE_IN_PUBLIC_CLASS =
             constructors().that().areAnnotatedWith(DataBoundConstructor.class)
-                    .should().beDeclaredInClassesThat().arePublic();
+                    .should().beDeclaredInClassesThat().arePublic().allowEmptyShould(true);
 
     /**
      * Methods that use data binding must be in public classes.
      */
     public static final ArchRule DATA_BOUND_SETTER_MUST_BE_IN_PUBLIC_CLASS =
             methods().that().areAnnotatedWith(DataBoundSetter.class)
-                    .should().beDeclaredInClassesThat().arePublic();
+                    .should().beDeclaredInClassesThat().arePublic().allowEmptyShould(true);
 
     /**
      * Methods that are used as AJAX end points must be in public classes.
@@ -97,7 +97,7 @@ public final class PluginArchitectureRules {
                     .and().haveRawReturnType(FormValidation.class)
                     .should().beAnnotatedWith(POST.class)
                     .andShould().bePublic()
-                    .andShould(checkPermissions());
+                    .andShould(checkPermissions()).allowEmptyShould(true);
 
     /**
      * List model methods that are used as AJAX end points must use @POST and have a permission check.
@@ -108,7 +108,7 @@ public final class PluginArchitectureRules {
                     .and().haveRawReturnType(ofAllowedClasses(ComboBoxModel.class, ListBoxModel.class))
                     .should().beAnnotatedWith(POST.class)
                     .andShould().bePublic()
-                    .andShould(checkPermissions());
+                    .andShould(checkPermissions()).allowEmptyShould(true);
 
     private static HavePermissionCheck checkPermissions() {
         return new HavePermissionCheck();
