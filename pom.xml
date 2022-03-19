@@ -23,7 +23,7 @@
 
     <module.name>${project.groupId}.plugin.util.api</module.name>
 
-    <codingstyle.library.version>2.16.0</codingstyle.library.version>
+    <codingstyle.library.version>2.17.0</codingstyle.library.version>
     <error-prone.version>2.11.0</error-prone.version>
     <commons.lang.version>3.12.0</commons.lang.version>
     <commons-text.version>1.9</commons-text.version>
