@@ -336,7 +336,7 @@ public abstract class IntegrationTest extends ResourceTest {
 
     private Node createPermanentAgent(final String host, final int sshPort)
             throws Descriptor.FormException, IOException {
-        String privateKey = toString("/" + "ssh/rsa_private_key");
+        String privateKey = toString("/ssh/rsa_private_key", IntegrationTest.class);
         BasicSSHUserPrivateKey.DirectEntryPrivateKeySource privateKeySource
                 = new BasicSSHUserPrivateKey.DirectEntryPrivateKeySource(privateKey);
         BasicSSHUserPrivateKey credentials
