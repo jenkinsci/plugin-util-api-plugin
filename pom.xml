@@ -222,6 +222,7 @@
             <configuration>
               <includes combine.children="append">
                 <include>**/util/*</include>
+                <include>ssh/*</include>
               </includes>
             </configuration>
           </execution>
