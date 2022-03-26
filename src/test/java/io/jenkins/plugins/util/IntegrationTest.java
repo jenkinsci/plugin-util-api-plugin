@@ -450,7 +450,7 @@ public abstract class IntegrationTest extends ResourceTest {
      * @param to
      *         the file name in the workspace
      */
-    protected void copySingleFileToAgentWorkspace(final Slave agent, final TopLevelItem job,
+    protected void copySingleFileToAgentWorkspace(final Node agent, final TopLevelItem job,
             final String from, final String to) {
         FilePath workspace = getAgentWorkspace(agent, job);
 
