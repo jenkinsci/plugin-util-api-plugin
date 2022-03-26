@@ -73,12 +73,7 @@ public abstract class IntegrationTest extends ResourceTest {
     private static final Charset UTF_8 = StandardCharsets.UTF_8;
 
     private static final String SSH_AGENT_NAME = "ssh-agent-rsa";
-    private static final String SSH_KEY_PATH = "ssh/rsa-key";
-    private static final String SSH_KEY_PUB_PATH = "ssh/rsa-key.pub";
-    private static final String SSH_SSHD_CONFIG = "ssh/sshd_config";
-    private static final String SSH_AUTHORIZED_KEYS = "ssh/authorized_keys";
     private static final String SSH_CREDENTIALS_ID = "sshCredentialsId";
-    private static final String DOCKERFILE = "Dockerfile";
     private static final String USER = "jenkins";
     private static final String PASSPHRASE = "";
     private static final int SSH_PORT = 22;
@@ -341,7 +336,7 @@ public abstract class IntegrationTest extends ResourceTest {
 
     private Node createPermanentAgent(final String host, final int sshPort)
             throws Descriptor.FormException, IOException {
-        String privateKey = toString("/" + SSH_KEY_PATH);
+        String privateKey = toString("/" + "ssh/rsa_private_key");
         BasicSSHUserPrivateKey.DirectEntryPrivateKeySource privateKeySource
                 = new BasicSSHUserPrivateKey.DirectEntryPrivateKeySource(privateKey);
         BasicSSHUserPrivateKey credentials
@@ -847,11 +842,11 @@ public abstract class IntegrationTest extends ResourceTest {
          */
         public AgentContainer() {
             super(new ImageFromDockerfile(SSH_AGENT_NAME, false)
-                    .withFileFromClasspath(SSH_AUTHORIZED_KEYS, "/" + SSH_AUTHORIZED_KEYS)
-                    .withFileFromClasspath(SSH_KEY_PATH, "/" + SSH_KEY_PATH)
-                    .withFileFromClasspath(SSH_KEY_PUB_PATH, "/" + SSH_KEY_PUB_PATH)
-                    .withFileFromClasspath(SSH_SSHD_CONFIG, "/" + SSH_SSHD_CONFIG)
-                    .withFileFromClasspath(DOCKERFILE, "/ssh/" + DOCKERFILE));
+                    .withFileFromClasspath("ssh/authorized_keys", "/ssh/authorized_keys")
+                    .withFileFromClasspath("ssh/rsa-key", "/ssh/rsa_private_key")
+                    .withFileFromClasspath("ssh/rsa-key.pub", "/ssh/rsa_public_key")
+                    .withFileFromClasspath("ssh/sshd_config", "/ssh/sshd_config")
+                    .withFileFromClasspath("Dockerfile", "/ssh/Dockerfile"));
 
             setExposedPorts(Collections.singletonList(SSH_PORT));
         }
