@@ -72,7 +72,8 @@ import static org.assertj.core.api.Assumptions.*;
 public abstract class IntegrationTest extends ResourceTest {
     private static final Charset UTF_8 = StandardCharsets.UTF_8;
 
-    private static final String SSH_AGENT_NAME = "ssh-agent-rsa";
+    /** Name of the agent when used in a {@code node()} statement. */
+    protected static final String SSH_AGENT_NAME = "docker-agent";
     private static final String SSH_CREDENTIALS_ID = "sshCredentialsId";
     private static final String USER = "jenkins";
     private static final String PASSPHRASE = "";
