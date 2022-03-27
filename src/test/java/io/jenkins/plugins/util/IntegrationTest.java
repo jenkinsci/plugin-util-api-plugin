@@ -73,7 +73,7 @@ public abstract class IntegrationTest extends ResourceTest {
     private static final Charset UTF_8 = StandardCharsets.UTF_8;
 
     /** Name of the agent when used in a {@code node()} statement. */
-    protected static final String SSH_AGENT_NAME = "docker-agent";
+    protected static final String DOCKER_AGENT_NAME = "docker-agent";
     private static final String SSH_CREDENTIALS_ID = "sshCredentialsId";
     private static final String USER = "jenkins";
     private static final String PASSPHRASE = "";
@@ -347,7 +347,7 @@ public abstract class IntegrationTest extends ResourceTest {
                 Collections.singletonList(credentials));
         SSHLauncher launcher = new SSHLauncher(host, sshPort, SSH_CREDENTIALS_ID);
         launcher.setSshHostKeyVerificationStrategy(new NonVerifyingKeyVerificationStrategy());
-        DumbSlave agent = new DumbSlave(SSH_AGENT_NAME, AGENT_WORK_DIR, launcher);
+        DumbSlave agent = new DumbSlave(DOCKER_AGENT_NAME, AGENT_WORK_DIR, launcher);
         agent.setNodeProperties(Collections.singletonList(new EnvironmentVariablesNodeProperty(new Entry("JAVA_HOME", "/usr/lib/jvm/java-11-openjdk-amd64"))));
         Jenkins jenkins = getJenkins().jenkins;
         jenkins.addNode(agent);
@@ -842,7 +842,7 @@ public abstract class IntegrationTest extends ResourceTest {
          * Creates a new container that exposes port {@link #SSH_PORT} for SSH connections.
          */
         public AgentContainer() {
-            super(new ImageFromDockerfile(SSH_AGENT_NAME, false)
+            super(new ImageFromDockerfile(DOCKER_AGENT_NAME, false)
                     .withFileFromClasspath("ssh/authorized_keys", "/ssh/authorized_keys")
                     .withFileFromClasspath("ssh/rsa-key", "/ssh/rsa_private_key")
                     .withFileFromClasspath("ssh/rsa-key.pub", "/ssh/rsa_public_key")
