@@ -11,14 +11,23 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Objects;
 import java.util.function.Function;
 
 import org.junit.jupiter.api.Tag;
 import org.jvnet.hudson.test.JenkinsRule;
 import org.jvnet.hudson.test.JenkinsRule.JSONWebResponse;
+import org.jvnet.hudson.test.JenkinsRule.WebClient;
+import org.testcontainers.containers.GenericContainer;
+import org.testcontainers.images.builder.ImageFromDockerfile;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
+
+import com.cloudbees.jenkins.plugins.sshcredentials.impl.BasicSSHUserPrivateKey;
+import com.cloudbees.plugins.credentials.CredentialsScope;
+import com.cloudbees.plugins.credentials.SystemCredentialsProvider;
+import com.cloudbees.plugins.credentials.domains.Domain;
 
 import edu.hm.hafner.util.PathUtil;
 import edu.hm.hafner.util.ResourceTest;
@@ -29,16 +38,24 @@ import org.jenkinsci.plugins.workflow.job.WorkflowJob;
 import hudson.FilePath;
 import hudson.Functions;
 import hudson.model.Action;
+import hudson.model.Descriptor;
+import hudson.model.Descriptor.FormException;
 import hudson.model.FreeStyleProject;
+import hudson.model.Node;
 import hudson.model.Result;
 import hudson.model.Run;
 import hudson.model.Slave;
 import hudson.model.TopLevelItem;
 import hudson.model.labels.LabelAtom;
+import hudson.plugins.sshslaves.SSHLauncher;
+import hudson.plugins.sshslaves.verifiers.NonVerifyingKeyVerificationStrategy;
 import hudson.slaves.DumbSlave;
+import hudson.slaves.EnvironmentVariablesNodeProperty;
+import hudson.slaves.EnvironmentVariablesNodeProperty.Entry;
 import hudson.tasks.BatchFile;
 import hudson.tasks.Builder;
 import hudson.tasks.Shell;
+import jenkins.model.Jenkins;
 import jenkins.model.ParameterizedJobMixIn.ParameterizedJob;
 import jenkins.security.s2m.AdminWhitelistRule;
 
@@ -51,10 +68,17 @@ import static org.assertj.core.api.Assumptions.*;
  * @author Ullrich Hafner
  */
 @Tag("IntegrationTest")
-@SuppressWarnings({"ClassDataAbstractionCoupling", "ClassFanOutComplexity", "SameParameterValue", "PMD.SystemPrintln", "PMD.GodClass", "PMD.ExcessiveClassLength", "PMD.ExcessiveImports", "PMD.CouplingBetweenObjects", "PMD.CyclomaticComplexity"})
+@SuppressWarnings({"ClassDataAbstractionCoupling", "ClassFanOutComplexity", "SameParameterValue", "PMD.SystemPrintln", "PMD.GodClass", "PMD.ExcessiveClassLength", "PMD.ExcessiveImports", "PMD.CouplingBetweenObjects", "PMD.CyclomaticComplexity", "unused"})
 public abstract class IntegrationTest extends ResourceTest {
     private static final Charset UTF_8 = StandardCharsets.UTF_8;
 
+    /** Name of the agent when used in a {@code node()} statement. */
+    protected static final String DOCKER_AGENT_NAME = "docker-agent";
+    private static final String SSH_CREDENTIALS_ID = "sshCredentialsId";
+    private static final String USER = "jenkins";
+    private static final String PASSPHRASE = "";
+    private static final int SSH_PORT = 22;
+    private static final String AGENT_WORK_DIR = "/home/jenkins";
     private static final String WINDOWS_FILE_ACCESS_READ_ONLY = "RX";
     private static final String WINDOWS_FILE_DENY = "/deny";
 
@@ -293,6 +317,55 @@ public abstract class IntegrationTest extends ResourceTest {
     }
 
     /**
+     * Creates an {@link Node agent} that runs in the provided docker container.
+     *
+     * @param agentContainer
+     *         the docker container to use as agent
+     *
+     * @return the agent
+     */
+    protected Node createDockerAgent(final AgentContainer agentContainer) {
+        try {
+            Node node = createPermanentAgent(agentContainer.getHost(), agentContainer.getMappedPort(SSH_PORT));
+            waitForAgentConnected(node);
+            return node;
+        }
+        catch (FormException | IOException | InterruptedException exception) {
+            throw new AssertionError(exception);
+        }
+    }
+
+    private Node createPermanentAgent(final String host, final int sshPort)
+            throws Descriptor.FormException, IOException {
+        String privateKey = toString("/ssh/rsa_private_key");
+        BasicSSHUserPrivateKey.DirectEntryPrivateKeySource privateKeySource
+                = new BasicSSHUserPrivateKey.DirectEntryPrivateKeySource(privateKey);
+        BasicSSHUserPrivateKey credentials
+                = new BasicSSHUserPrivateKey(CredentialsScope.SYSTEM, SSH_CREDENTIALS_ID, USER, privateKeySource,
+                PASSPHRASE, "Private Key ssh credentials");
+        SystemCredentialsProvider.getInstance().getDomainCredentialsMap().put(Domain.global(),
+                Collections.singletonList(credentials));
+        SSHLauncher launcher = new SSHLauncher(host, sshPort, SSH_CREDENTIALS_ID);
+        launcher.setSshHostKeyVerificationStrategy(new NonVerifyingKeyVerificationStrategy());
+        DumbSlave agent = new DumbSlave(DOCKER_AGENT_NAME, AGENT_WORK_DIR, launcher);
+        agent.setNodeProperties(Collections.singletonList(new EnvironmentVariablesNodeProperty(new Entry("JAVA_HOME", "/usr/lib/jvm/java-11-openjdk-amd64"))));
+        Jenkins jenkins = getJenkins().jenkins;
+        jenkins.addNode(agent);
+        return jenkins.getNode(agent.getNodeName());
+    }
+
+    @SuppressWarnings("BusyWait")
+    private void waitForAgentConnected(final Node node) throws InterruptedException {
+        int count = 0;
+        while (!Objects.requireNonNull(node.toComputer()).isOnline() && count < 150) {
+            Thread.sleep(1000);
+            count++;
+        }
+
+        assertThat(Objects.requireNonNull(node.toComputer()).isOnline()).isTrue();
+    }
+
+    /**
      * Creates an {@link DumbSlave agent} with the specified label. Master - agent security will be enabled.
      *
      * @param label
@@ -330,7 +403,7 @@ public abstract class IntegrationTest extends ResourceTest {
      *
      * @return path to the workspace
      */
-    protected FilePath getAgentWorkspace(final Slave agent, final TopLevelItem job) {
+    protected FilePath getAgentWorkspace(final Node agent, final TopLevelItem job) {
         FilePath workspace = agent.getWorkspaceFor(job);
         assertThat(workspace).isNotNull();
         return workspace;
@@ -348,7 +421,7 @@ public abstract class IntegrationTest extends ResourceTest {
      * @param content
      *         the content to write
      */
-    protected void createFileInAgentWorkspace(final Slave agent, final TopLevelItem job, final String fileName,
+    protected void createFileInAgentWorkspace(final Node agent, final TopLevelItem job, final String fileName,
             final String content) {
         try {
             FilePath workspace = getAgentWorkspace(agent, job);
@@ -373,7 +446,7 @@ public abstract class IntegrationTest extends ResourceTest {
      * @param to
      *         the file name in the workspace
      */
-    protected void copySingleFileToAgentWorkspace(final Slave agent, final TopLevelItem job,
+    protected void copySingleFileToAgentWorkspace(final Node agent, final TopLevelItem job,
             final String from, final String to) {
         FilePath workspace = getAgentWorkspace(agent, job);
 
@@ -752,10 +825,31 @@ public abstract class IntegrationTest extends ResourceTest {
      */
     protected Document callXmlRemoteApi(final String url) {
         try {
-            return getJenkins().createWebClient().goToXml(url).getXmlDocument();
+            try (WebClient webClient = getJenkins().createWebClient()) {
+                return webClient.goToXml(url).getXmlDocument();
+            }
         }
         catch (IOException | SAXException e) {
             throw new AssertionError(e);
+        }
+    }
+
+    /**
+     * Docker container to be used as Jenkins build agent. Provides tools like make, gcc, java 11, or maven.
+     */
+    public static class AgentContainer extends GenericContainer<AgentContainer> {
+        /**
+         * Creates a new container that exposes port {@link #SSH_PORT} for SSH connections.
+         */
+        public AgentContainer() {
+            super(new ImageFromDockerfile(DOCKER_AGENT_NAME, false)
+                    .withFileFromClasspath("ssh/authorized_keys", "/ssh/authorized_keys")
+                    .withFileFromClasspath("ssh/rsa-key", "/ssh/rsa_private_key")
+                    .withFileFromClasspath("ssh/rsa-key.pub", "/ssh/rsa_public_key")
+                    .withFileFromClasspath("ssh/sshd_config", "/ssh/sshd_config")
+                    .withFileFromClasspath("Dockerfile", "/ssh/Dockerfile"));
+
+            setExposedPorts(Collections.singletonList(SSH_PORT));
         }
     }
 }

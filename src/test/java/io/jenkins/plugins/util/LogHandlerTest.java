@@ -3,13 +3,13 @@ package io.jenkins.plugins.util;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import edu.hm.hafner.util.FilteredLog;
 
 import hudson.model.TaskListener;
 
+import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 /**
@@ -40,7 +40,7 @@ class LogHandlerTest {
 
         logHandler.log(logger);
 
-        Assertions.assertThat(outputStream.toString()).isEqualTo(String.format(
+        assertThat(outputStream.toString()).isEqualTo(String.format(
                 "[%s] [-ERROR-] %s%n"
                         + "[%s] %s%n",
                 LOG_HANDLER_NAME, MESSAGE, LOG_HANDLER_NAME, MESSAGE));
@@ -49,7 +49,7 @@ class LogHandlerTest {
         logger.logError(ADDITIONAL_MESSAGE);
         logHandler.log(logger);
 
-        Assertions.assertThat(outputStream.toString()).isEqualTo(String.format(
+        assertThat(outputStream.toString()).isEqualTo(String.format(
                 "[%s] [-ERROR-] %s%n"
                         + "[%s] %s%n"
                         + "[%s] [-ERROR-] %s%n"
@@ -67,7 +67,7 @@ class LogHandlerTest {
 
         logHandler.log(LOGGER_MESSAGE);
 
-        Assertions.assertThat(outputStream.toString())
+        assertThat(outputStream.toString())
                 .isEqualTo(String.format("[%s] %s%n", LOG_HANDLER_NAME, LOGGER_MESSAGE));
     }
 
