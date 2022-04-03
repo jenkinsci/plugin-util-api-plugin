@@ -1,0 +1,5 @@
+<?jelly escape-by-default='true'?>
+
+<div>
+  Provides utility classes that can be used to accelerate plugin development.
+</div>
