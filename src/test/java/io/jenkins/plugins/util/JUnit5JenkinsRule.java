@@ -10,6 +10,7 @@ import org.jvnet.hudson.test.JenkinsRecipe;
 import org.jvnet.hudson.test.JenkinsRule;
 
 import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 /**
  * Provides JUnit 5 compatibility for {@link JenkinsRule}.
@@ -27,6 +28,7 @@ class JUnit5JenkinsRule extends JenkinsRule {
     }
 
     @Override
+    @SuppressFBWarnings("THROWS")
     public void recipe() {
         JenkinsRecipe jenkinsRecipe = context.findAnnotation(JenkinsRecipe.class).orElse(null);
         if (jenkinsRecipe == null) {
