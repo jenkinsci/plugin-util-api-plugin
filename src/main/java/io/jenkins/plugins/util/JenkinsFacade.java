@@ -7,6 +7,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.security.access.AccessDeniedException;
 
 import edu.umd.cs.findbugs.annotations.CheckForNull;
 
@@ -201,13 +202,8 @@ public class JenkinsFacade implements Serializable {
         try {
             return Optional.ofNullable(getJenkins().getItemByFullName(name, Job.class));
         }
-        catch (RuntimeException x) { // TODO switch to simple catch (AccessDeniedException) when baseline includes Spring Security
-            if (x.getClass().getSimpleName().startsWith("AccessDeniedException")) {
-                return Optional.empty();
-            }
-            else {
-                throw x;
-            }
+        catch (AccessDeniedException ignored) {
+            return Optional.empty();
         }
     }
 
@@ -224,13 +220,8 @@ public class JenkinsFacade implements Serializable {
         try {
             return Optional.ofNullable(Run.fromExternalizableId(id));
         }
-        catch (RuntimeException x) { // TODO switch to simple catch (AccessDeniedException) when baseline includes Spring Security
-            if (x.getClass().getSimpleName().startsWith("AccessDeniedException")) {
-                return Optional.empty();
-            }
-            else {
-                throw x;
-            }
+        catch (AccessDeniedException ignored) {
+            return Optional.empty();
         }
     }
 
