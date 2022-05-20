@@ -1,5 +1,6 @@
 package io.jenkins.plugins.util;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 import org.junit.jupiter.api.extension.ExtensionContext;
@@ -26,14 +27,19 @@ class JUnit5JenkinsRule extends JenkinsRule {
     }
 
     @Override
-    public void recipe() throws Exception {
+    public void recipe() {
         JenkinsRecipe jenkinsRecipe = context.findAnnotation(JenkinsRecipe.class).orElse(null);
         if (jenkinsRecipe == null) {
             return;
         }
-        @SuppressWarnings("unchecked") final JenkinsRecipe.Runner<JenkinsRecipe> runner
-                = (JenkinsRecipe.Runner<JenkinsRecipe>) jenkinsRecipe.value().getDeclaredConstructor().newInstance();
-        recipes.add(runner);
-        tearDowns.add(() -> runner.tearDown(this, jenkinsRecipe));
+        try {
+            @SuppressWarnings("unchecked")
+            final JenkinsRecipe.Runner<JenkinsRecipe> runner = (JenkinsRecipe.Runner<JenkinsRecipe>) jenkinsRecipe.value().getDeclaredConstructor().newInstance();
+            recipes.add(runner);
+            tearDowns.add(() -> runner.tearDown(this, jenkinsRecipe));
+        }
+        catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException exception) {
+            throw new AssertionError(exception);
+        }
     }
 }

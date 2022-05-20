@@ -7,6 +7,8 @@ import org.junit.jupiter.api.extension.ParameterResolutionException;
 import org.junit.jupiter.api.extension.ParameterResolver;
 import org.jvnet.hudson.test.JenkinsRule;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 /**
  * JUnit 5 extension providing {@link JenkinsRule} integration.
  *
@@ -18,6 +20,7 @@ class JenkinsExtension implements ParameterResolver, AfterEachCallback {
             = ExtensionContext.Namespace.create(JenkinsExtension.class);
 
     @Override
+    @SuppressFBWarnings("THROWS")
     public void afterEach(final ExtensionContext context) throws Exception {
         final JenkinsRule rule = context.getStore(NAMESPACE).remove(KEY, JenkinsRule.class);
         if (rule == null) {
