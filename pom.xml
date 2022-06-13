@@ -239,6 +239,50 @@
           <entryPointClassPackage>io.jenkins.plugins.util.assertions</entryPointClassPackage>
         </configuration>
       </plugin>
+      <plugin>
+        <groupId>org.revapi</groupId>
+        <artifactId>revapi-maven-plugin</artifactId>
+        <configuration>
+          <checkDependencies>false</checkDependencies>
+          <analysisConfiguration>
+            <revapi.java>
+              <missing-classes>
+                <behavior>ignore</behavior>
+              </missing-classes>
+            </revapi.java>
+            <revapi.filter>
+              <elements>
+                <exclude combine.children="append">
+                  <item>
+                    <matcher>java-package</matcher>
+                    <match>/org\.apache(\..*)?/</match>
+                  </item>
+                  <item>
+                    <matcher>java-package</matcher>
+                    <match>/j2html(\..*)?/</match>
+                  </item>
+                  <item>
+                    <matcher>java-package</matcher>
+                    <match>/one\.util\.streamex(\..*)?/</match>
+                  </item>
+                </exclude>
+              </elements>
+            </revapi.filter>
+            <revapi.differences>
+              <justification>Not relevant changes that are safe to ignore</justification>
+              <criticality>allowed</criticality>
+              <differences combine.children="append">
+                <item>
+                  <regex>true</regex>
+                  <code>java.annotation.*</code>
+                  <annotationType>edu.umd.cs.findbugs.annotations.*</annotationType>
+                  <justification>Annotation should be safe to change</justification>
+                </item>
+              </differences>
+            </revapi.differences>
+          </analysisConfiguration>
+        </configuration>
+      </plugin>
     </plugins>
   </build>
 
