@@ -4,22 +4,14 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.apache.commons.lang3.StringUtils;
-
 import com.tngtech.archunit.base.DescribedPredicate;
-import com.tngtech.archunit.core.domain.AccessTarget.ConstructorCallTarget;
-import com.tngtech.archunit.core.domain.JavaCall;
 import com.tngtech.archunit.core.domain.JavaClass;
-import com.tngtech.archunit.core.domain.JavaConstructorCall;
 import com.tngtech.archunit.core.domain.JavaMethod;
 import com.tngtech.archunit.core.domain.JavaModifier;
-import com.tngtech.archunit.core.domain.properties.CanBeAnnotated;
 import com.tngtech.archunit.lang.ArchCondition;
 import com.tngtech.archunit.lang.ArchRule;
 import com.tngtech.archunit.lang.ConditionEvents;
 import com.tngtech.archunit.lang.SimpleConditionEvent;
-
-import edu.hm.hafner.util.VisibleForTesting;
 
 import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.DataBoundSetter;
@@ -122,31 +114,6 @@ public final class PluginArchitectureRules {
         // prevents instantiation
     }
 
-    /**
-     * Matches if a call from outside the defining class uses a method or constructor annotated with {@link
-     * VisibleForTesting}. There are two exceptions:
-     * <ul>
-     * <li>The method is called on the same class</li>
-     * <li>The method is called in a method also annotated with {@link VisibleForTesting}</li>
-     * </ul>
-     */
-    private static class AccessRestrictedToTests extends DescribedPredicate<JavaCall<?>> {
-        AccessRestrictedToTests() {
-            super("access is restricted to tests");
-        }
-
-        @Override
-        public boolean apply(final JavaCall<?> input) {
-            return isVisibleForTesting(input.getTarget())
-                    && !input.getOriginOwner().equals(input.getTargetOwner())
-                    && !isVisibleForTesting(input.getOrigin());
-        }
-
-        private boolean isVisibleForTesting(final CanBeAnnotated target) {
-            return target.isAnnotatedWith(VisibleForTesting.class);
-        }
-    }
-
     private static class HavePermissionCheck extends ArchCondition<JavaMethod> {
         HavePermissionCheck() {
             super("should have a permission check");
@@ -181,40 +148,6 @@ public final class PluginArchitectureRules {
         @Override
         public boolean apply(final JavaClass input) {
             return allowedClassNames.contains(input.getFullName());
-        }
-    }
-
-    private static class ExceptionHasNoContext extends DescribedPredicate<JavaConstructorCall> {
-        ExceptionHasNoContext() {
-            super("exception context is missing");
-        }
-
-        @Override
-        public boolean apply(final JavaConstructorCall javaConstructorCall) {
-            ConstructorCallTarget target = javaConstructorCall.getTarget();
-            if (target.getRawParameterTypes().size() > 0) {
-                return false;
-            }
-            return target.getOwner().isAssignableTo(Throwable.class);
-        }
-    }
-
-    /**
-     * Matches if a code unit of one of the registered classes has been called.
-     */
-    private static class TargetIsForbiddenClass extends DescribedPredicate<JavaCall<?>> {
-        private final String[] classes;
-
-        TargetIsForbiddenClass(final String... classes) {
-            super("forbidden class");
-
-            this.classes = Arrays.copyOf(classes, classes.length);
-        }
-
-        @Override
-        public boolean apply(final JavaCall<?> input) {
-            return StringUtils.containsAny(input.getTargetOwner().getFullName(), classes)
-                    && !"assertTimeoutPreemptively".equals(input.getName());
         }
     }
 }
