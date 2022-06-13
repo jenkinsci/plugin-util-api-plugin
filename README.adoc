@@ -1,11 +1,14 @@
 :imagesdir: etc/images
 
+:xrefstyle: short
+
 = Jenkins Plugin Utilities
 
 image:https://ci.jenkins.io/job/Plugins/job/plugin-util-api-plugin/job/master/badge/icon?subject=Jenkins%20CI[Jenkins, link=https://ci.jenkins.io/job/Plugins/job/plugin-util-api-plugin/job/master/]
 image:https://github.com/jenkinsci/plugin-util-api-plugin/workflows/GitHub%20CI/badge.svg?branch=master[GitHub Actions, link=https://github.com/jenkinsci/plugin-util-api-plugin/actions]
+image:https://img.shields.io/jenkins/plugin/i/plugin-util-api.svg?color=red[Jenkins Plugin Installslink=https://plugins.jenkins.io/warnings-ng]
 
-This Jenkins plug-in provides utility classes that can be used to accelerate plugin development.
+This Jenkins plug-in provides utility classes that can be used to accelerate plugin development. It can be used in conjunction with several JS based UI plug-ins to improve the user experience of your plug-ins as well. For more details please refer to the https://www.jenkins.io/blog/2020/03/17/ui-plugins/[blog post] or https://www.youtube.com/watch?v=GLLhi2UZlxI[meetup video] of the general topic "Hands On: Beautify the UI of Jenkins reporter plugins".
 
 == How to use the plugin
 
@@ -16,16 +19,14 @@ In order to use this small library, add a maven dependency to your pom:
 <dependency>
   <groupId>io.jenkins.plugins</groupId>
   <artifactId>plugin-util-api</artifactId>
-  <version>[latest version]</version>
 </dependency>
 ----
 
+This plugin is included in https://www.jenkins.io/doc/developer/plugin-development/dependency-management/[Jenkins BOM], so there is no need to specify the exact version to include.
+
 == General structure of a reporter
 
-In this section I will explain some fundamentals of the design of Jenkins, i.e. the Java model and the associated
-user interface elements. If you are already familiar on how to implement the corresponding extension points of a
-reporter plugin (see section https://jenkins.io/doc/developer/extensibility/[Extensibility] in Jenkins'
-developer guide), then you can skip this section and head directly to <<extending-jenkins-model>>.
+In this section I will explain some fundamentals of the design of Jenkins, i.e. the Java model and the associated user interface elements. If you are already familiar on how to implement the corresponding extension points of a reporter plugin (see section https://jenkins.io/doc/developer/extensibility/[Extensibility] in Jenkins' developer guide), then you can skip this section and head directly to <<extending-jenkins-model>>.
 
 Jenkins organizes projects using the static object model structure shown in <<jenkins-model>>.
 
@@ -33,61 +34,41 @@ Jenkins organizes projects using the static object model structure shown in <<je
 .Jenkins design - high level view of the Java model
 image::jenkins-design.png[Jenkins design]
 
-The top level items in Jenkins user interface are jobs (at least the top level items
-we are interested in). Jenkins contains several jobs of different types (Freestyle jobs, Maven Jobs, Pipelines, etc.).
+The top level items in Jenkins user interface are jobs (at least the top level items we are interested in). Jenkins contains several jobs of different types (Freestyle jobs, Maven Jobs, Pipelines, etc.).
 
-Each of these jobs contains an arbitrary number of builds (or more technically, runs). Each build is identified by its
-unique build number. Jenkins plugins can attach results to these builds, e.g. build artifacts, test results,
-analysis reports, etc. In order to attach such a result, a plugin technically needs to implement and create an action
-that stores these results.
+Each of these jobs contains an arbitrary number of builds (or more technically, runs). Each build is identified by its unique build number. Jenkins' plug-ins can attach results to these builds, e.g. build artifacts, test results, analysis reports, etc. In order to attach such a result, a plugin technically needs to implement and create an action that stores these results.
 
-These Java objects are visualized in several different views, which are described in more detail in the following
+These Java objects are visualized in several views, which are described in more detail in the following
 sections. The top-level view that shows all available Jobs is shown in <<img-jobs>>.
 
 .Jenkins view showing all available jobs
 [#img-jobs]
 image::jobs.png[Jobs]
 
-Plugins can also contribute UI elements in these views, but this is out of scope of this guide.
+Plugins can also contribute UI elements in these views, but this is out of scope of this guide, see https://www.jenkins.io/blog/2020/03/17/ui-plugins/[Hands On: Beautify the UI of Jenkins reporter plugins] for more details.
 
-Each job has a detail view, where plugins can extend corresponding extension points and provide summary boxes and
-trend charts. Typically, summary boxes for reporters are not required on the job level, so I describe only trend charts
-in more detail, see https://github.com/jenkinsci/echarts-api-plugin[ECharts Jenkins plugin].
+Each job has a detail view, where plugins can extend corresponding extension points and provide summary boxes and trend charts. Typically, summary boxes for reporters are not required on the job level, so I describe only trend charts in more detail, see https://github.com/jenkinsci/echarts-api-plugin[ECharts Jenkins plugin].
 
 .Jenkins view showing details about a job
 [#img-job]
 image::job.png[Job details]
 
-Each build has a detail view as well. Here plugins can provide summary boxes similar to the boxes for the job details
-view. Typically, plugins show here only a short summary and provide a link to detailed results, see <<img-build>> for
-an example.
+Each build has a detail view as well. Here plugins can provide summary boxes similar to the boxes for the job details view. Typically, plugins show here only a short summary and provide a link to detailed results, see <<img-build>> for an example.
 
 .Jenkins view showing details about a build
 [#img-build]
 image::build.png[Build details]
 
-The last element in the view hierarchy actually is a dedicated view that shows the results of a specific plugin. E.g.,
-there are views to show the test results, the analysis results, and so on. It is totally up to a given plugin what
-elements should be shown there. In the next few sections I will introduce some new UI components that can be used
-to show the corresponding results in a pleasant way.
+The last element in the view hierarchy actually is a dedicated view that shows the results of a specific plugin. E.g., there are views to show the test results, the analysis results, and so on. It is totally up to a given plugin what elements should be shown there. In the next few sections I will introduce some new UI components that can be used to show the corresponding results in a pleasant way.
 
 [#extending-jenkins-model]
 === Extending Jenkins object model
 
-Since reporters typically are composed in a similar way, I extended Jenkins' original object model
-(see <<jenkins-model>>) with some additional elements, so it will be much simpler to create or implement
-a new reporter plugin. This new model is shown in <<jenkins-reporter-model>>. The central element is a build action that
-will store the results of a plugin reporter. This action will be attached to each build and will hold (and persist) the
-results for a reporter. The detail data of each action will be automatically stored in an additional file, so the
-memory footprint of Jenkins can be kept small if the details are never requested by users. Additionally, this
-action is also used to simplify the creation of project actions and trend charts, see <<trend-charts>>.
+Since reporters typically are composed in a similar way, I extended Jenkins' original object model(see <<jenkins-model>>) with some additional elements, so it will be much simpler to create or implement a new reporter plugin. This new model is shown in <<jenkins-reporter-model>>. The central element is a build action that will store the results of a plugin reporter. This action will be attached to each build and will hold (and persist) the results for a reporter. The detail data of each action will be automatically stored in an additional file, so the memory footprint of Jenkins can be kept small if the details are never requested by users. Additionally, this action is also used to simplify the creation of project actions and trend charts, for details see the https://github.com/jenkinsci/echarts-api-plugin[ECharts Jenkins plugin].
 
 [#jenkins-reporter-model]
 .Jenkins reporter design - high level view of the model for reporter plugins
 image::reporter-design.png[Jenkins reporter design]
 
-
-You can find several examples of Jenkins plugins that use this library, e.g.  the
-https://github.com/jenkinsci/warnings-ng-plugin[Warnings Next Generation plugin]
-or the https://github.com/jenkinsci/warnings-ng-plugin[Forensics plugin].
+You can find several examples of Jenkins plugins that use this library, e.g.  the https://github.com/jenkinsci/warnings-ng-plugin[Warnings Next Generation plugin] or the https://github.com/jenkinsci/warnings-ng-plugin[Forensics plugin].
 
