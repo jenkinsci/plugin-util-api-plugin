@@ -2,12 +2,11 @@ package io.jenkins.plugins.util;
 
 import java.util.Objects;
 
-import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.text.StringEscapeUtils;
 import org.assertj.core.api.AbstractAssert;
 
 import hudson.util.FormValidation;
 import hudson.util.FormValidation.Kind;
+import org.springframework.web.util.HtmlUtils;
 
 /**
  * Assertions for {@link FormValidation} instances.
@@ -88,10 +87,10 @@ public class FormValidationAssert extends AbstractAssert<FormValidationAssert, F
     public FormValidationAssert hasMessage(final String expectedMessage) {
         isNotNull();
 
-        String actualMessage = StringEscapeUtils.unescapeHtml4(actual.getMessage());
+        String actualMessage = HtmlUtils.htmlUnescape(actual.getMessage());
         if (!Objects.equals(actualMessage, expectedMessage)) {
             failWithMessage(EXPECTED_BUT_WAS_MESSAGE, "message",
-                    StringEscapeUtils.unescapeHtml4(actual.toString()), expectedMessage, actualMessage);
+                    HtmlUtils.htmlUnescape(actual.toString()), expectedMessage, actualMessage);
         }
 
         return this;
@@ -110,10 +109,10 @@ public class FormValidationAssert extends AbstractAssert<FormValidationAssert, F
     public FormValidationAssert hasMessageContaining(final String expectedMessagePart) {
         isNotNull();
 
-        String actualMessage = StringEscapeUtils.unescapeHtml4(actual.getMessage());
-        if (!StringUtils.contains(actualMessage, expectedMessagePart)) {
+        String actualMessage = HtmlUtils.htmlUnescape(actual.getMessage());
+        if (!actualMessage.contains(expectedMessagePart)) {
             failWithMessage("%nExpecting %s of:%n <%s>%nto contain:%n <%s>%nbut was:%n <%s>.", "message",
-                    StringEscapeUtils.unescapeHtml4(actual.toString()), expectedMessagePart, actualMessage);
+                    HtmlUtils.htmlUnescape(actual.toString()), expectedMessagePart, actualMessage);
         }
 
         return this;

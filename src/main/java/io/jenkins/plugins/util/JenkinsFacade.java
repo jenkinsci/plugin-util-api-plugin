@@ -6,7 +6,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import org.apache.commons.lang3.StringUtils;
+import org.springframework.util.StringUtils;
 import org.springframework.security.access.AccessDeniedException;
 
 import edu.umd.cs.findbugs.annotations.CheckForNull;
@@ -257,7 +257,7 @@ public class JenkinsFacade implements Serializable {
         if (currentRequest != null) {
             return currentRequest.getContextPath();
         }
-        return StringUtils.EMPTY;
+        return "";
     }
 
     /**
@@ -269,7 +269,7 @@ public class JenkinsFacade implements Serializable {
      * @return the absolute URL
      */
     public String getAbsoluteUrl(final String... urlElements) {
-        return getAbsoluteUrl(StringUtils.join(urlElements, "/"));
+        return getAbsoluteUrl(StringUtils.arrayToDelimitedString(urlElements, "/"));
 
     }
 
