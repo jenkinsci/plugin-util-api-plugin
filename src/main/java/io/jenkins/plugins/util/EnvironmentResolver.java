@@ -2,7 +2,6 @@ package io.jenkins.plugins.util;
 
 import edu.hm.hafner.util.VisibleForTesting;
 import edu.umd.cs.findbugs.annotations.CheckForNull;
-import org.springframework.util.StringUtils;
 import hudson.EnvVars;
 import hudson.Util;
 
@@ -43,7 +42,7 @@ public class EnvironmentResolver {
     public String expandEnvironmentVariables(@CheckForNull final EnvVars environment, final String nonExpandedValue) {
         String expanded = nonExpandedValue;
         if (environment != null && !environment.isEmpty()) {
-            for (int i = 0; i < resolveVariablesDepth && StringUtils.hasText(expanded) && StringUtils.hasLength(expanded); i++) {
+            for (int i = 0; i < resolveVariablesDepth && !expanded.isBlank(); i++) {
                 String old = expanded;
                 expanded = Util.replaceMacro(expanded, environment);
                 if (old.equals(expanded)) {

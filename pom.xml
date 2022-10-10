@@ -18,6 +18,8 @@
   <url>https://github.com/jenkinsci/plugin-util-api-plugin</url>
 
   <properties>
+    <jenkins.baseline>2.361</jenkins.baseline>
+    <jenkins.version>${jenkins.baseline}.2</jenkins.version>
     <revision>2.19.0</revision>
     <changelist>-SNAPSHOT</changelist>
 
@@ -160,7 +162,11 @@
       <artifactId>ssh-slaves</artifactId>
       <scope>test</scope>
     </dependency>
-
+    <dependency>
+      <groupId>io.jenkins.plugins</groupId>
+      <artifactId>commons-text-api</artifactId>
+      <scope>test</scope>
+    </dependency>
   </dependencies>
 
   <build>
