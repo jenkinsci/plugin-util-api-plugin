@@ -321,6 +321,27 @@ public abstract class IntegrationTest extends ResourceTest {
      *
      * @param agentContainer
      *         the docker container to use as agent
+     * @param label
+     *         the label to use for the agent
+     *
+     * @return the agent
+     */
+    protected Node createDockerAgent(final AgentContainer agentContainer, final String label) {
+        try {
+            Node agent = createDockerAgent(agentContainer);
+            agent.setLabelString(label);
+            return agent;
+        }
+        catch (IOException exception) {
+            throw new AssertionError(exception);
+        }
+    }
+
+    /**
+     * Creates an {@link Node agent} that runs in the provided docker container.
+     *
+     * @param agentContainer
+     *         the docker container to use as agent
      *
      * @return the agent
      */
@@ -431,6 +452,22 @@ public abstract class IntegrationTest extends ResourceTest {
         catch (IOException | InterruptedException e) {
             throw new AssertionError(e);
         }
+    }
+
+    /**
+     * Copies the specified files to the workspace of the specified agent. Uses the specified new file name in the
+     * workspace.
+     *
+     * @param agent
+     *         the agent to get the workspace for
+     * @param job
+     *         the job to get the workspace for
+     * @param fileName
+     *         the file to copy
+     */
+    protected void copySingleFileToAgentWorkspace(final Node agent, final TopLevelItem job,
+            final String fileName) {
+        copySingleFileToAgentWorkspace(agent, job, fileName, fileName);
     }
 
     /**
