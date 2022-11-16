@@ -245,6 +245,7 @@
           </packages>
           <excludes combine.children="append">
             <exclude>.*IntegrationTestAgentContainer.*</exclude>
+            <exclude>.*FilesScanner.*</exclude>
           </excludes>
           <entryPointClassPackage>io.jenkins.plugins.util.assertions</entryPointClassPackage>
         </configuration>
