@@ -60,7 +60,7 @@ public abstract class FilesScanner<T extends Serializable>
     }
 
     @Override
-    public ScannerResult<T> invoke(final File workspace, final VirtualChannel channel) {
+    public final ScannerResult<T> invoke(final File workspace, final VirtualChannel channel) {
         FilteredLog log = new FilteredLog("Errors during parsing");
         log.logInfo("Searching for all files in '%s' that match the pattern '%s'",
                 workspace.getAbsolutePath(), filePattern);
@@ -73,7 +73,7 @@ public abstract class FilesScanner<T extends Serializable>
             return new ScannerResult<>(log);
         }
         else {
-            log.logInfo("-> found %d %s", fileNames.length == 1 ? "file" : "files");
+            log.logInfo("-> found %s", plural(fileNames.length, "file"));
 
             return new ScannerResult<>(log, scanFiles(workspace, fileNames, log));
         }
@@ -95,6 +95,21 @@ public abstract class FilesScanner<T extends Serializable>
             }
         }
         return results;
+    }
+
+    /**
+     * Creates the correct singular or plural form of the specified word depending on the size of the elements.
+     *
+     * @param count
+     *         the count of elements
+     * @param itemName
+     *         the name of the items (singular)
+     *
+     * @return the message
+     */
+    @SuppressWarnings("PMD.AvoidLiteralsInIfCondition")
+    protected String plural(final int count, final String itemName) {
+        return String.format("%d %s%s", count, itemName, count == 1 ? "" : "s");
     }
 
     protected abstract T processFile(Path file, Charset charset, FilteredLog log);
