@@ -18,31 +18,34 @@ import org.apache.tools.ant.types.selectors.TypeSelector;
 import org.apache.tools.ant.types.selectors.TypeSelector.FileType;
 
 import edu.hm.hafner.util.FilteredLog;
+import edu.hm.hafner.util.VisibleForTesting;
 
 import hudson.remoting.VirtualChannel;
 import jenkins.MasterToSlaveFileCallable;
 
+import io.jenkins.plugins.util.FilesVisitor.ScannerResult;
+
 /**
- * Finds all files that match a specified Ant files pattern and delegates these file to the actual processing method
- * {@link #processFile(Path, Charset, FilteredLog)}. This callable will be invoked on an agent so all fields and the
- * returned list of results need to be {@link Serializable}.
+ * Finds all files that match a specified Ant file pattern and visits these files with the processing method
+ * {@link #processFile(Path, Charset, FilteredLog)}, that has to be implemented by concrete subclasses. This callable
+ * will be invoked on an agent so all fields and the returned list of results need to be {@link Serializable}.
  *
  * @param <T>
  *         the type of the results
  *
  * @author Ullrich Hafner
  */
-// FIXME: check if we should rather use NIO package than Ant
-public abstract class FilesScanner<T extends Serializable>
-        extends MasterToSlaveFileCallable<FilesScanner.ScannerResult<T>> {
+public abstract class FilesVisitor<T extends Serializable>
+        extends MasterToSlaveFileCallable<ScannerResult<T>> {
     private static final long serialVersionUID = 2216842481400265078L;
 
     private final String filePattern;
     private final String encoding;
     private final boolean followSymbolicLinks;
+    private final FileSystemFacade fileSystemFacade;
 
     /**
-     * Creates a new instance of {@link FilesScanner}.
+     * Creates a new instance of {@link FilesVisitor}.
      *
      * @param filePattern
      *         ant file-set pattern to scan for files to parse
@@ -51,22 +54,29 @@ public abstract class FilesScanner<T extends Serializable>
      * @param followSymbolicLinks
      *         if the scanner should traverse symbolic links
      */
-    protected FilesScanner(final String filePattern, final String encoding, final boolean followSymbolicLinks) {
+    protected FilesVisitor(final String filePattern, final String encoding, final boolean followSymbolicLinks) {
+        this(filePattern, encoding, followSymbolicLinks, new FileSystemFacade());
+    }
+
+    @VisibleForTesting
+    FilesVisitor(final String filePattern, final String encoding, final boolean followSymbolicLinks,
+            final FileSystemFacade fileSystemFacade) {
         super();
 
         this.filePattern = filePattern;
         this.encoding = encoding;
         this.followSymbolicLinks = followSymbolicLinks;
+        this.fileSystemFacade = fileSystemFacade;
     }
 
     @Override
     public final ScannerResult<T> invoke(final File workspace, final VirtualChannel channel) {
         FilteredLog log = new FilteredLog("Errors during parsing");
         log.logInfo("Searching for all files in '%s' that match the pattern '%s'",
-                workspace.getAbsolutePath(), filePattern);
+                fileSystemFacade.getAbsolutePath(workspace), filePattern);
         log.logInfo("Traversing of symbolic links: %s", followSymbolicLinks ? "enabled" : "disabled");
 
-        String[] fileNames = new FileFinder(filePattern, StringUtils.EMPTY, followSymbolicLinks).find(workspace);
+        String[] fileNames = fileSystemFacade.find(filePattern, followSymbolicLinks, workspace);
         if (fileNames.length == 0) {
             log.logError("No files found for pattern '%s'. Configuration error?", filePattern);
 
@@ -82,16 +92,17 @@ public abstract class FilesScanner<T extends Serializable>
     private List<T> scanFiles(final File workspace, final String[] fileNames, final FilteredLog log) {
         List<T> results = new ArrayList<>();
         for (String fileName : fileNames) {
-            Path file = workspace.toPath().resolve(fileName);
+            Path file = fileSystemFacade.resolve(workspace, fileName);
 
-            if (!Files.isReadable(file)) {
+            if (fileSystemFacade.isNotReadable(file)) {
                 log.logError("Skipping file '%s' because Jenkins has no permission to read the file", fileName);
             }
-            else if (isEmpty(file)) {
+            else if (fileSystemFacade.isEmpty(file)) {
                 log.logError("Skipping file '%s' because it's empty", fileName);
             }
             else {
                 results.add(processFile(file, new CharsetValidation().getCharset(encoding), log));
+                log.logInfo("Successfully processed file '%s'", fileName);
             }
         }
         return results;
@@ -107,59 +118,39 @@ public abstract class FilesScanner<T extends Serializable>
      *
      * @return the message
      */
-    @SuppressWarnings("PMD.AvoidLiteralsInIfCondition")
     protected String plural(final int count, final String itemName) {
         return String.format("%d %s%s", count, itemName, count == 1 ? "" : "s");
     }
 
     protected abstract T processFile(Path file, Charset charset, FilteredLog log);
 
-    private boolean isEmpty(final Path file) {
-        try {
-            return Files.size(file) <= 0;
-        }
-        catch (IOException e) {
-            return true;
-        }
-    }
-
     /**
-     * The results for all found files. Logging messages that have been recorded during the scanning process will be
-     * also available.
-     *
-     * @param <T>
-     *         the type of the results
+     * File system facade that can be replaced by a stub in unit tests.
      */
-    public static class ScannerResult<T extends Serializable> implements Serializable {
-        private static final long serialVersionUID = 2122230867938547733L;
-
-        private final FilteredLog log;
-        private final List<T> results;
-
-        ScannerResult(final FilteredLog log) {
-            this(log, Collections.emptyList());
+    public static class FileSystemFacade {
+        String getAbsolutePath(final File file) {
+            return file.getAbsolutePath();
         }
 
-        ScannerResult(final FilteredLog log, final List<T> results) {
-            this.log = log;
-            this.results = new ArrayList<>(results);
+        String[] find(final String includesPattern, final boolean followSymbolicLinks, final File workspace) {
+            return new FileFinder(includesPattern, StringUtils.EMPTY, followSymbolicLinks).find(workspace);
         }
 
-        public FilteredLog getLog() {
-            return log;
+        Path resolve(final File folder, final String fileName) {
+            return folder.toPath().resolve(fileName);
         }
 
-        public List<T> getResults() {
-            return results;
+        boolean isNotReadable(final Path file) {
+            return !Files.isReadable(file);
         }
 
-        /**
-         * Returns whether there have been error messages recorded.
-         *
-         * @return {@code true} if error messages have been recorded, {@code false} otherwise
-         */
-        public boolean hasErrors() {
-            return !getLog().getErrorMessages().isEmpty();
+        boolean isEmpty(final Path file) {
+            try {
+                return Files.size(file) <= 0;
+            }
+            catch (IOException e) {
+                return true;
+            }
         }
     }
 
@@ -168,12 +159,12 @@ public abstract class FilesScanner<T extends Serializable>
      *
      * @author Ullrich Hafner
      */
-    private static class FileFinder extends MasterToSlaveFileCallable<String[]> {
+    static class FileFinder extends MasterToSlaveFileCallable<String[]> {
         private static final long serialVersionUID = 2970029366847565970L;
 
         private final String includesPattern;
         private final String excludesPattern;
-        private final boolean followSymlinks;
+        private final boolean followSymbolicLinks;
 
         FileFinder(final String includesPattern) {
             this(includesPattern, StringUtils.EMPTY);
@@ -183,12 +174,12 @@ public abstract class FilesScanner<T extends Serializable>
             this(includesPattern, excludesPattern, false);
         }
 
-        FileFinder(final String includesPattern, final String excludesPattern, final boolean followSymlinks) {
+        FileFinder(final String includesPattern, final String excludesPattern, final boolean followSymbolicLinks) {
             super();
 
             this.includesPattern = includesPattern;
             this.excludesPattern = excludesPattern;
-            this.followSymlinks = followSymlinks;
+            this.followSymbolicLinks = followSymbolicLinks;
         }
 
         /**
@@ -229,13 +220,53 @@ public abstract class FilesScanner<T extends Serializable>
                 if (StringUtils.isNotBlank(excludesPattern)) {
                     fileSet.setExcludes(excludesPattern);
                 }
-                fileSet.setFollowSymlinks(followSymlinks);
+                fileSet.setFollowSymlinks(followSymbolicLinks);
 
                 return fileSet.getDirectoryScanner(antProject).getIncludedFiles();
             }
             catch (BuildException ignored) {
                 return new String[0]; // as fallback do not return any file
             }
+        }
+    }
+
+    /**
+     * The results for all found files. Logging messages that have been recorded during the scanning process will be
+     * also available.
+     *
+     * @param <T>
+     *         the type of the results
+     */
+    public static class ScannerResult<T extends Serializable> implements Serializable {
+        private static final long serialVersionUID = 2122230867938547733L;
+
+        private final FilteredLog log;
+        private final List<T> results;
+
+        ScannerResult(final FilteredLog log) {
+            this(log, Collections.emptyList());
+        }
+
+        ScannerResult(final FilteredLog log, final List<T> results) {
+            this.log = log;
+            this.results = new ArrayList<>(results);
+        }
+
+        public FilteredLog getLog() {
+            return log;
+        }
+
+        public List<T> getResults() {
+            return Collections.unmodifiableList(results);
+        }
+
+        /**
+         * Returns whether there have been error messages recorded.
+         *
+         * @return {@code true} if error messages have been recorded, {@code false} otherwise
+         */
+        public boolean hasErrors() {
+            return !getLog().getErrorMessages().isEmpty();
         }
     }
 }

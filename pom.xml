@@ -4,7 +4,7 @@
   <parent>
     <groupId>org.jvnet.hudson.plugins</groupId>
     <artifactId>analysis-pom</artifactId>
-    <version>5.35.0</version>
+    <version>5.36.0-SNAPSHOT</version>
     <relativePath />
   </parent>
 
@@ -27,6 +27,7 @@
     <j2html.version>1.4.0</j2html.version>
     <streamex.version>0.8.1</streamex.version>
     <testcontainers.version>1.17.5</testcontainers.version>
+    <mockito.version>4.8.1</mockito.version>
     <codingstyle.library.version>${codingstyle.config.version}</codingstyle.library.version>
   </properties>
 
