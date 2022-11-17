@@ -13,6 +13,7 @@ import org.junit.jupiter.params.provider.CsvSource;
 import edu.hm.hafner.util.FilteredLog;
 import edu.hm.hafner.util.SerializableTest;
 import edu.hm.hafner.util.VisibleForTesting;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import io.jenkins.plugins.util.AgentFileVisitor.FileSystemFacade;
 import io.jenkins.plugins.util.AgentFileVisitor.ScannerResult;
@@ -135,7 +136,7 @@ class AgentFileVisitorTest extends SerializableTest<StringScanner> {
 
     static class StringScanner extends AgentFileVisitor<String> {
         private static final long serialVersionUID = -6902473746775046311L;
-        private int counter = 1;
+        private transient int counter = 1;
 
         @VisibleForTesting
         protected StringScanner(final String filePattern, final String encoding, final boolean followSymbolicLinks, final FileSystemFacade fileSystemFacade) {
@@ -147,6 +148,8 @@ class AgentFileVisitorTest extends SerializableTest<StringScanner> {
             return CONTENT + counter++;
         }
 
+        @SuppressWarnings("EqualsWhichDoesntCheckParameterClass")
+        @SuppressFBWarnings(value = "EQ_ALWAYS_TRUE", justification = "Required for serializable test")
         @Override
         public boolean equals(final Object o) {
             return true;
