@@ -118,7 +118,7 @@ public abstract class AgentFileVisitor<T extends Serializable>
      *
      * @return the message
      */
-    protected String plural(final int count, final String itemName) {
+    protected String plural(final int count, @SuppressWarnings("SameParameterValue") final String itemName) {
         return String.format("%d %s%s", count, itemName, count == 1 ? "" : "s");
     }
 
@@ -165,10 +165,6 @@ public abstract class AgentFileVisitor<T extends Serializable>
         private final String includesPattern;
         private final String excludesPattern;
         private final boolean followSymbolicLinks;
-
-        FileFinder(final String includesPattern) {
-            this(includesPattern, StringUtils.EMPTY);
-        }
 
         FileFinder(final String includesPattern, final String excludesPattern) {
             this(includesPattern, excludesPattern, false);
