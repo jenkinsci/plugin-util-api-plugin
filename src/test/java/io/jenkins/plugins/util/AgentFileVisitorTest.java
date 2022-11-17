@@ -13,17 +13,17 @@ import org.junit.jupiter.params.provider.CsvSource;
 import edu.hm.hafner.util.FilteredLog;
 import edu.hm.hafner.util.VisibleForTesting;
 
-import io.jenkins.plugins.util.FilesVisitor.FileSystemFacade;
+import io.jenkins.plugins.util.AgentFileVisitor.FileSystemFacade;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 /**
- * Tests the class {@link FilesVisitor}.
+ * Tests the class {@link AgentFileVisitor}.
  *
  * @author Ullrich Hafner
  */
-class FilesVisitorTest {
+class AgentFileVisitorTest {
     private static final String CONTENT = "Hello World!";
     private static final String PATTERN = "**/*.txt";
 
@@ -37,7 +37,7 @@ class FilesVisitorTest {
         StringScanner scanner = new StringScanner(PATTERN, "UTF-8", followLinks,
                 createFileSystemFacade(followLinks));
 
-        FilesVisitor.ScannerResult<String> actualResult = scanner.invoke(workspace, null);
+        AgentFileVisitor.ScannerResult<String> actualResult = scanner.invoke(workspace, null);
 
         assertThat(actualResult.getResults()).isEmpty();
         assertThat(actualResult.getLog().getInfoMessages()).containsExactly(
@@ -56,7 +56,7 @@ class FilesVisitorTest {
         StringScanner scanner = new StringScanner(PATTERN, "UTF-8", followLinks,
                 createFileSystemFacade(followLinks, "/one.txt"));
 
-        FilesVisitor.ScannerResult<String> actualResult = scanner.invoke(workspace, null);
+        AgentFileVisitor.ScannerResult<String> actualResult = scanner.invoke(workspace, null);
         assertThat(actualResult.getResults()).containsExactly(CONTENT + 1);
         assertThat(actualResult.getLog().getInfoMessages()).containsExactly(
                 "Searching for all files in '/absolute/path' that match the pattern '**/*.txt'",
@@ -74,7 +74,7 @@ class FilesVisitorTest {
         StringScanner scanner = new StringScanner(PATTERN, "UTF-8", followLinks,
                 createFileSystemFacade(followLinks, "/one.txt", "/two.txt"));
 
-        FilesVisitor.ScannerResult<String> actualResult = scanner.invoke(workspace, null);
+        AgentFileVisitor.ScannerResult<String> actualResult = scanner.invoke(workspace, null);
         assertThat(actualResult.getResults()).containsExactly(CONTENT + 1, CONTENT + 2);
         assertThat(actualResult.getLog().getInfoMessages()).containsExactly(
                 "Searching for all files in '/absolute/path' that match the pattern '**/*.txt'",
@@ -103,7 +103,7 @@ class FilesVisitorTest {
         StringScanner scanner = new StringScanner(PATTERN, "UTF-8", true,
                 fileSystemFacade);
 
-        FilesVisitor.ScannerResult<String> actualResult = scanner.invoke(workspace, null);
+        AgentFileVisitor.ScannerResult<String> actualResult = scanner.invoke(workspace, null);
         assertThat(actualResult.getResults()).containsExactly(CONTENT + 1, CONTENT + 2);
         assertThat(actualResult.getLog().getInfoMessages()).contains(
                 "Searching for all files in '/absolute/path' that match the pattern '**/*.txt'",
@@ -125,7 +125,7 @@ class FilesVisitorTest {
         return fileSystem;
     }
 
-    static class StringScanner extends FilesVisitor<String> {
+    static class StringScanner extends AgentFileVisitor<String> {
         private static final long serialVersionUID = -6902473746775046311L;
         private int counter = 1;
 

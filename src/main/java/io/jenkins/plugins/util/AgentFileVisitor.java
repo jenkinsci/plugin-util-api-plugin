@@ -23,7 +23,7 @@ import edu.hm.hafner.util.VisibleForTesting;
 import hudson.remoting.VirtualChannel;
 import jenkins.MasterToSlaveFileCallable;
 
-import io.jenkins.plugins.util.FilesVisitor.ScannerResult;
+import io.jenkins.plugins.util.AgentFileVisitor.ScannerResult;
 
 /**
  * Finds all files that match a specified Ant file pattern and visits these files with the processing method
@@ -35,7 +35,7 @@ import io.jenkins.plugins.util.FilesVisitor.ScannerResult;
  *
  * @author Ullrich Hafner
  */
-public abstract class FilesVisitor<T extends Serializable>
+public abstract class AgentFileVisitor<T extends Serializable>
         extends MasterToSlaveFileCallable<ScannerResult<T>> {
     private static final long serialVersionUID = 2216842481400265078L;
 
@@ -45,7 +45,7 @@ public abstract class FilesVisitor<T extends Serializable>
     private final FileSystemFacade fileSystemFacade;
 
     /**
-     * Creates a new instance of {@link FilesVisitor}.
+     * Creates a new instance of {@link AgentFileVisitor}.
      *
      * @param filePattern
      *         ant file-set pattern to scan for files to parse
@@ -54,12 +54,12 @@ public abstract class FilesVisitor<T extends Serializable>
      * @param followSymbolicLinks
      *         if the scanner should traverse symbolic links
      */
-    protected FilesVisitor(final String filePattern, final String encoding, final boolean followSymbolicLinks) {
+    protected AgentFileVisitor(final String filePattern, final String encoding, final boolean followSymbolicLinks) {
         this(filePattern, encoding, followSymbolicLinks, new FileSystemFacade());
     }
 
     @VisibleForTesting
-    FilesVisitor(final String filePattern, final String encoding, final boolean followSymbolicLinks,
+    AgentFileVisitor(final String filePattern, final String encoding, final boolean followSymbolicLinks,
             final FileSystemFacade fileSystemFacade) {
         super();
 
