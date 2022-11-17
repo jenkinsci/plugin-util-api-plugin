@@ -127,7 +127,9 @@ public abstract class AgentFileVisitor<T extends Serializable>
     /**
      * File system facade that can be replaced by a stub in unit tests.
      */
-    public static class FileSystemFacade {
+    static class FileSystemFacade implements Serializable {
+        private static final long serialVersionUID = 4052720703351280685L;
+
         String getAbsolutePath(final File file) {
             return file.getAbsolutePath();
         }
