@@ -4,7 +4,7 @@
   <parent>
     <groupId>org.jvnet.hudson.plugins</groupId>
     <artifactId>analysis-pom</artifactId>
-    <version>5.36.0-SNAPSHOT</version>
+    <version>5.35.0</version>
     <relativePath />
   </parent>
 
@@ -246,7 +246,7 @@
           </packages>
           <excludes combine.children="append">
             <exclude>.*IntegrationTestAgentContainer.*</exclude>
-            <exclude>.*FilesScanner.*</exclude>
+            <exclude>.*FilesVisitor.*</exclude>
           </excludes>
           <entryPointClassPackage>io.jenkins.plugins.util.assertions</entryPointClassPackage>
         </configuration>
