@@ -136,7 +136,7 @@ class AgentFileVisitorTest extends SerializableTest<StringScanner> {
 
     static class StringScanner extends AgentFileVisitor<String> {
         private static final long serialVersionUID = -6902473746775046311L;
-        private transient int counter = 1;
+        private int counter = 1;
 
         @VisibleForTesting
         protected StringScanner(final String filePattern, final String encoding, final boolean followSymbolicLinks, final FileSystemFacade fileSystemFacade) {
