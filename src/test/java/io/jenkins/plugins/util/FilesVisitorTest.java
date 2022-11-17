@@ -31,7 +31,7 @@ class FilesVisitorTest {
     private File workspace;
 
     @DisplayName("Should report error on empty results")
-    @CsvSource(value = {"true, enabled", "false, disabled"})
+    @CsvSource({"true, enabled", "false, disabled"})
     @ParameterizedTest(name = "{index} => followSymbolicLinks={0}, message={1}")
     void shouldReportErrorOnEmptyResults(final boolean followLinks, final String message) {
         StringScanner scanner = new StringScanner(PATTERN, "UTF-8", followLinks,
@@ -50,7 +50,7 @@ class FilesVisitorTest {
     }
 
     @DisplayName("Should report error on single result")
-    @CsvSource(value = {"true, enabled", "false, disabled"})
+    @CsvSource({"true, enabled", "false, disabled"})
     @ParameterizedTest(name = "{index} => followSymbolicLinks={0}, message={1}")
     void shouldReturnSingleResult(final boolean followLinks, final String message) {
         StringScanner scanner = new StringScanner(PATTERN, "UTF-8", followLinks,
@@ -68,7 +68,7 @@ class FilesVisitorTest {
     }
 
     @DisplayName("Should report error on single result")
-    @CsvSource(value = {"true, enabled", "false, disabled"})
+    @CsvSource({"true, enabled", "false, disabled"})
     @ParameterizedTest(name = "{index} => followSymbolicLinks={0}, message={1}")
     void shouldReturnMultipleResults(final boolean followLinks, final String message) {
         StringScanner scanner = new StringScanner(PATTERN, "UTF-8", followLinks,
