@@ -123,7 +123,7 @@ class AgentFileVisitorTest extends SerializableTest<StringScanner> {
                 fileSystemFacade);
 
         ScannerResult<String> actualResult1 = scanner.invoke(workspace, null);
-        assertThat(actualResult.getLog().getInfoMessages()).containsExactly(
+        assertThat(actualResult1.getLog().getInfoMessages()).containsExactly(
                 "Skipping file 'not-readable.txt' because it's empty");
     }
 
