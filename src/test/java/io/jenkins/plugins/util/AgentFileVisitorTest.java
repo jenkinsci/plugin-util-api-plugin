@@ -122,9 +122,9 @@ class AgentFileVisitorTest extends SerializableTest<StringScanner> {
         StringScanner scanner1 = new StringScanner(PATTERN, "UTF-8", true,false,
                 fileSystemFacade);
 
-        ScannerResult<String> actualResult1 = scanner.invoke(workspace, null);
-        assertThat(actualResult1.getLog().getInfoMessages()).containsExactly(
-                "Skipping file 'not-readable.txt' because it's empty");
+//        ScannerResult<String> actualResult1 = scanner.invoke(workspace, null);
+//        assertThat(actualResult1.getLog().getInfoMessages()).containsExactly(
+//                "Skipping file 'not-readable.txt' because it's empty");
     }
 
     private FileSystemFacade createFileSystemFacade(final boolean followLinks, final String... files) {
