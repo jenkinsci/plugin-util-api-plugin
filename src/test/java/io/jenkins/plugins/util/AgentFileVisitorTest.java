@@ -118,21 +118,6 @@ class AgentFileVisitorTest extends SerializableTest<StringScanner> {
         assertThat(actualResult.getLog().getErrorMessages()).containsExactly("Errors during parsing",
                 "Skipping file 'not-readable.txt' because Jenkins has no permission to read the file",
                 "Skipping file 'empty.txt' because it's empty");
-
-        StringScanner scanner1 = new StringScanner(PATTERN, "UTF-8", true,false,
-                fileSystemFacade);
-
-        ScannerResult<String> actualResult1 = scanner1.invoke(workspace, null);
-        assertThat(actualResult1.getResults()).containsExactly(CONTENT + 1, CONTENT + 2);
-        assertThat(actualResult1.getLog().getInfoMessages()).contains(
-                "Searching for all files in '/absolute/path' that match the pattern '**/*.txt'",
-                "-> found 4 files",
-                "Successfully processed file '/one.txt'",
-                "Successfully processed file '/two.txt'",
-                "Skipping file 'empty.txt' because it's empty");
-        assertThat(actualResult1.hasErrors()).isTrue();
-        assertThat(actualResult1.getLog().getErrorMessages()).containsExactly("Errors during parsing",
-                "Skipping file 'not-readable.txt' because Jenkins has no permission to read the file");
     }
 
     private FileSystemFacade createFileSystemFacade(final boolean followLinks, final String... files) {
