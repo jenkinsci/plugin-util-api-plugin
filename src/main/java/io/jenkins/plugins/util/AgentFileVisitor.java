@@ -42,30 +42,32 @@ public abstract class AgentFileVisitor<T extends Serializable>
     private final String filePattern;
     private final String encoding;
     private final boolean followSymbolicLinks;
+    private boolean errorOnEmptyFiles = true;
     private final FileSystemFacade fileSystemFacade;
 
     /**
      * Creates a new instance of {@link AgentFileVisitor}.
-     *
      * @param filePattern
      *         ant file-set pattern to scan for files to parse
      * @param encoding
      *         encoding of the files to parse
      * @param followSymbolicLinks
-     *         if the scanner should traverse symbolic links
+     * @param errorOnEmptyFiles
+     * @param errorOnEmptyFiles1
      */
-    protected AgentFileVisitor(final String filePattern, final String encoding, final boolean followSymbolicLinks) {
-        this(filePattern, encoding, followSymbolicLinks, new FileSystemFacade());
+    protected AgentFileVisitor(final String filePattern, final String encoding, final boolean followSymbolicLinks, boolean errorOnEmptyFiles, boolean errorOnEmptyFiles1) {
+        this(filePattern, encoding, followSymbolicLinks, errorOnEmptyFiles, new FileSystemFacade());
     }
 
     @VisibleForTesting
     AgentFileVisitor(final String filePattern, final String encoding, final boolean followSymbolicLinks,
-            final FileSystemFacade fileSystemFacade) {
+                     boolean errorOnEmptyFiles, final FileSystemFacade fileSystemFacade) {
         super();
 
         this.filePattern = filePattern;
         this.encoding = encoding;
         this.followSymbolicLinks = followSymbolicLinks;
+        this.errorOnEmptyFiles = errorOnEmptyFiles;
         this.fileSystemFacade = fileSystemFacade;
     }
 
@@ -98,7 +100,11 @@ public abstract class AgentFileVisitor<T extends Serializable>
                 log.logError("Skipping file '%s' because Jenkins has no permission to read the file", fileName);
             }
             else if (fileSystemFacade.isEmpty(file)) {
-                log.logError("Skipping file '%s' because it's empty", fileName);
+                if(errorOnEmptyFiles){
+                    log.logError("Skipping file '%s' because it's empty", fileName);
+                }else {
+                    log.logInfo("Skipping file '%s' because it's empty", fileName);
+                }
             }
             else {
                 results.add(processFile(file, new CharsetValidation().getCharset(encoding), log));
