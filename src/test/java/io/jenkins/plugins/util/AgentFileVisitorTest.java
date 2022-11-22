@@ -116,8 +116,8 @@ class AgentFileVisitorTest extends SerializableTest<StringScanner> {
                 "Successfully processed file '/two.txt'");
         assertThat(actualResult.hasErrors()).isTrue();
         assertThat(actualResult.getLog().getErrorMessages()).containsExactly("Errors during parsing",
-                "Skipping file 'not-readable.txt' because Jenkins has no permission to read the file",
-                "Skipping file 'empty.txt' because it's empty");
+                "Skipping file 'empty.txt' because Jenkins has no permission to read the file",
+                "Skipping file 'not-readable.txt' because it's empty");
     }
 
     private FileSystemFacade createFileSystemFacade(final boolean followLinks, final String... files) {
