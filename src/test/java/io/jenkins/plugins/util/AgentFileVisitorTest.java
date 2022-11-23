@@ -38,7 +38,7 @@ class AgentFileVisitorTest extends SerializableTest<StringScanner> {
     @CsvSource({"true, enabled", "false, disabled"})
     @ParameterizedTest(name = "{index} => followSymbolicLinks={0}, message={1}")
     void shouldReportErrorOnEmptyResults(final boolean followLinks, final String message) {
-        StringScanner scanner = new StringScanner(PATTERN, "UTF-8", followLinks,true,
+        StringScanner scanner = new StringScanner(PATTERN, "UTF-8", followLinks, true,
                 createFileSystemFacade(followLinks));
 
         ScannerResult<String> actualResult = scanner.invoke(workspace, null);
@@ -57,7 +57,7 @@ class AgentFileVisitorTest extends SerializableTest<StringScanner> {
     @CsvSource({"true, enabled", "false, disabled"})
     @ParameterizedTest(name = "{index} => followSymbolicLinks={0}, message={1}")
     void shouldReturnSingleResult(final boolean followLinks, final String message) {
-        StringScanner scanner = new StringScanner(PATTERN, "UTF-8", followLinks,true,
+        StringScanner scanner = new StringScanner(PATTERN, "UTF-8", followLinks, true,
                 createFileSystemFacade(followLinks, "/one.txt"));
 
         ScannerResult<String> actualResult = scanner.invoke(workspace, null);
@@ -75,7 +75,7 @@ class AgentFileVisitorTest extends SerializableTest<StringScanner> {
     @CsvSource({"true, enabled", "false, disabled"})
     @ParameterizedTest(name = "{index} => followSymbolicLinks={0}, message={1}")
     void shouldReturnMultipleResults(final boolean followLinks, final String message) {
-        StringScanner scanner = new StringScanner(PATTERN, "UTF-8", followLinks,true,
+        StringScanner scanner = new StringScanner(PATTERN, "UTF-8", followLinks, true,
                 createFileSystemFacade(followLinks, "/one.txt", "/two.txt"));
 
         ScannerResult<String> actualResult = scanner.invoke(workspace, null);
@@ -104,7 +104,7 @@ class AgentFileVisitorTest extends SerializableTest<StringScanner> {
         when(fileSystemFacade.resolve(workspace, "not-readable.txt")).thenReturn(notReadable);
         when(fileSystemFacade.isEmpty(notReadable)).thenReturn(true);
 
-        StringScanner scanner = new StringScanner(PATTERN, "UTF-8", true,true,
+        StringScanner scanner = new StringScanner(PATTERN, "UTF-8", true, true,
                 fileSystemFacade);
 
         ScannerResult<String> actualResult = scanner.invoke(workspace, null);
@@ -131,7 +131,7 @@ class AgentFileVisitorTest extends SerializableTest<StringScanner> {
 
     @Override
     protected StringScanner createSerializable() {
-        return new StringScanner(PATTERN, "UTF-8", true,true, createFileSystemFacade(true));
+        return new StringScanner(PATTERN, "UTF-8", true, true, createFileSystemFacade(true));
     }
 
     static class StringScanner extends AgentFileVisitor<String> {
@@ -139,7 +139,7 @@ class AgentFileVisitorTest extends SerializableTest<StringScanner> {
         private int counter = 1;
 
         @VisibleForTesting
-        protected StringScanner(final String filePattern, final String encoding, final boolean followSymbolicLinks,final boolean errorOnEmptyFiles, final FileSystemFacade fileSystemFacade) {
+        protected StringScanner(final String filePattern, final String encoding, final boolean followSymbolicLinks, final boolean errorOnEmptyFiles, final FileSystemFacade fileSystemFacade) {
             super(filePattern, encoding, followSymbolicLinks, errorOnEmptyFiles, fileSystemFacade);
         }
 
