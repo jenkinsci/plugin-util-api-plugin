@@ -44,6 +44,7 @@ public abstract class AgentFileVisitor<T extends Serializable>
     private final boolean followSymbolicLinks;
     private final boolean errorOnEmptyFiles;
     private final FileSystemFacade fileSystemFacade;
+    private static final String EMPTY_FILE = "Skipping file '%s' because it's empty";
 
     /**
      * Creates a new instance of {@link AgentFileVisitor}.
@@ -100,10 +101,10 @@ public abstract class AgentFileVisitor<T extends Serializable>
             }
             else if (fileSystemFacade.isEmpty(file)) {
                 if (errorOnEmptyFiles) {
-                    log.logError("Skipping file '%s' because it's empty", fileName);
+                    log.logError(EMPTY_FILE, fileName);
                 }
                 else {
-                    log.logInfo("Skipping file '%s' because it's empty", fileName);
+                    log.logInfo(EMPTY_FILE, fileName);
                 }
             }
             else {
