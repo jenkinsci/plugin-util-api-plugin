@@ -99,8 +99,10 @@ public abstract class AgentFileVisitor<T extends Serializable>
                 log.logError("Skipping file '%s' because Jenkins has no permission to read the file", fileName);
             }
             else if (fileSystemFacade.isEmpty(file)) {
-                log.logError("Skipping file '%s' because it's empty", fileName);
-                if(errorOnEmptyFiles){
+                if (errorOnEmptyFiles) {
+                    log.logError("Skipping file '%s' because it's empty", fileName);
+                }
+                else {
                     log.logInfo("Skipping file '%s' because it's empty", fileName);
                 }
             }
