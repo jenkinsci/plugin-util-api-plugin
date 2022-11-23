@@ -104,18 +104,18 @@ class AgentFileVisitorTest extends SerializableTest<StringScanner> {
         when(fileSystemFacade.resolve(workspace, "not-readable.txt")).thenReturn(notReadable);
         when(fileSystemFacade.isEmpty(notReadable)).thenReturn(true);
 
-        StringScanner scannerOne = new StringScanner(PATTERN, "UTF-8", true, true,
+        StringScanner scanner = new StringScanner(PATTERN, "UTF-8", true, true,
                 fileSystemFacade);
 
-        ScannerResult<String> actualResultOne = scannerOne.invoke(workspace, null);
-        assertThat(actualResultOne.getResults()).containsExactly(CONTENT + 1, CONTENT + 2);
-        assertThat(actualResultOne.getLog().getInfoMessages()).contains(
+        ScannerResult<String> actualResult = scanner.invoke(workspace, null);
+        assertThat(actualResult.getResults()).containsExactly(CONTENT + 1, CONTENT + 2);
+        assertThat(actualResult.getLog().getInfoMessages()).contains(
                 "Searching for all files in '/absolute/path' that match the pattern '**/*.txt'",
                 "-> found 4 files",
                 "Successfully processed file '/one.txt'",
                 "Successfully processed file '/two.txt'");
-        assertThat(actualResultOne.hasErrors()).isTrue();
-        assertThat(actualResultOne.getLog().getErrorMessages()).containsExactly("Errors during parsing",
+        assertThat(actualResult.hasErrors()).isTrue();
+        assertThat(actualResult.getLog().getErrorMessages()).containsExactly("Errors during parsing",
                 "Skipping file 'empty.txt' because Jenkins has no permission to read the file",
                 "Skipping file 'not-readable.txt' because it's empty");
 
