@@ -139,7 +139,7 @@ class AgentFileVisitorTest extends SerializableTest<StringScanner> {
         private int counter = 1;
 
         @VisibleForTesting
-        protected StringScanner(final String filePattern, final String encoding, final boolean followSymbolicLinks,boolean errorOnEmptyFiles, final FileSystemFacade fileSystemFacade) {
+        protected StringScanner(final String filePattern, final String encoding, final boolean followSymbolicLinks,final boolean errorOnEmptyFiles, final FileSystemFacade fileSystemFacade) {
             super(filePattern, encoding, followSymbolicLinks, errorOnEmptyFiles, fileSystemFacade);
         }
 
