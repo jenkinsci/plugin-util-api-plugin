@@ -53,15 +53,16 @@ public abstract class AgentFileVisitor<T extends Serializable>
      * @param encoding
      *         encoding of the files to parse
      * @param followSymbolicLinks
+     *         if the scanner should traverse symbolic links
      * @param errorOnEmptyFiles
+     *         if the true is configured log Error if not log Info message
      */
     protected AgentFileVisitor(final String filePattern, final String encoding, final boolean followSymbolicLinks, final boolean errorOnEmptyFiles) {
         this(filePattern, encoding, followSymbolicLinks, errorOnEmptyFiles, new FileSystemFacade());
     }
 
     @VisibleForTesting
-    AgentFileVisitor(final String filePattern, final String encoding, final boolean followSymbolicLinks,
-                     boolean errorOnEmptyFiles, final FileSystemFacade fileSystemFacade) {
+    AgentFileVisitor(final String filePattern, final String encoding, final boolean followSymbolicLinks, final boolean errorOnEmptyFiles, final FileSystemFacade fileSystemFacade) {
         super();
 
         this.filePattern = filePattern;

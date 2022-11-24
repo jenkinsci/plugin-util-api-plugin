@@ -98,11 +98,11 @@ class AgentFileVisitorTest extends SerializableTest<StringScanner> {
 
         Path empty = workspace.toPath().resolve("empty.txt");
         when(fileSystemFacade.resolve(workspace, "empty.txt")).thenReturn(empty);
-        when(fileSystemFacade.isNotReadable(empty)).thenReturn(true);
+        when(fileSystemFacade.isEmpty(empty)).thenReturn(true);
 
         Path notReadable = workspace.toPath().resolve("not-readable.txt");
         when(fileSystemFacade.resolve(workspace, "not-readable.txt")).thenReturn(notReadable);
-        when(fileSystemFacade.isEmpty(notReadable)).thenReturn(true);
+        when(fileSystemFacade.isNotReadable(notReadable)).thenReturn(true);
 
         StringScanner scanner = new StringScanner(PATTERN, "UTF-8", true, true,
                 fileSystemFacade);
@@ -116,23 +116,38 @@ class AgentFileVisitorTest extends SerializableTest<StringScanner> {
                 "Successfully processed file '/two.txt'");
         assertThat(actualResult.hasErrors()).isTrue();
         assertThat(actualResult.getLog().getErrorMessages()).containsExactly("Errors during parsing",
-                "Skipping file 'empty.txt' because Jenkins has no permission to read the file",
-                "Skipping file 'not-readable.txt' because it's empty");
+                "Skipping file 'empty.txt' because it's empty",
+                "Skipping file 'not-readable.txt' because Jenkins has no permission to read the file");
+    }
 
-        StringScanner scannerTwo = new StringScanner(PATTERN, "UTF-8", true, false,
+    @Test
+    @DisplayName("Should handle empty or forbidden files and info on Empty Files")
+    void shouldReturnMultipleResultsAndInfoOnEmptyFiles() {
+        FileSystemFacade fileSystemFacade = createFileSystemFacade(true,
+                "/one.txt", "/two.txt", "empty.txt", "not-readable.txt");
+
+        Path empty = workspace.toPath().resolve("empty.txt");
+        when(fileSystemFacade.resolve(workspace, "empty.txt")).thenReturn(empty);
+        when(fileSystemFacade.isEmpty(empty)).thenReturn(true);
+
+        Path notReadable = workspace.toPath().resolve("not-readable.txt");
+        when(fileSystemFacade.resolve(workspace, "not-readable.txt")).thenReturn(notReadable);
+        when(fileSystemFacade.isNotReadable(notReadable)).thenReturn(true);
+
+        StringScanner scanner = new StringScanner(PATTERN, "UTF-8", true, false,
                 fileSystemFacade);
 
-        ScannerResult<String> actualResultTwo = scannerTwo.invoke(workspace, null);
-        assertThat(actualResultTwo.getResults()).containsExactly(CONTENT + 1, CONTENT + 2);
-        assertThat(actualResultTwo.getLog().getInfoMessages()).contains(
+        ScannerResult<String> actualResult = scanner.invoke(workspace, null);
+        assertThat(actualResult.getResults()).containsExactly(CONTENT + 1, CONTENT + 2);
+        assertThat(actualResult.getLog().getInfoMessages()).contains(
                 "Searching for all files in '/absolute/path' that match the pattern '**/*.txt'",
                 "-> found 4 files",
                 "Successfully processed file '/one.txt'",
                 "Successfully processed file '/two.txt'",
-                "Skipping file 'not-readable.txt' because it's empty");
-        assertThat(actualResultTwo.hasErrors()).isTrue();
-        assertThat(actualResultTwo.getLog().getErrorMessages()).containsExactly("Errors during parsing",
-                "Skipping file 'empty.txt' because Jenkins has no permission to read the file");
+                "Skipping file 'empty.txt' because it's empty");
+        assertThat(actualResult.hasErrors()).isTrue();
+        assertThat(actualResult.getLog().getErrorMessages()).containsExactly("Errors during parsing",
+                "Skipping file 'not-readable.txt' because Jenkins has no permission to read the file");
     }
 
     private FileSystemFacade createFileSystemFacade(final boolean followLinks, final String... files) {
