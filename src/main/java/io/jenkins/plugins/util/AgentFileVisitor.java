@@ -48,14 +48,15 @@ public abstract class AgentFileVisitor<T extends Serializable>
 
     /**
      * Creates a new instance of {@link AgentFileVisitor}.
+     *
      * @param filePattern
      *         ant file-set pattern to scan for files to parse
      * @param encoding
      *         encoding of the files to parse
      * @param followSymbolicLinks
-     *         if the scanner should traverse symbolic links
+     *         determines whether the visitor should traverse symbolic links
      * @param errorOnEmptyFiles
-     *         if the true is configured log Error if not log Info message
+     *         determines whether the visitor should log errors if a file is empty
      */
     protected AgentFileVisitor(final String filePattern, final String encoding, final boolean followSymbolicLinks, final boolean errorOnEmptyFiles) {
         this(filePattern, encoding, followSymbolicLinks, errorOnEmptyFiles, new FileSystemFacade());

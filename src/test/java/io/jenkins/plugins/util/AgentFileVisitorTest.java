@@ -91,8 +91,8 @@ class AgentFileVisitorTest extends SerializableTest<StringScanner> {
     }
 
     @Test
-    @DisplayName("Should handle empty or forbidden files")
-    void shouldReturnMultipleResults() {
+    @DisplayName("Should log error for empty or forbidden files")
+    void shouldLogErrorForEmptyAndForbiddenFiles() {
         FileSystemFacade fileSystemFacade = createFileSystemFacade(true,
                 "/one.txt", "/two.txt", "empty.txt", "not-readable.txt");
 
@@ -121,33 +121,28 @@ class AgentFileVisitorTest extends SerializableTest<StringScanner> {
     }
 
     @Test
-    @DisplayName("Should handle empty or forbidden files and info on Empty Files")
-    void shouldReturnMultipleResultsAndInfoOnEmptyFiles() {
+    @DisplayName("Should skip logging of errors when parsing empty files")
+    void shouldSkipLoggingOfErrorsForEmptyFiles() {
         FileSystemFacade fileSystemFacade = createFileSystemFacade(true,
-                "/one.txt", "/two.txt", "empty.txt", "not-readable.txt");
+                "/one.txt", "/two.txt", "empty.txt");
 
         Path empty = workspace.toPath().resolve("empty.txt");
         when(fileSystemFacade.resolve(workspace, "empty.txt")).thenReturn(empty);
         when(fileSystemFacade.isEmpty(empty)).thenReturn(true);
 
-        Path notReadable = workspace.toPath().resolve("not-readable.txt");
-        when(fileSystemFacade.resolve(workspace, "not-readable.txt")).thenReturn(notReadable);
-        when(fileSystemFacade.isNotReadable(notReadable)).thenReturn(true);
-
         StringScanner scanner = new StringScanner(PATTERN, "UTF-8", true, false,
                 fileSystemFacade);
 
-        ScannerResult<String> actualResult = scanner.invoke(workspace, null);
+        FileVisitorResult<String> actualResult = scanner.invoke(workspace, null);
         assertThat(actualResult.getResults()).containsExactly(CONTENT + 1, CONTENT + 2);
         assertThat(actualResult.getLog().getInfoMessages()).contains(
                 "Searching for all files in '/absolute/path' that match the pattern '**/*.txt'",
-                "-> found 4 files",
+                "-> found 3 files",
                 "Successfully processed file '/one.txt'",
                 "Successfully processed file '/two.txt'",
                 "Skipping file 'empty.txt' because it's empty");
-        assertThat(actualResult.hasErrors()).isTrue();
-        assertThat(actualResult.getLog().getErrorMessages()).containsExactly("Errors during parsing",
-                "Skipping file 'not-readable.txt' because Jenkins has no permission to read the file");
+        assertThat(actualResult.hasErrors()).isFalse();
+        assertThat(actualResult.getLog().getErrorMessages()).isEmpty();
     }
 
     private FileSystemFacade createFileSystemFacade(final boolean followLinks, final String... files) {
