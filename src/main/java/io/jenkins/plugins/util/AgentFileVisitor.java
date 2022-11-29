@@ -23,7 +23,7 @@ import edu.hm.hafner.util.VisibleForTesting;
 import hudson.remoting.VirtualChannel;
 import jenkins.MasterToSlaveFileCallable;
 
-import io.jenkins.plugins.util.AgentFileVisitor.ScannerResult;
+import io.jenkins.plugins.util.AgentFileVisitor.FileVisitorResult;
 
 /**
  * Finds all files that match a specified Ant file pattern and visits these files with the processing method
@@ -36,7 +36,7 @@ import io.jenkins.plugins.util.AgentFileVisitor.ScannerResult;
  * @author Ullrich Hafner
  */
 public abstract class AgentFileVisitor<T extends Serializable>
-        extends MasterToSlaveFileCallable<ScannerResult<T>> {
+        extends MasterToSlaveFileCallable<FileVisitorResult<T>> {
     private static final long serialVersionUID = 2216842481400265078L;
 
     private final String filePattern;
@@ -73,7 +73,7 @@ public abstract class AgentFileVisitor<T extends Serializable>
     }
 
     @Override
-    public final ScannerResult<T> invoke(final File workspace, final VirtualChannel channel) {
+    public final FileVisitorResult<T> invoke(final File workspace, final VirtualChannel channel) {
         FilteredLog log = new FilteredLog("Errors during parsing");
         log.logInfo("Searching for all files in '%s' that match the pattern '%s'",
                 fileSystemFacade.getAbsolutePath(workspace), filePattern);
@@ -83,12 +83,12 @@ public abstract class AgentFileVisitor<T extends Serializable>
         if (fileNames.length == 0) {
             log.logError("No files found for pattern '%s'. Configuration error?", filePattern);
 
-            return new ScannerResult<>(log);
+            return new FileVisitorResult<>(log);
         }
         else {
             log.logInfo("-> found %s", plural(fileNames.length, "file"));
 
-            return new ScannerResult<>(log, scanFiles(workspace, fileNames, log));
+            return new FileVisitorResult<>(log, scanFiles(workspace, fileNames, log));
         }
     }
 
@@ -243,17 +243,17 @@ public abstract class AgentFileVisitor<T extends Serializable>
      * @param <T>
      *         the type of the results
      */
-    public static class ScannerResult<T extends Serializable> implements Serializable {
+    public static class FileVisitorResult<T extends Serializable> implements Serializable {
         private static final long serialVersionUID = 2122230867938547733L;
 
         private final FilteredLog log;
         private final List<T> results;
 
-        ScannerResult(final FilteredLog log) {
+        FileVisitorResult(final FilteredLog log) {
             this(log, Collections.emptyList());
         }
 
-        ScannerResult(final FilteredLog log, final List<T> results) {
+        FileVisitorResult(final FilteredLog log, final List<T> results) {
             this.log = log;
             this.results = new ArrayList<>(results);
         }
