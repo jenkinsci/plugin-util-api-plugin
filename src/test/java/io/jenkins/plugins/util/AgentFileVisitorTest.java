@@ -3,6 +3,7 @@ package io.jenkins.plugins.util;
 import java.io.File;
 import java.nio.charset.Charset;
 import java.nio.file.Path;
+import java.util.Optional;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -30,6 +31,7 @@ import static org.mockito.Mockito.*;
 class AgentFileVisitorTest extends SerializableTest<StringScanner> {
     private static final String CONTENT = "Hello World!";
     private static final String PATTERN = "**/*.txt";
+    private static final String ENCODING = "UTF-8";
 
     @TempDir
     private File workspace;
@@ -38,7 +40,7 @@ class AgentFileVisitorTest extends SerializableTest<StringScanner> {
     @CsvSource({"true, enabled", "false, disabled"})
     @ParameterizedTest(name = "{index} => followSymbolicLinks={0}, message={1}")
     void shouldReportErrorOnEmptyResults(final boolean followLinks, final String message) {
-        StringScanner scanner = new StringScanner(PATTERN, "UTF-8", followLinks, true,
+        StringScanner scanner = new StringScanner(PATTERN, ENCODING, followLinks, true,
                 createFileSystemFacade(followLinks));
 
         FileVisitorResult<String> actualResult = scanner.invoke(workspace, null);
@@ -57,7 +59,7 @@ class AgentFileVisitorTest extends SerializableTest<StringScanner> {
     @CsvSource({"true, enabled", "false, disabled"})
     @ParameterizedTest(name = "{index} => followSymbolicLinks={0}, message={1}")
     void shouldReturnSingleResult(final boolean followLinks, final String message) {
-        StringScanner scanner = new StringScanner(PATTERN, "UTF-8", followLinks, true,
+        StringScanner scanner = new StringScanner(PATTERN, ENCODING, followLinks, true,
                 createFileSystemFacade(followLinks, "/one.txt"));
 
         FileVisitorResult<String> actualResult = scanner.invoke(workspace, null);
@@ -75,7 +77,7 @@ class AgentFileVisitorTest extends SerializableTest<StringScanner> {
     @CsvSource({"true, enabled", "false, disabled"})
     @ParameterizedTest(name = "{index} => followSymbolicLinks={0}, message={1}")
     void shouldReturnMultipleResults(final boolean followLinks, final String message) {
-        StringScanner scanner = new StringScanner(PATTERN, "UTF-8", followLinks, true,
+        StringScanner scanner = new StringScanner(PATTERN, ENCODING, followLinks, true,
                 createFileSystemFacade(followLinks, "/one.txt", "/two.txt"));
 
         FileVisitorResult<String> actualResult = scanner.invoke(workspace, null);
@@ -104,7 +106,7 @@ class AgentFileVisitorTest extends SerializableTest<StringScanner> {
         when(fileSystemFacade.resolve(workspace, "not-readable.txt")).thenReturn(notReadable);
         when(fileSystemFacade.isNotReadable(notReadable)).thenReturn(true);
 
-        StringScanner scanner = new StringScanner(PATTERN, "UTF-8", true, true,
+        StringScanner scanner = new StringScanner(PATTERN, ENCODING, true, true,
                 fileSystemFacade);
 
         FileVisitorResult<String> actualResult = scanner.invoke(workspace, null);
@@ -130,7 +132,7 @@ class AgentFileVisitorTest extends SerializableTest<StringScanner> {
         when(fileSystemFacade.resolve(workspace, "empty.txt")).thenReturn(empty);
         when(fileSystemFacade.isEmpty(empty)).thenReturn(true);
 
-        StringScanner scanner = new StringScanner(PATTERN, "UTF-8", true, false,
+        StringScanner scanner = new StringScanner(PATTERN, ENCODING, true, false,
                 fileSystemFacade);
 
         FileVisitorResult<String> actualResult = scanner.invoke(workspace, null);
@@ -145,6 +147,24 @@ class AgentFileVisitorTest extends SerializableTest<StringScanner> {
         assertThat(actualResult.getLog().getErrorMessages()).isEmpty();
     }
 
+    @Test
+    @DisplayName("Should log error if no results are returned")
+    void shouldLogErrorIfNoResultIsAvailable() {
+        FileSystemFacade fileSystemFacade = createFileSystemFacade(false, "/one.txt");
+
+        EmptyScanner scanner = new EmptyScanner(fileSystemFacade);
+
+        FileVisitorResult<String> actualResult = scanner.invoke(workspace, null);
+        assertThat(actualResult.getResults()).isEmpty();
+        assertThat(actualResult.getLog().getInfoMessages()).containsExactly(
+                "Searching for all files in '/absolute/path' that match the pattern '**/*.txt'",
+                "Traversing of symbolic links: disabled",
+                "-> found 1 file");
+        assertThat(actualResult.hasErrors()).isTrue();
+        assertThat(actualResult.getLog().getErrorMessages()).containsExactly("Errors during parsing",
+                "No result created for file '/one.txt' due to some errors");
+    }
+
     private FileSystemFacade createFileSystemFacade(final boolean followLinks, final String... files) {
         FileSystemFacade fileSystem = mock(FileSystemFacade.class);
 
@@ -156,7 +176,7 @@ class AgentFileVisitorTest extends SerializableTest<StringScanner> {
 
     @Override
     protected StringScanner createSerializable() {
-        return new StringScanner(PATTERN, "UTF-8", true, true, createFileSystemFacade(true));
+        return new StringScanner(PATTERN, ENCODING, true, true, createFileSystemFacade(true));
     }
 
     static class StringScanner extends AgentFileVisitor<String> {
@@ -169,8 +189,35 @@ class AgentFileVisitorTest extends SerializableTest<StringScanner> {
         }
 
         @Override
-        protected String processFile(final Path file, final Charset charset, final FilteredLog log) {
-            return CONTENT + counter++;
+        protected Optional<String> processFile(final Path file, final Charset charset, final FilteredLog log) {
+            return Optional.of(CONTENT + counter++);
+        }
+
+        @SuppressWarnings("EqualsWhichDoesntCheckParameterClass")
+        @SuppressFBWarnings(value = "EQ_ALWAYS_TRUE", justification = "Required for serializable test")
+        @Override
+        public boolean equals(final Object o) {
+            return true;
+        }
+
+        @Override
+        public int hashCode() {
+            return 0;
+        }
+    }
+
+    private static class EmptyScanner extends AgentFileVisitor<String> {
+
+        private static final long serialVersionUID = 3700448215163706213L;
+
+        @VisibleForTesting
+        protected EmptyScanner(final FileSystemFacade fileSystemFacade) {
+            super(PATTERN, ENCODING, false, false, fileSystemFacade);
+        }
+
+        @Override
+        protected Optional<String> processFile(final Path file, final Charset charset, final FilteredLog log) {
+            return Optional.empty();
         }
 
         @SuppressWarnings("EqualsWhichDoesntCheckParameterClass")

@@ -9,6 +9,7 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.tools.ant.BuildException;
@@ -110,8 +111,14 @@ public abstract class AgentFileVisitor<T extends Serializable>
                 }
             }
             else {
-                results.add(processFile(file, new CharsetValidation().getCharset(encoding), log));
-                log.logInfo("Successfully processed file '%s'", fileName);
+                Optional<T> result = processFile(file, new CharsetValidation().getCharset(encoding), log);
+                if (result.isPresent()) {
+                    results.add(result.get());
+                    log.logInfo("Successfully processed file '%s'", fileName);
+                }
+                else {
+                    log.logError("No result created for file '%s' due to some errors", fileName);
+                }
             }
         }
         return results;
@@ -131,7 +138,7 @@ public abstract class AgentFileVisitor<T extends Serializable>
         return String.format("%d %s%s", count, itemName, count == 1 ? "" : "s");
     }
 
-    protected abstract T processFile(Path file, Charset charset, FilteredLog log);
+    protected abstract Optional<T> processFile(Path file, Charset charset, FilteredLog log);
 
     /**
      * File system facade that can be replaced by a stub in unit tests.
