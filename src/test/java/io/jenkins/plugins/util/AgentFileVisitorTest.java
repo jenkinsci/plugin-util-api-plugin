@@ -38,7 +38,7 @@ class AgentFileVisitorTest extends SerializableTest<StringScanner> {
     @CsvSource({"true, enabled", "false, disabled"})
     @ParameterizedTest(name = "{index} => followSymbolicLinks={0}, message={1}")
     void shouldReportErrorOnEmptyResults(final boolean followLinks, final String message) {
-        StringScanner scanner = new StringScanner(PATTERN, "UTF-8", followLinks,
+        StringScanner scanner = new StringScanner(PATTERN, "UTF-8", followLinks, true,
                 createFileSystemFacade(followLinks));
 
         FileVisitorResult<String> actualResult = scanner.invoke(workspace, null);
@@ -57,7 +57,7 @@ class AgentFileVisitorTest extends SerializableTest<StringScanner> {
     @CsvSource({"true, enabled", "false, disabled"})
     @ParameterizedTest(name = "{index} => followSymbolicLinks={0}, message={1}")
     void shouldReturnSingleResult(final boolean followLinks, final String message) {
-        StringScanner scanner = new StringScanner(PATTERN, "UTF-8", followLinks,
+        StringScanner scanner = new StringScanner(PATTERN, "UTF-8", followLinks, true,
                 createFileSystemFacade(followLinks, "/one.txt"));
 
         FileVisitorResult<String> actualResult = scanner.invoke(workspace, null);
@@ -75,7 +75,7 @@ class AgentFileVisitorTest extends SerializableTest<StringScanner> {
     @CsvSource({"true, enabled", "false, disabled"})
     @ParameterizedTest(name = "{index} => followSymbolicLinks={0}, message={1}")
     void shouldReturnMultipleResults(final boolean followLinks, final String message) {
-        StringScanner scanner = new StringScanner(PATTERN, "UTF-8", followLinks,
+        StringScanner scanner = new StringScanner(PATTERN, "UTF-8", followLinks, true,
                 createFileSystemFacade(followLinks, "/one.txt", "/two.txt"));
 
         FileVisitorResult<String> actualResult = scanner.invoke(workspace, null);
@@ -91,20 +91,20 @@ class AgentFileVisitorTest extends SerializableTest<StringScanner> {
     }
 
     @Test
-    @DisplayName("Should handle empty or forbidden files")
-    void shouldReturnMultipleResults() {
+    @DisplayName("Should log error for empty or forbidden files")
+    void shouldLogErrorForEmptyAndForbiddenFiles() {
         FileSystemFacade fileSystemFacade = createFileSystemFacade(true,
                 "/one.txt", "/two.txt", "empty.txt", "not-readable.txt");
 
         Path empty = workspace.toPath().resolve("empty.txt");
         when(fileSystemFacade.resolve(workspace, "empty.txt")).thenReturn(empty);
-        when(fileSystemFacade.isNotReadable(empty)).thenReturn(true);
+        when(fileSystemFacade.isEmpty(empty)).thenReturn(true);
 
         Path notReadable = workspace.toPath().resolve("not-readable.txt");
         when(fileSystemFacade.resolve(workspace, "not-readable.txt")).thenReturn(notReadable);
-        when(fileSystemFacade.isEmpty(notReadable)).thenReturn(true);
+        when(fileSystemFacade.isNotReadable(notReadable)).thenReturn(true);
 
-        StringScanner scanner = new StringScanner(PATTERN, "UTF-8", true,
+        StringScanner scanner = new StringScanner(PATTERN, "UTF-8", true, true,
                 fileSystemFacade);
 
         FileVisitorResult<String> actualResult = scanner.invoke(workspace, null);
@@ -116,8 +116,33 @@ class AgentFileVisitorTest extends SerializableTest<StringScanner> {
                 "Successfully processed file '/two.txt'");
         assertThat(actualResult.hasErrors()).isTrue();
         assertThat(actualResult.getLog().getErrorMessages()).containsExactly("Errors during parsing",
-                "Skipping file 'empty.txt' because Jenkins has no permission to read the file",
-                "Skipping file 'not-readable.txt' because it's empty");
+                "Skipping file 'empty.txt' because it's empty",
+                "Skipping file 'not-readable.txt' because Jenkins has no permission to read the file");
+    }
+
+    @Test
+    @DisplayName("Should skip logging of errors when parsing empty files")
+    void shouldSkipLoggingOfErrorsForEmptyFiles() {
+        FileSystemFacade fileSystemFacade = createFileSystemFacade(true,
+                "/one.txt", "/two.txt", "empty.txt");
+
+        Path empty = workspace.toPath().resolve("empty.txt");
+        when(fileSystemFacade.resolve(workspace, "empty.txt")).thenReturn(empty);
+        when(fileSystemFacade.isEmpty(empty)).thenReturn(true);
+
+        StringScanner scanner = new StringScanner(PATTERN, "UTF-8", true, false,
+                fileSystemFacade);
+
+        FileVisitorResult<String> actualResult = scanner.invoke(workspace, null);
+        assertThat(actualResult.getResults()).containsExactly(CONTENT + 1, CONTENT + 2);
+        assertThat(actualResult.getLog().getInfoMessages()).contains(
+                "Searching for all files in '/absolute/path' that match the pattern '**/*.txt'",
+                "-> found 3 files",
+                "Successfully processed file '/one.txt'",
+                "Successfully processed file '/two.txt'",
+                "Skipping file 'empty.txt' because it's empty");
+        assertThat(actualResult.hasErrors()).isFalse();
+        assertThat(actualResult.getLog().getErrorMessages()).isEmpty();
     }
 
     private FileSystemFacade createFileSystemFacade(final boolean followLinks, final String... files) {
@@ -131,7 +156,7 @@ class AgentFileVisitorTest extends SerializableTest<StringScanner> {
 
     @Override
     protected StringScanner createSerializable() {
-        return new StringScanner(PATTERN, "UTF-8", true, createFileSystemFacade(true));
+        return new StringScanner(PATTERN, "UTF-8", true, true, createFileSystemFacade(true));
     }
 
     static class StringScanner extends AgentFileVisitor<String> {
@@ -139,8 +164,8 @@ class AgentFileVisitorTest extends SerializableTest<StringScanner> {
         private int counter = 1;
 
         @VisibleForTesting
-        protected StringScanner(final String filePattern, final String encoding, final boolean followSymbolicLinks, final FileSystemFacade fileSystemFacade) {
-            super(filePattern, encoding, followSymbolicLinks, fileSystemFacade);
+        protected StringScanner(final String filePattern, final String encoding, final boolean followSymbolicLinks, final boolean errorOnEmptyFiles, final FileSystemFacade fileSystemFacade) {
+            super(filePattern, encoding, followSymbolicLinks, errorOnEmptyFiles, fileSystemFacade);
         }
 
         @Override

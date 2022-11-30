@@ -42,7 +42,9 @@ public abstract class AgentFileVisitor<T extends Serializable>
     private final String filePattern;
     private final String encoding;
     private final boolean followSymbolicLinks;
+    private final boolean errorOnEmptyFiles;
     private final FileSystemFacade fileSystemFacade;
+    private static final String EMPTY_FILE = "Skipping file '%s' because it's empty";
 
     /**
      * Creates a new instance of {@link AgentFileVisitor}.
@@ -52,20 +54,22 @@ public abstract class AgentFileVisitor<T extends Serializable>
      * @param encoding
      *         encoding of the files to parse
      * @param followSymbolicLinks
-     *         if the scanner should traverse symbolic links
+     *         determines whether the visitor should traverse symbolic links
+     * @param errorOnEmptyFiles
+     *         determines whether the visitor should log errors if a file is empty
      */
-    protected AgentFileVisitor(final String filePattern, final String encoding, final boolean followSymbolicLinks) {
-        this(filePattern, encoding, followSymbolicLinks, new FileSystemFacade());
+    protected AgentFileVisitor(final String filePattern, final String encoding, final boolean followSymbolicLinks, final boolean errorOnEmptyFiles) {
+        this(filePattern, encoding, followSymbolicLinks, errorOnEmptyFiles, new FileSystemFacade());
     }
 
     @VisibleForTesting
-    AgentFileVisitor(final String filePattern, final String encoding, final boolean followSymbolicLinks,
-            final FileSystemFacade fileSystemFacade) {
+    AgentFileVisitor(final String filePattern, final String encoding, final boolean followSymbolicLinks, final boolean errorOnEmptyFiles, final FileSystemFacade fileSystemFacade) {
         super();
 
         this.filePattern = filePattern;
         this.encoding = encoding;
         this.followSymbolicLinks = followSymbolicLinks;
+        this.errorOnEmptyFiles = errorOnEmptyFiles;
         this.fileSystemFacade = fileSystemFacade;
     }
 
@@ -98,7 +102,12 @@ public abstract class AgentFileVisitor<T extends Serializable>
                 log.logError("Skipping file '%s' because Jenkins has no permission to read the file", fileName);
             }
             else if (fileSystemFacade.isEmpty(file)) {
-                log.logError("Skipping file '%s' because it's empty", fileName);
+                if (errorOnEmptyFiles) {
+                    log.logError(EMPTY_FILE, fileName);
+                }
+                else {
+                    log.logInfo(EMPTY_FILE, fileName);
+                }
             }
             else {
                 results.add(processFile(file, new CharsetValidation().getCharset(encoding), log));
