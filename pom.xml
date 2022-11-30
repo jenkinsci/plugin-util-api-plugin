@@ -254,10 +254,9 @@
               <differences combine.children="append">
                 <item>
                   <ignore>true</ignore>
-                  <regex>true</regex>
-                  <code>java.class.removed</code>
-                  <classQualifiedName>org.apache.commons.*</classQualifiedName>
-                  <justification>Classes have been moved to API plugins.</justification>
+                  <code>java.method.returnTypeChanged</code>
+                  <classQualifiedName>io.jenkins.plugins.util.AgentFileVisitor</classQualifiedName>
+                  <justification>Not yet used.</justification>
                 </item>
                 <item>
                   <ignore>true</ignore>
