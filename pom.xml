@@ -46,6 +46,7 @@
   </developers>
 
   <dependencies>
+    <!-- Library Dependencies -->
     <dependency>
       <groupId>edu.hm.hafner</groupId>
       <artifactId>codingstyle</artifactId>
@@ -92,22 +93,22 @@
       <version>${streamex.version}</version>
       <scope>provided</scope>
     </dependency>
-    <!-- Test Plugin Dependencies -->
+
+    <!-- Plugin Dependencies -->
     <dependency>
       <groupId>org.jenkins-ci.plugins.workflow</groupId>
       <artifactId>workflow-api</artifactId>
-      <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.jenkins-ci.plugins.workflow</groupId>
-      <artifactId>workflow-cps</artifactId>
-      <scope>test</scope>
+      <artifactId>workflow-step-api</artifactId>
     </dependency>
     <dependency>
       <groupId>org.jenkins-ci.plugins.workflow</groupId>
-      <artifactId>workflow-job</artifactId>
-      <scope>test</scope>
+      <artifactId>workflow-support</artifactId>
     </dependency>
+
+    <!-- Library Test Dependencies -->
     <dependency>
       <groupId>edu.hm.hafner</groupId>
       <artifactId>codingstyle</artifactId>
@@ -149,6 +150,18 @@
           <artifactId>commons-compress</artifactId>
         </exclusion>
       </exclusions>
+    </dependency>
+
+    <!-- Plugin Test Dependencies -->
+    <dependency>
+      <groupId>org.jenkins-ci.plugins.workflow</groupId>
+      <artifactId>workflow-cps</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.jenkins-ci.plugins.workflow</groupId>
+      <artifactId>workflow-job</artifactId>
+      <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.jenkins-ci.plugins</groupId>
