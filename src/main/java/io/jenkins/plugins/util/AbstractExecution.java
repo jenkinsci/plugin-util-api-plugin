@@ -18,7 +18,7 @@ import hudson.remoting.VirtualChannel;
  * elements.
  *
  * @param <T>
- *         the type of the return value (might be {@link Void})
+ *         the type of the return value (use {@link Void} if no return value is available)
  *
  * @author Ullrich Hafner
  */
@@ -139,7 +139,7 @@ public abstract class AbstractExecution<T> extends SynchronousNonBlockingStepExe
     /**
      * Creates a {@link StageResultHandler} that sets the overall build result of the {@link Run}.
      *
-     * @return a {@link StageResultHandler that sets the overall build result of the {@link Run}
+     * @return a {@link StageResultHandler} that sets the overall build result of the {@link Run}
      * @throws InterruptedException
      *         if the user canceled the execution
      * @throws IOException

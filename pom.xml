@@ -209,7 +209,7 @@
               <outputDirectory>${project.build.directory}/classes</outputDirectory>
               <includeArtifactIds>codingstyle,error_prone_annotations,streamex,j2html</includeArtifactIds>
               <excludeTypes>test-jar</excludeTypes>
-              <excludes>META-INF/**/*</excludes>
+              <excludes>META-INF/**/*,**/module-info.class</excludes>
             </configuration>
           </execution>
           <execution>
@@ -267,9 +267,24 @@
               <differences combine.children="append">
                 <item>
                   <ignore>true</ignore>
-                  <code>java.method.returnTypeChanged</code>
-                  <classQualifiedName>io.jenkins.plugins.util.AgentFileVisitor</classQualifiedName>
-                  <justification>Not yet used.</justification>
+                  <regex>true</regex>
+                  <code>java.class.externalClassExposedInAPI</code>
+                  <classQualifiedName>jenkins.model.*</classQualifiedName>
+                  <justification>New dependency added.</justification>
+                </item>
+                <item>
+                  <ignore>true</ignore>
+                  <regex>true</regex>
+                  <code>java.class.externalClassExposedInAPI</code>
+                  <classQualifiedName>org.jenkinsci.plugins.workflow.*</classQualifiedName>
+                  <justification>New dependency added.</justification>
+                </item>
+                <item>
+                  <ignore>true</ignore>
+                  <regex>true</regex>
+                  <code>java.class.externalClassExposedInAPI</code>
+                  <classQualifiedName>com.google.common.*</classQualifiedName>
+                  <justification>New dependency added.</justification>
                 </item>
                 <item>
                   <ignore>true</ignore>
@@ -283,6 +298,18 @@
                   <code>java.class.nonPublicPartOfAPI</code>
                   <classQualifiedName>one.util.streamex.Joining.Accumulator</classQualifiedName>
                   <justification>This type can be ignored since it is not used in our code.</justification>
+                </item>
+                <item>
+                  <ignore>true</ignore>
+                  <code>java.class.removed</code>
+                  <classQualifiedName>edu.hm.hafner.util.StringContainsUtils</classQualifiedName>
+                  <justification>This type is not used in our code.</justification>
+                </item>
+                <item>
+                  <ignore>true</ignore>
+                  <code>java.class.removed</code>
+                  <classQualifiedName>edu.hm.hafner.util.NoSuchElementException</classQualifiedName>
+                  <justification>This type is not used in our code.</justification>
                 </item>
               </differences>
             </revapi.differences>

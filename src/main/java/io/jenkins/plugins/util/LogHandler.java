@@ -13,6 +13,7 @@ import hudson.model.TaskListener;
  *
  * @author Ullrich Hafner
  */
+// FIXME: log handler of warnings plugin!
 @SuppressWarnings("PMD.LoggerIsNotStaticFinal")
 public class LogHandler {
     private final PluginLogger errorLogger;

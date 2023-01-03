@@ -57,7 +57,6 @@ import hudson.tasks.Builder;
 import hudson.tasks.Shell;
 import jenkins.model.Jenkins;
 import jenkins.model.ParameterizedJobMixIn.ParameterizedJob;
-import jenkins.security.s2m.AdminWhitelistRule;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.assertj.core.api.Assumptions.*;
@@ -403,9 +402,6 @@ public abstract class IntegrationTest extends ResourceTest {
                     .child("secrets/filepath-filters.d/30-default.conf");
             child.delete();
             child.write("", "ISO_8859_1");
-
-            Objects.requireNonNull(getJenkins().jenkins.getInjector())
-                    .getInstance(AdminWhitelistRule.class).setMasterKillSwitch(false);
             getJenkins().jenkins.save();
             return agent;
         }
