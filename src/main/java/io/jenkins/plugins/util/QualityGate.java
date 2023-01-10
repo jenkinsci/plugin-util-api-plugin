@@ -34,6 +34,8 @@ public abstract class QualityGate extends AbstractDescribableImpl<QualityGate> i
      *         minimum or maximum value that triggers this quality gate
      */
     protected QualityGate(final double threshold) {
+        super();
+
         this.threshold = threshold;
     }
 
