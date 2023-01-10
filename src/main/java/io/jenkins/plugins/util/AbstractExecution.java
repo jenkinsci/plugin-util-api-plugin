@@ -133,7 +133,7 @@ public abstract class AbstractExecution<T> extends SynchronousNonBlockingStepExe
      * @return the default charset for the specified encoding string
      */
     protected Charset getCharset(final String charset) {
-        return new CharsetValidation().getCharset(charset);
+        return new ValidationUtilities().getCharset(charset);
     }
 
     /**
