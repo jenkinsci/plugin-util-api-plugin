@@ -47,7 +47,7 @@ public abstract class QualityGate extends AbstractDescribableImpl<QualityGate> i
      *         the criticality for this quality gate
      */
     @DataBoundSetter
-    public void setCriticality(final QualityGateCriticality criticality) {
+    public final void setCriticality(final QualityGateCriticality criticality) {
         this.criticality = criticality;
     }
 
@@ -63,15 +63,15 @@ public abstract class QualityGate extends AbstractDescribableImpl<QualityGate> i
         return getName() + String.format(" - %s: %f", getCriticality(), getThreshold());
     }
 
-    public double getThreshold() {
+    public final double getThreshold() {
         return threshold;
     }
 
-    public QualityGateCriticality getCriticality() {
+    public final QualityGateCriticality getCriticality() {
         return criticality;
     }
 
-    public QualityGateStatus getStatus() {
+    public final QualityGateStatus getStatus() {
         return getCriticality().getStatus();
     }
 
