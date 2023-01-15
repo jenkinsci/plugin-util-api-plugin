@@ -1,5 +1,6 @@
 package io.jenkins.plugins.util;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -10,7 +11,9 @@ import java.util.stream.Collectors;
  *
  * @author Ullrich Hafner
  */
-public class QualityGateResult {
+public class QualityGateResult implements Serializable {
+    private static final long serialVersionUID = -4306601972076922976L;
+
     private QualityGateStatus overallStatus = QualityGateStatus.INACTIVE;
     private final List<QualityGateResultItem> items = new ArrayList<>();
 
@@ -64,7 +67,9 @@ public class QualityGateResult {
     /**
      * Represents a single item of the quality gate results.
      */
-    public static class QualityGateResultItem {
+    public static class QualityGateResultItem implements Serializable {
+        private static final long serialVersionUID = -4011767393049355487L;
+
         private final QualityGateStatus status;
         private final QualityGate qualityGate;
         private final String actualValue;
