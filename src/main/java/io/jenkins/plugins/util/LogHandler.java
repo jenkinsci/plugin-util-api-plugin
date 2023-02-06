@@ -91,9 +91,17 @@ public class LogHandler {
         infoLogger.log(format, args);
     }
 
-    // TODO: extract to method
     private void logErrorMessages(final FilteredLog logger) {
-        List<String> errorMessages = logger.getErrorMessages();
+        logErrorMessages(logger.getErrorMessages());
+    }
+
+    /**
+     * Logs the specified error messages.
+     *
+     * @param errorMessages
+     *         the error messages to log
+     */
+    public void logErrorMessages(final List<String> errorMessages) {
         if (errorPosition < errorMessages.size() && !quiet) {
             errorLogger.logEachLine(errorMessages.subList(errorPosition, errorMessages.size()));
             errorPosition = errorMessages.size();
@@ -101,7 +109,16 @@ public class LogHandler {
     }
 
     private void logInfoMessages(final FilteredLog logger) {
-        List<String> infoMessages = logger.getInfoMessages();
+        logInfoMessages(logger.getInfoMessages());
+    }
+
+    /**
+     * Logs the specified information messages.
+     *
+     * @param infoMessages
+     *         the information messages to log
+     */
+    public void logInfoMessages(final List<String> infoMessages) {
         if (infoPosition < infoMessages.size() && !quiet) {
             infoLogger.logEachLine(infoMessages.subList(infoPosition, infoMessages.size()));
             infoPosition = infoMessages.size();
