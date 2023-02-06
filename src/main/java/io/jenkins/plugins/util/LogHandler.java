@@ -13,7 +13,6 @@ import hudson.model.TaskListener;
  *
  * @author Ullrich Hafner
  */
-// FIXME: log handler of warnings plugin!
 @SuppressWarnings("PMD.LoggerIsNotStaticFinal")
 public class LogHandler {
     private final PluginLogger errorLogger;
@@ -21,6 +20,7 @@ public class LogHandler {
 
     private int infoPosition;
     private int errorPosition;
+    private boolean quiet = false;
 
     /**
      * Creates a new {@link LogHandler}.
@@ -94,7 +94,7 @@ public class LogHandler {
     // TODO: extract to method
     private void logErrorMessages(final FilteredLog logger) {
         List<String> errorMessages = logger.getErrorMessages();
-        if (errorPosition < errorMessages.size()) {
+        if (errorPosition < errorMessages.size() && !quiet) {
             errorLogger.logEachLine(errorMessages.subList(errorPosition, errorMessages.size()));
             errorPosition = errorMessages.size();
         }
@@ -102,10 +102,13 @@ public class LogHandler {
 
     private void logInfoMessages(final FilteredLog logger) {
         List<String> infoMessages = logger.getInfoMessages();
-        if (infoPosition < infoMessages.size()) {
+        if (infoPosition < infoMessages.size() && !quiet) {
             infoLogger.logEachLine(infoMessages.subList(infoPosition, infoMessages.size()));
             infoPosition = infoMessages.size();
         }
     }
 
+    public void setQuiet(final boolean quiet) {
+        this.quiet = quiet;
+    }
 }
