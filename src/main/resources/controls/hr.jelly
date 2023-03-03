@@ -1,0 +1,18 @@
+<?jelly escape-by-default='true'?>
+<j:jelly xmlns:j="jelly:core" xmlns:f="/lib/form" xmlns:st="jelly:stapler">
+
+  <st:documentation>
+    Provides a horizontal rule <hr/> with a caption.
+    <st:attribute name="title" use="optional" type="String">
+      The caption of the horizontal rule.
+    </st:attribute>
+  </st:documentation>
+
+  <st:once>
+    <link rel="stylesheet" href="${resURL}/plugin/plugin-util-api/css/jenkins-style.css"/>
+  </st:once>
+
+  <f:block><div class="subsection-header"/></f:block>
+  <f:block><div class="subsection-title">${title}</div></f:block>
+
+</j:jelly>
