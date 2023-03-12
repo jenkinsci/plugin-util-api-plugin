@@ -4,7 +4,7 @@
   <parent>
     <groupId>org.jvnet.hudson.plugins</groupId>
     <artifactId>analysis-pom</artifactId>
-    <version>5.37.0</version>
+    <version>6.2.0</version>
     <relativePath />
   </parent>
 
@@ -18,7 +18,7 @@
   <url>https://github.com/jenkinsci/plugin-util-api-plugin</url>
 
   <properties>
-    <revision>2.21.0</revision>
+    <revision>3.0.0</revision>
     <changelist>-SNAPSHOT</changelist>
 
     <module.name>${project.groupId}.plugin.util.api</module.name>
@@ -27,7 +27,7 @@
     <j2html.version>1.4.0</j2html.version>
     <streamex.version>0.8.1</streamex.version>
     <testcontainers.version>1.17.6</testcontainers.version>
-    <codingstyle.library.version>${codingstyle.config.version}</codingstyle.library.version>
+    <codingstyle.library.version>3.11.0</codingstyle.library.version>
   </properties>
 
   <licenses>
@@ -46,6 +46,7 @@
   </developers>
 
   <dependencies>
+    <!-- Library Dependencies -->
     <dependency>
       <groupId>edu.hm.hafner</groupId>
       <artifactId>codingstyle</artifactId>
@@ -92,22 +93,22 @@
       <version>${streamex.version}</version>
       <scope>provided</scope>
     </dependency>
-    <!-- Test Plugin Dependencies -->
+
+    <!-- Plugin Dependencies -->
     <dependency>
       <groupId>org.jenkins-ci.plugins.workflow</groupId>
       <artifactId>workflow-api</artifactId>
-      <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.jenkins-ci.plugins.workflow</groupId>
-      <artifactId>workflow-cps</artifactId>
-      <scope>test</scope>
+      <artifactId>workflow-step-api</artifactId>
     </dependency>
     <dependency>
       <groupId>org.jenkins-ci.plugins.workflow</groupId>
-      <artifactId>workflow-job</artifactId>
-      <scope>test</scope>
+      <artifactId>workflow-support</artifactId>
     </dependency>
+
+    <!-- Library Test Dependencies -->
     <dependency>
       <groupId>edu.hm.hafner</groupId>
       <artifactId>codingstyle</artifactId>
@@ -149,6 +150,18 @@
           <artifactId>commons-compress</artifactId>
         </exclusion>
       </exclusions>
+    </dependency>
+
+    <!-- Plugin Test Dependencies -->
+    <dependency>
+      <groupId>org.jenkins-ci.plugins.workflow</groupId>
+      <artifactId>workflow-cps</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.jenkins-ci.plugins.workflow</groupId>
+      <artifactId>workflow-job</artifactId>
+      <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.jenkins-ci.plugins</groupId>
@@ -196,7 +209,7 @@
               <outputDirectory>${project.build.directory}/classes</outputDirectory>
               <includeArtifactIds>codingstyle,error_prone_annotations,streamex,j2html</includeArtifactIds>
               <excludeTypes>test-jar</excludeTypes>
-              <excludes>META-INF/**/*</excludes>
+              <excludes>META-INF/**/*,**/module-info.class</excludes>
             </configuration>
           </execution>
           <execution>
@@ -246,6 +259,7 @@
         <groupId>org.revapi</groupId>
         <artifactId>revapi-maven-plugin</artifactId>
         <configuration>
+          <skip>true</skip>
           <analysisConfiguration>
             <revapi.differences id="manually-vetted">
               <attachments>
@@ -254,9 +268,24 @@
               <differences combine.children="append">
                 <item>
                   <ignore>true</ignore>
-                  <code>java.method.returnTypeChanged</code>
-                  <classQualifiedName>io.jenkins.plugins.util.AgentFileVisitor</classQualifiedName>
-                  <justification>Not yet used.</justification>
+                  <regex>true</regex>
+                  <code>java.class.externalClassExposedInAPI</code>
+                  <classQualifiedName>jenkins.model.*</classQualifiedName>
+                  <justification>New dependency added.</justification>
+                </item>
+                <item>
+                  <ignore>true</ignore>
+                  <regex>true</regex>
+                  <code>java.class.externalClassExposedInAPI</code>
+                  <classQualifiedName>org.jenkinsci.plugins.workflow.*</classQualifiedName>
+                  <justification>New dependency added.</justification>
+                </item>
+                <item>
+                  <ignore>true</ignore>
+                  <regex>true</regex>
+                  <code>java.class.externalClassExposedInAPI</code>
+                  <classQualifiedName>com.google.common.*</classQualifiedName>
+                  <justification>New dependency added.</justification>
                 </item>
                 <item>
                   <ignore>true</ignore>
@@ -270,6 +299,18 @@
                   <code>java.class.nonPublicPartOfAPI</code>
                   <classQualifiedName>one.util.streamex.Joining.Accumulator</classQualifiedName>
                   <justification>This type can be ignored since it is not used in our code.</justification>
+                </item>
+                <item>
+                  <ignore>true</ignore>
+                  <code>java.class.removed</code>
+                  <classQualifiedName>edu.hm.hafner.util.StringContainsUtils</classQualifiedName>
+                  <justification>This type is not used in our code.</justification>
+                </item>
+                <item>
+                  <ignore>true</ignore>
+                  <code>java.class.removed</code>
+                  <classQualifiedName>edu.hm.hafner.util.NoSuchElementException</classQualifiedName>
+                  <justification>This type is not used in our code.</justification>
                 </item>
               </differences>
             </revapi.differences>

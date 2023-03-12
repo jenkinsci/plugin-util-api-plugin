@@ -4,6 +4,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import edu.hm.hafner.util.FilteredLog;
 
@@ -24,8 +26,9 @@ class LogHandlerTest {
     private static final String ADDITIONAL_MESSAGE = "Additional";
     private static final String LOGGER_MESSAGE = "Logger message";
 
-    @Test
-    void shouldLogInfoAndErrorMessage() {
+    @ValueSource(booleans = {true, false})
+    @ParameterizedTest(name = "Log some messages and evaluate quiet flag value (quiet = {0})")
+    void shouldLogInfoAndErrorMessage(final boolean quiet) {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         PrintStream printStream = new PrintStream(outputStream);
         TaskListener taskListener = createTaskListener(printStream);
@@ -35,27 +38,38 @@ class LogHandlerTest {
         logger.logError(NOT_SHOWN);
 
         LogHandler logHandler = new LogHandler(taskListener, LOG_HANDLER_NAME, logger);
+        logHandler.setQuiet(quiet);
+
         logger.logInfo(MESSAGE);
         logger.logError(MESSAGE);
 
         logHandler.log(logger);
 
-        assertThat(outputStream.toString()).isEqualTo(String.format(
-                "[%s] [-ERROR-] %s%n"
-                        + "[%s] %s%n",
-                LOG_HANDLER_NAME, MESSAGE, LOG_HANDLER_NAME, MESSAGE));
-
+        if (quiet) {
+            assertThat(outputStream.toString()).isEmpty();
+        }
+        else {
+            assertThat(outputStream.toString()).isEqualTo(String.format(
+                    "[%s] [-ERROR-] %s%n"
+                            + "[%s] %s%n",
+                    LOG_HANDLER_NAME, MESSAGE, LOG_HANDLER_NAME, MESSAGE));
+        }
         logger.logInfo(ADDITIONAL_MESSAGE);
         logger.logError(ADDITIONAL_MESSAGE);
         logHandler.log(logger);
 
-        assertThat(outputStream.toString()).isEqualTo(String.format(
-                "[%s] [-ERROR-] %s%n"
-                        + "[%s] %s%n"
-                        + "[%s] [-ERROR-] %s%n"
-                        + "[%s] %s%n",
-                LOG_HANDLER_NAME, MESSAGE, LOG_HANDLER_NAME, MESSAGE, LOG_HANDLER_NAME,
-                ADDITIONAL_MESSAGE, LOG_HANDLER_NAME, ADDITIONAL_MESSAGE));
+        if (quiet) {
+            assertThat(outputStream.toString()).isEmpty();
+        }
+        else {
+            assertThat(outputStream.toString()).isEqualTo(String.format(
+                    "[%s] [-ERROR-] %s%n"
+                            + "[%s] %s%n"
+                            + "[%s] [-ERROR-] %s%n"
+                            + "[%s] %s%n",
+                    LOG_HANDLER_NAME, MESSAGE, LOG_HANDLER_NAME, MESSAGE, LOG_HANDLER_NAME,
+                    ADDITIONAL_MESSAGE, LOG_HANDLER_NAME, ADDITIONAL_MESSAGE));
+        }
     }
 
     @Test

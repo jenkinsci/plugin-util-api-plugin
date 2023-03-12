@@ -146,7 +146,7 @@ public final class PluginArchitectureRules {
         }
 
         @Override
-        public boolean apply(final JavaClass input) {
+        public boolean test(final JavaClass input) {
             return allowedClassNames.contains(input.getFullName());
         }
     }

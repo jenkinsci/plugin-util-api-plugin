@@ -20,6 +20,7 @@ public class LogHandler {
 
     private int infoPosition;
     private int errorPosition;
+    private boolean quiet = false;
 
     /**
      * Creates a new {@link LogHandler}.
@@ -90,21 +91,41 @@ public class LogHandler {
         infoLogger.log(format, args);
     }
 
-    // TODO: extract to method
     private void logErrorMessages(final FilteredLog logger) {
-        List<String> errorMessages = logger.getErrorMessages();
-        if (errorPosition < errorMessages.size()) {
+        logErrorMessages(logger.getErrorMessages());
+    }
+
+    /**
+     * Logs the specified error messages.
+     *
+     * @param errorMessages
+     *         the error messages to log
+     */
+    public void logErrorMessages(final List<String> errorMessages) {
+        if (errorPosition < errorMessages.size() && !quiet) {
             errorLogger.logEachLine(errorMessages.subList(errorPosition, errorMessages.size()));
             errorPosition = errorMessages.size();
         }
     }
 
     private void logInfoMessages(final FilteredLog logger) {
-        List<String> infoMessages = logger.getInfoMessages();
-        if (infoPosition < infoMessages.size()) {
+        logInfoMessages(logger.getInfoMessages());
+    }
+
+    /**
+     * Logs the specified information messages.
+     *
+     * @param infoMessages
+     *         the information messages to log
+     */
+    public void logInfoMessages(final List<String> infoMessages) {
+        if (infoPosition < infoMessages.size() && !quiet) {
             infoLogger.logEachLine(infoMessages.subList(infoPosition, infoMessages.size()));
             infoPosition = infoMessages.size();
         }
     }
 
+    public void setQuiet(final boolean quiet) {
+        this.quiet = quiet;
+    }
 }

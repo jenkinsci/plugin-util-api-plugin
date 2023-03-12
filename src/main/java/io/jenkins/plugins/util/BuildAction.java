@@ -27,6 +27,7 @@ import jenkins.tasks.SimpleBuildStep.LastBuildAction;
  *
  * @author Ullrich Hafner
  */
+// FIXME: this action does not work for multiple instantiations
 public abstract class BuildAction<T> implements LastBuildAction, RunAction2, Serializable {
     private static final long serialVersionUID = -2074456133028895573L;
 

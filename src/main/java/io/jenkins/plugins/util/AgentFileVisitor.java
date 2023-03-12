@@ -111,7 +111,7 @@ public abstract class AgentFileVisitor<T extends Serializable>
                 }
             }
             else {
-                Optional<T> result = processFile(file, new CharsetValidation().getCharset(encoding), log);
+                Optional<T> result = processFile(file, new ValidationUtilities().getCharset(encoding), log);
                 if (result.isPresent()) {
                     results.add(result.get());
                     log.logInfo("Successfully processed file '%s'", fileName);

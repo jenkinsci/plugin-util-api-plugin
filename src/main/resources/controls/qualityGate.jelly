@@ -1,0 +1,44 @@
+<?jelly escape-by-default='true'?>
+<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:l="/lib/layout">
+  <st:documentation>
+    Renders the results of the quality gates of a given build.
+    <st:attribute name="result" type="io.jenkins.plugins.util.QualityGateResult">
+      The results of the quality gate evaluation.
+    </st:attribute>
+  </st:documentation>
+
+  <j:set var="status" value="${result.overallStatus}"/>
+  <j:if test="${status.name() != 'INACTIVE'}">
+    <j:set var="tooltip">
+      <div class="jenkins-tooltip healthReportDetails jenkins-tooltip--table-wrapper">
+        <table class="jenkins-table">
+          <thead>
+            <tr>
+              <th>${%S}</th>
+              <th align="left">${%Quality Gate}</th>
+              <th align="right">${%Threshold}</th>
+              <th align="right">${%Actual}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <j:forEach var="item" items="${result.resultItems}">
+              <tr>
+                <td >
+                  <l:icon style="width: 16px; height: 16px; margin-left: 0; position: relative; top: -0.1rem;" alt="${item.status.description}" class="${item.status.iconClass} icon-sm"/>
+                </td>
+                <td align="left" style="white-space: nowrap;">${item.qualityGate.name}</td>
+                <td align="right" style="white-space: nowrap;">${item.qualityGate.threshold}</td>
+                <td align="right" style="white-space: nowrap;">${item.actualValue}</td>
+              </tr>
+            </j:forEach>
+          </tbody>
+        </table>
+      </div>
+    </j:set>
+    <li data-html-tooltip="${tooltip}" >
+      ${%Quality gate}: ${status.description}
+      <l:icon style="width: 16px; height: 16px; margin-left: 0; position: relative; top: -0.1rem;" alt="${status.description}" class="${status.iconClass} icon-sm"/>
+    </li>
+  </j:if>
+
+</j:jelly>
