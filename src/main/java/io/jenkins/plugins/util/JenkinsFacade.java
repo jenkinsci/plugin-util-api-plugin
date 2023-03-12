@@ -7,6 +7,8 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
+import org.jenkins.ui.symbol.Symbol;
+import org.jenkins.ui.symbol.SymbolRequest;
 import org.springframework.security.access.AccessDeniedException;
 
 import edu.umd.cs.findbugs.annotations.CheckForNull;
@@ -240,6 +242,18 @@ public class JenkinsFacade implements Serializable {
         return getContextPath() + "/images/16x16/" + color.getImage();
     }
 
+    /**
+     * Returns a symbol that can be embedded in a page. The returned String is a well formatted HTML snippet that can
+     * be embedded in a page.
+     *
+     * @param symbol
+     *         the symbol
+     *
+     * @return the symbol
+     */
+    public String getSymbol(final SymbolRequest symbol) {
+        return Symbol.get(symbol);
+    }
     /**
      * Returns the absolute URL for the specified icon.
      *
