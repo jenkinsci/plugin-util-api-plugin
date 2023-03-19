@@ -254,6 +254,7 @@ public class JenkinsFacade implements Serializable {
     public String getSymbol(final SymbolRequest symbol) {
         return Symbol.get(symbol);
     }
+
     /**
      * Returns the absolute URL for the specified icon.
      *
