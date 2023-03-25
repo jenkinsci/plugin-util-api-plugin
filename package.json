@@ -1,6 +1,6 @@
 {
   "name": "plugin-util",
-  "version": "0.1.0",
+  "version": "3.2.0",
   "description": "Jenkins Plugin Utilities API Plugin",
   "directories": {
     "doc": "doc"
