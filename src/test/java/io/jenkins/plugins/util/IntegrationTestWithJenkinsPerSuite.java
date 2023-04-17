@@ -2,6 +2,7 @@ package io.jenkins.plugins.util;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.jvnet.hudson.test.JenkinsRule;
+import org.jvnet.hudson.test.junit.jupiter.WithJenkins;
 
 /**
  * Base class for integration tests in Jenkins. Subclasses will get a new and fresh Jenkins instance for each test
@@ -9,7 +10,7 @@ import org.jvnet.hudson.test.JenkinsRule;
  *
  * @author Ullrich Hafner
  */
-@EnableJenkins
+@WithJenkins
 public abstract class IntegrationTestWithJenkinsPerSuite extends IntegrationTest {
     private static JenkinsRule jenkinsPerSuite;
 
