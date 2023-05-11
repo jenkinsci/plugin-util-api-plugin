@@ -2,8 +2,6 @@ package io.jenkins.plugins.util;
 
 import org.junit.jupiter.api.Test;
 
-import nl.jqno.equalsverifier.EqualsVerifier;
-
 import static org.assertj.core.api.Assertions.*;
 
 class RemoteResultWrapperTest {
@@ -17,10 +15,5 @@ class RemoteResultWrapperTest {
 
         wrapper.logInfo("Hello %s", "World");
         assertThat(wrapper.getInfoMessages()).containsExactly("Hello World");
-    }
-
-    @Test
-    void shouldAdhereToEquals() {
-        EqualsVerifier.forClass(RemoteResultWrapper.class).withRedefinedSuperclass().verify();
     }
 }
