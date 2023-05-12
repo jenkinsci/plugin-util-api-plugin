@@ -4,7 +4,7 @@
   <parent>
     <groupId>org.jvnet.hudson.plugins</groupId>
     <artifactId>analysis-pom</artifactId>
-    <version>6.6.0</version>
+    <version>6.7.0</version>
     <relativePath />
   </parent>
 
@@ -23,7 +23,7 @@
 
     <module.name>${project.groupId}.plugin.util.api</module.name>
 
-    <error-prone.version>2.18.0</error-prone.version>
+    <error-prone.version>2.19.1</error-prone.version>
     <j2html.version>1.4.0</j2html.version>
     <streamex.version>0.8.1</streamex.version>
     <testcontainers.version>1.18.0</testcontainers.version>
@@ -251,6 +251,7 @@
           <excludes combine.children="append">
             <exclude>.*IntegrationTestAgentContainer.*</exclude>
             <exclude>.*AgentFileVisitor.*</exclude>
+            <exclude>.*RemoteResultWrapper.*</exclude>
           </excludes>
           <entryPointClassPackage>io.jenkins.plugins.util.assertions</entryPointClassPackage>
         </configuration>
