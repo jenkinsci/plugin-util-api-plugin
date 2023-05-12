@@ -26,7 +26,7 @@
     <error-prone.version>2.19.1</error-prone.version>
     <j2html.version>1.4.0</j2html.version>
     <streamex.version>0.8.1</streamex.version>
-    <testcontainers.version>1.18.0</testcontainers.version>
+    <testcontainers.version>1.18.1</testcontainers.version>
     <codingstyle.library.version>3.16.0</codingstyle.library.version>
   </properties>
 
