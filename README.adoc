@@ -4,8 +4,8 @@
 
 = Jenkins Plugin Utilities
 
-image:https://ci.jenkins.io/job/Plugins/job/plugin-util-api-plugin/job/master/badge/icon?subject=Jenkins%20CI[Jenkins, link=https://ci.jenkins.io/job/Plugins/job/plugin-util-api-plugin/job/master/]
-image:https://github.com/jenkinsci/plugin-util-api-plugin/workflows/GitHub%20CI/badge.svg?branch=master[GitHub Actions, link=https://github.com/jenkinsci/plugin-util-api-plugin/actions]
+image:https://ci.jenkins.io/job/Plugins/job/plugin-util-api-plugin/job/main/badge/icon?subject=Jenkins%20CI[Jenkins, link=https://ci.jenkins.io/job/Plugins/job/plugin-util-api-plugin/job/main/]
+image:https://github.com/jenkinsci/plugin-util-api-plugin/workflows/GitHub%20CI/badge.svg?branch=main[GitHub Actions, link=https://github.com/jenkinsci/plugin-util-api-plugin/actions]
 image:https://img.shields.io/jenkins/plugin/i/plugin-util-api.svg?color=red[Jenkins Plugin Installslink=https://plugins.jenkins.io/warnings-ng]
 
 This Jenkins plug-in provides utility classes that can be used to accelerate plugin development. It can be used in conjunction with several JS based UI plug-ins to improve the user experience of your plug-ins as well. For more details please refer to the https://www.jenkins.io/blog/2020/03/17/ui-plugins/[blog post] or https://www.youtube.com/watch?v=GLLhi2UZlxI[meetup video] of the general topic "Hands On: Beautify the UI of Jenkins reporter plugins".
