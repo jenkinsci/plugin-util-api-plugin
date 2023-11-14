@@ -4,15 +4,13 @@ import java.io.Serializable;
 
 import edu.hm.hafner.util.VisibleForTesting;
 
-import org.kohsuke.stapler.AncestorInPath;
 import org.kohsuke.stapler.DataBoundSetter;
 import org.kohsuke.stapler.verb.POST;
 import hudson.Extension;
 import hudson.model.AbstractDescribableImpl;
-import hudson.model.AbstractProject;
 import hudson.model.Descriptor;
-import hudson.model.Item;
 import hudson.util.ListBoxModel;
+import jenkins.model.Jenkins;
 
 /**
  * Defines a quality gate based on a specific threshold of code coverage in the current build. After a build has been
@@ -126,15 +124,12 @@ public abstract class QualityGate extends AbstractDescribableImpl<QualityGate> i
         /**
          * Returns a model with all {@link QualityGateCriticality criticalities} that can be used in quality gates.
          *
-         * @param project
-         *         the project that is configured
-         *
          * @return a model with all {@link QualityGateCriticality criticalities}.
          */
         @POST
         @SuppressWarnings("unused") // used by Stapler view data binding
-        public ListBoxModel doFillCriticalityItems(@AncestorInPath final AbstractProject<?, ?> project) {
-            if (jenkins.hasPermission(Item.CONFIGURE, project)) {
+        public ListBoxModel doFillCriticalityItems() {
+            if (jenkins.hasPermission(Jenkins.READ)) {
                 ListBoxModel options = new ListBoxModel();
                 options.add(Messages.QualityGate_Unstable(), QualityGateCriticality.UNSTABLE.name());
                 options.add(Messages.QualityGate_Failure(), QualityGateCriticality.FAILURE.name());
