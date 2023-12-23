@@ -178,5 +178,4 @@ class EnvironmentResolverTest {
 
         assertThat(expanded).isEqualTo(expected);
     }
-
 }

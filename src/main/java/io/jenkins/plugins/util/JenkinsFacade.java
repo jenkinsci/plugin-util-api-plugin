@@ -285,7 +285,6 @@ public class JenkinsFacade implements Serializable {
      */
     public String getAbsoluteUrl(final String... urlElements) {
         return getAbsoluteUrl(StringUtils.join(urlElements, "/"));
-
     }
 
     private String getAbsoluteUrl(final String url) {
