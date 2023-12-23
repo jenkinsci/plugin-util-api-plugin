@@ -23,7 +23,7 @@
 
     <module.name>${project.groupId}.plugin.util.api</module.name>
 
-    <error-prone.version>2.23.0</error-prone.version>
+    <error-prone.version>2.24.0</error-prone.version>
     <j2html.version>1.4.0</j2html.version>
     <streamex.version>0.8.2</streamex.version>
     <testcontainers.version>1.19.3</testcontainers.version>
