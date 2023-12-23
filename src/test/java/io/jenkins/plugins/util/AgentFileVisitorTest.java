@@ -207,7 +207,6 @@ class AgentFileVisitorTest extends SerializableTest<StringScanner> {
     }
 
     private static class EmptyScanner extends AgentFileVisitor<String> {
-
         private static final long serialVersionUID = 3700448215163706213L;
 
         @VisibleForTesting

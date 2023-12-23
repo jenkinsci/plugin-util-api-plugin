@@ -39,7 +39,6 @@ class BuildResultNavigatorTest {
                 "spotbugs",
                 "last-build"))
                 .isEmpty();
-
     }
 
     @Test
@@ -108,5 +107,4 @@ class BuildResultNavigatorTest {
                 "wrong-selection"))
                 .isEmpty();
     }
-
 }
