@@ -57,7 +57,7 @@ public class QualityGateResult implements Serializable {
     }
 
     private String createMessage(final QualityGateResultItem item) {
-        return String.format("-> [%s]: ≪%s≫ - (Actual value: %s, Quality gate: %.2f)",
+        return String.format("   - [%s]: ≪%s≫ - (Actual value: %s, Quality gate: %.2f)",
                 item.getQualityGate().getName(),
                 item.getStatus().getDescription(),
                 item.getActualValue(),

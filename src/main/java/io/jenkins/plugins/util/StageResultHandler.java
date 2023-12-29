@@ -6,7 +6,7 @@ import hudson.model.Result;
  * Handles the setting of the results of a stage.
  *
  * @author Devin Nusbaum
- * @deprecated use {@link QualityGateNotifier} instead
+ * @deprecated use {@link ResultHandler} instead
  */
 @Deprecated
 public interface StageResultHandler {

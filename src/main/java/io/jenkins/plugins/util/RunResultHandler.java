@@ -4,12 +4,12 @@ import hudson.model.Result;
 import hudson.model.Run;
 
 /**
- * A {@link QualityGateNotifier} that sets the overall build result of the {@link Run}.
+ * A {@link ResultHandler} that sets the overall build result of the {@link Run}.
  *
  * @author Devin Nusbaum
  */
 @SuppressWarnings("deprecation")
-public class RunResultHandler implements StageResultHandler, QualityGateNotifier {
+public class RunResultHandler implements StageResultHandler, ResultHandler {
     private final Run<?, ?> run;
 
     /**
@@ -24,6 +24,11 @@ public class RunResultHandler implements StageResultHandler, QualityGateNotifier
 
     @Override
     public void setResult(final Result result, final String message) {
+        publishResult(result, message);
+    }
+
+    @Override
+    public void publishResult(final Result result, final String message) {
         if (result.equals(Result.UNSTABLE) || result.equals(Result.FAILURE)) {
             run.setResult(result);
         }

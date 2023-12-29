@@ -6,13 +6,13 @@ import hudson.model.Result;
 import hudson.model.Run;
 
 /**
- * A {@link QualityGateNotifier} that sets the overall build result of the {@link Run} and annotates the given Pipeline
+ * A {@link ResultHandler} that sets the overall build result of the {@link Run} and annotates the given Pipeline
  * step with a {@link WarningAction}.
  *
  * @author Devin Nusbaum
  */
 @SuppressWarnings("deprecation")
-public class PipelineResultHandler implements StageResultHandler, QualityGateNotifier {
+public class PipelineResultHandler implements StageResultHandler, ResultHandler {
     private final Run<?, ?> run;
     private final FlowNode flowNode;
 
@@ -31,6 +31,11 @@ public class PipelineResultHandler implements StageResultHandler, QualityGateNot
 
     @Override
     public void setResult(final Result result, final String message) {
+        publishResult(result, message);
+    }
+
+    @Override
+    public void publishResult(final Result result, final String message) {
         run.setResult(result);
 
         setStageResult(result, message);
