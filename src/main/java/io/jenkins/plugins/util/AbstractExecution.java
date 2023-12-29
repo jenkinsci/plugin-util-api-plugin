@@ -125,7 +125,7 @@ public abstract class AbstractExecution<T> extends SynchronousNonBlockingStepExe
 
     /**
      * Returns the default charset for the specified encoding string. If the default encoding is empty or {@code null},
-     * or if the charset is not valid then the default encoding of the platform is returned.
+     * or if the charset is not valid, then the default encoding of the platform is returned.
      *
      * @param charset
      *         identifier of the character set
