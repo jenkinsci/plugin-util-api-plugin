@@ -59,7 +59,7 @@ public abstract class QualityGateEvaluator<T extends QualityGate> {
                 resultHandler.publishResult(result.getOverallStatus(), message);
             }
             log.logInfo("-> Details for each quality gate:");
-            result.getMessages().forEach(log::logInfo);
+            result.getMessages().forEach(message -> log.logInfo("   -" + message));
         }
 
         return result;
