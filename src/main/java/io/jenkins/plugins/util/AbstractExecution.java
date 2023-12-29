@@ -144,8 +144,28 @@ public abstract class AbstractExecution<T> extends SynchronousNonBlockingStepExe
      *         if the user canceled the execution
      * @throws IOException
      *         if the required {@link FlowNode} instance is not found
+     * @deprecated use {@link #createQualityGateNotifier()} instead
      */
+    @Deprecated
     protected StageResultHandler createStageResultHandler() throws InterruptedException, IOException {
+        return createPipelineResultHandler();
+    }
+
+    /**
+     * Creates a {@link QualityGateNotifier} that sets build result of the {@link Run} or step.
+     *
+     * @return a {@link QualityGateNotifier} that sets the build result of the {@link Run} or step
+     * @throws InterruptedException
+     *         if the user canceled the execution
+     * @throws IOException
+     *         if the required {@link FlowNode} instance is not found
+     *
+     */
+    protected QualityGateNotifier createQualityGateNotifier() throws InterruptedException, IOException {
+        return createPipelineResultHandler();
+    }
+
+    private PipelineResultHandler createPipelineResultHandler() throws IOException, InterruptedException {
         return new PipelineResultHandler(getRun(), getContext().get(FlowNode.class));
     }
 }

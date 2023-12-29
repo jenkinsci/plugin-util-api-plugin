@@ -4,11 +4,14 @@ import java.io.Serializable;
 
 import edu.hm.hafner.util.VisibleForTesting;
 
+import org.kohsuke.stapler.AncestorInPath;
 import org.kohsuke.stapler.DataBoundSetter;
 import org.kohsuke.stapler.verb.POST;
 import hudson.Extension;
 import hudson.model.AbstractDescribableImpl;
+import hudson.model.BuildableItem;
 import hudson.model.Descriptor;
+import hudson.model.FreeStyleProject;
 import hudson.util.ListBoxModel;
 import jenkins.model.Jenkins;
 
@@ -77,10 +80,16 @@ public abstract class QualityGate extends AbstractDescribableImpl<QualityGate> i
      * Determines the Jenkins build result if the quality gate is failed.
      */
     public enum QualityGateCriticality {
-        /** The build will be marked as unstable. */
+        /** The stage will be marked with a warning. */
+        NOTE(QualityGateStatus.NOTE),
+
+        /** The stage and the build will be marked as unstable. */
         UNSTABLE(QualityGateStatus.WARNING),
 
-        /** The build will be marked as failed. */
+        /** The stage will be marked as failed. */
+        ERROR(QualityGateStatus.ERROR),
+
+        /** The stage and the build will be marked as failed. */
         FAILURE(QualityGateStatus.FAILED);
 
         private final QualityGateStatus status;
@@ -124,15 +133,26 @@ public abstract class QualityGate extends AbstractDescribableImpl<QualityGate> i
         /**
          * Returns a model with all {@link QualityGateCriticality criticalities} that can be used in quality gates.
          *
+         * @param project
+         *         the project that is configured
+         *
          * @return a model with all {@link QualityGateCriticality criticalities}.
          */
         @POST
         @SuppressWarnings("unused") // used by Stapler view data binding
-        public ListBoxModel doFillCriticalityItems() {
+        public ListBoxModel doFillCriticalityItems(@AncestorInPath final BuildableItem project) {
             if (jenkins.hasPermission(Jenkins.READ)) {
                 ListBoxModel options = new ListBoxModel();
-                options.add(Messages.QualityGate_Unstable(), QualityGateCriticality.UNSTABLE.name());
-                options.add(Messages.QualityGate_Failure(), QualityGateCriticality.FAILURE.name());
+                if (project instanceof FreeStyleProject) {
+                    options.add(Messages.QualityGate_Unstable(), QualityGateCriticality.UNSTABLE.name());
+                    options.add(Messages.QualityGate_Failure(), QualityGateCriticality.FAILURE.name());
+                }
+                else {
+                    options.add(Messages.QualityGate_UnstableStage(), QualityGateCriticality.NOTE.name());
+                    options.add(Messages.QualityGate_UnstableRun(), QualityGateCriticality.UNSTABLE.name());
+                    options.add(Messages.QualityGate_FailureStage(), QualityGateCriticality.ERROR.name());
+                    options.add(Messages.QualityGate_FailureRun(), QualityGateCriticality.FAILURE.name());
+                }
                 return options;
             }
             return new ListBoxModel();

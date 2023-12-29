@@ -43,7 +43,7 @@ public abstract class QualityGateEvaluator<T extends QualityGate> {
     protected abstract void evaluate(T qualityGate, QualityGateResult result);
 
     /**
-     * Appends all the quality gates in the specified collection to the end of the list of quality gates.
+     * Appends all the specified quality gates to the end of the existing quality gates.
      *
      * @param additionalQualityGates
      *         the quality gates to add
