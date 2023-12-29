@@ -1,19 +1,26 @@
 package io.jenkins.plugins.util;
 
 import java.io.Serializable;
+import java.util.Collection;
+import java.util.stream.Collectors;
 
 import edu.hm.hafner.util.VisibleForTesting;
 
 import org.kohsuke.stapler.AncestorInPath;
 import org.kohsuke.stapler.DataBoundSetter;
+import org.kohsuke.stapler.export.Exported;
+import org.kohsuke.stapler.export.ExportedBean;
 import org.kohsuke.stapler.verb.POST;
 import hudson.Extension;
 import hudson.model.AbstractDescribableImpl;
 import hudson.model.BuildableItem;
 import hudson.model.Descriptor;
 import hudson.model.FreeStyleProject;
+import hudson.model.Result;
 import hudson.util.ListBoxModel;
 import jenkins.model.Jenkins;
+
+import io.jenkins.plugins.util.QualityGateResult.QualityGateResultItem;
 
 /**
  * Defines a quality gate based on a specific threshold of code coverage in the current build. After a build has been
@@ -105,6 +112,63 @@ public abstract class QualityGate extends AbstractDescribableImpl<QualityGate> i
          */
         public QualityGateStatus getStatus() {
             return status;
+        }
+    }
+
+    /**
+     * Remote API to list the overview of the quality gate evaluation.
+     */
+    @ExportedBean
+    public static class QualityGateResultApi {
+        private final QualityGateResult qualityGateResult;
+
+        QualityGateResultApi(final QualityGateResult qualityGateResult) {
+            this.qualityGateResult = qualityGateResult;
+        }
+
+        @Exported(inline = true)
+        public QualityGateStatus getOverallResult() {
+            return qualityGateResult.getOverallStatus();
+        }
+
+        @Exported(inline = true)
+        public Collection<QualityGateItemApi> getResultItems() {
+            return qualityGateResult.getResultItems()
+                    .stream()
+                    .map(QualityGateItemApi::new)
+                    .collect(Collectors.toList());
+        }
+    }
+
+    /**
+     * Remote API to show the content of an individual quality gate item.
+     */
+    @ExportedBean
+    public static class QualityGateItemApi {
+        private final QualityGateResultItem item;
+
+        QualityGateItemApi(final QualityGateResultItem item) {
+            this.item = item;
+        }
+
+        @Exported
+        public String getQualityGate() {
+            return item.getQualityGate().getName();
+        }
+
+        @Exported
+        public double getThreshold() {
+            return item.getQualityGate().getThreshold();
+        }
+
+        @Exported(inline = true)
+        public Result getResult() {
+            return item.getStatus().getResult();
+        }
+
+        @Exported
+        public String getValue() {
+            return item.getActualValue();
         }
     }
 
