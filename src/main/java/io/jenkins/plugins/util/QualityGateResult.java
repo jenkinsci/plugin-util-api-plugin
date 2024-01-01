@@ -6,6 +6,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.jenkinsci.plugins.scriptsecurity.sandbox.whitelists.Whitelisted;
+
 /**
  * Result of a quality gate evaluation. Aggregates the individual results of the quality gates into an overall status.
  *
@@ -40,10 +42,12 @@ public class QualityGateResult implements Serializable {
         return items;
     }
 
+    @Whitelisted
     public QualityGateStatus getOverallStatus() {
         return overallStatus;
     }
 
+    @Whitelisted
     public boolean isSuccessful() {
         return overallStatus.isSuccessful();
     }
