@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.List;
 
 import edu.hm.hafner.util.FilteredLog;
+import edu.hm.hafner.util.VisibleForTesting;
 
 /**
  * Evaluates a given set of quality gates.
@@ -16,6 +17,11 @@ import edu.hm.hafner.util.FilteredLog;
  */
 public abstract class QualityGateEvaluator<T extends QualityGate> {
     private final List<T> qualityGates = new ArrayList<>();
+
+    @VisibleForTesting
+    QualityGateEvaluator() {
+        this(List.of());
+    }
 
     /**
      * Creates a new quality evaluator for the specified quality gates.
@@ -38,7 +44,7 @@ public abstract class QualityGateEvaluator<T extends QualityGate> {
      * @return result of the evaluation, expressed by a build state
      */
     public QualityGateResult evaluate(final ResultHandler resultHandler, final FilteredLog log) {
-        var result = new QualityGateResult();
+        var result = createResult();
 
         if (qualityGates.isEmpty()) {
             log.logInfo("No quality gates have been set - skipping");
@@ -63,6 +69,11 @@ public abstract class QualityGateEvaluator<T extends QualityGate> {
         }
 
         return result;
+    }
+
+    @VisibleForTesting
+    QualityGateResult createResult() {
+        return new QualityGateResult();
     }
 
     protected abstract void evaluate(T qualityGate, QualityGateResult result);

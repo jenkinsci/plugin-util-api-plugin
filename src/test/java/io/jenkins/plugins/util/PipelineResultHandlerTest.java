@@ -34,6 +34,21 @@ class PipelineResultHandlerTest {
         verify(flowNode).addOrReplaceAction(argThat(action -> hasFlowNode(action, Result.FAILURE)));
     }
 
+    @Test
+    void shouldReplaceRunResult() {
+        var run = mock(Run.class);
+        var flowNode = mock(FlowNode.class);
+
+        var handler = new PipelineResultHandler(run, flowNode);
+        when(flowNode.getPersistentAction(WarningAction.class)).thenReturn(new WarningAction(Result.UNSTABLE));
+
+        handler.publishResult(QualityGateStatus.WARNING, MESSAGE);
+        verify(flowNode, never()).addOrReplaceAction(any());
+
+        handler.publishResult(QualityGateStatus.ERROR, MESSAGE);
+        verify(flowNode).addOrReplaceAction(argThat(action -> hasFlowNode(action, Result.FAILURE)));
+    }
+
     @Test @Issue("JENKINS-72059")
     void shouldSetStageResult() {
         var run = mock(Run.class);

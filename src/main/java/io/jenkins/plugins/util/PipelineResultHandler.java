@@ -7,7 +7,7 @@ import hudson.model.Run;
 
 /**
  * A {@link ResultHandler} that sets the overall build result of the {@link Run} and annotates the given Pipeline
- * step with a {@link WarningAction}.
+ * stage with a {@link WarningAction}.
  *
  * @author Devin Nusbaum
  */

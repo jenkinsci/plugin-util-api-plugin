@@ -152,9 +152,9 @@ public abstract class AbstractExecution<T> extends SynchronousNonBlockingStepExe
     }
 
     /**
-     * Creates a {@link ResultHandler} that sets build result of the {@link Run} or step.
+     * Creates a {@link ResultHandler} that sets build result of the {@link Run} or stage.
      *
-     * @return a {@link ResultHandler} that sets the build result of the {@link Run} or step
+     * @return a {@link ResultHandler} that sets the build result of the {@link Run} or stage
      * @throws InterruptedException
      *         if the user canceled the execution
      * @throws IOException

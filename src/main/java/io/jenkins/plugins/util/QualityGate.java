@@ -122,7 +122,13 @@ public abstract class QualityGate extends AbstractDescribableImpl<QualityGate> i
     public static class QualityGateResultApi {
         private final QualityGateResult qualityGateResult;
 
-        QualityGateResultApi(final QualityGateResult qualityGateResult) {
+        /**
+         * Creates a new instance of {@link QualityGateResultApi}.
+         *
+         * @param qualityGateResult
+         *         the quality gate result to show
+         */
+        public QualityGateResultApi(final QualityGateResult qualityGateResult) {
             this.qualityGateResult = qualityGateResult;
         }
 
@@ -147,7 +153,13 @@ public abstract class QualityGate extends AbstractDescribableImpl<QualityGate> i
     public static class QualityGateItemApi {
         private final QualityGateResultItem item;
 
-        QualityGateItemApi(final QualityGateResultItem item) {
+        /**
+         * Creates a new instance of {@link QualityGateItemApi}.
+         *
+         * @param item
+         *         the quality gate result item to show
+         */
+        public QualityGateItemApi(final QualityGateResultItem item) {
             this.item = item;
         }
 
