@@ -68,6 +68,11 @@ public class QualityGateResult implements Serializable {
                 item.getQualityGate().getThreshold());
     }
 
+    @Override
+    public String toString() {
+        return getOverallStatus().toString();
+    }
+
     /**
      * Represents a single item of the quality gate results.
      */

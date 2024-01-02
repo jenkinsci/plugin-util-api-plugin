@@ -17,6 +17,7 @@ class QualityGateEvaluatorTest {
         var log = new FilteredLog();
         var result = createEvaluator(log);
 
+        assertThat(result).hasToString("INACTIVE");
         assertThat(result.getOverallStatus()).isEqualTo(QualityGateStatus.INACTIVE);
         assertThat(log.getInfoMessages())
                 .contains("No quality gates have been set - skipping");
@@ -38,6 +39,7 @@ class QualityGateEvaluatorTest {
         var resultHandler = mock(ResultHandler.class);
         var result = evaluator.evaluate(resultHandler, log);
 
+        assertThat(result).hasToString("INACTIVE");
         assertThat(result.getOverallStatus()).isEqualTo(QualityGateStatus.INACTIVE);
         assertThat(log.getInfoMessages())
                 .contains("Evaluating quality gates",
