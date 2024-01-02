@@ -25,7 +25,7 @@ import jenkins.model.Jenkins;
 public abstract class QualityGate extends AbstractDescribableImpl<QualityGate> implements Serializable {
     private static final long serialVersionUID = -397278599489426668L;
 
-    private final double threshold;
+    private double threshold;
     private QualityGateCriticality criticality = QualityGateCriticality.UNSTABLE;
 
     /**
@@ -58,6 +58,10 @@ public abstract class QualityGate extends AbstractDescribableImpl<QualityGate> i
      * @return a human-readable name
      */
     public abstract String getName();
+
+    protected void setThreshold(final double threshold) {
+        this.threshold = threshold;
+    }
 
     @Override
     public String toString() {
