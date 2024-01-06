@@ -19,8 +19,26 @@ import hudson.model.Result;
 public class QualityGateResult implements Serializable {
     private static final long serialVersionUID = -4306601972076922976L;
 
-    private QualityGateStatus overallStatus = QualityGateStatus.INACTIVE;
+    private QualityGateStatus overallStatus;
     private final List<QualityGateResultItem> items = new ArrayList<>();
+
+    /**
+     * Creates a new instance of {@link QualityGateResult} that has its overall status set to
+     * {@link QualityGateStatus#INACTIVE}.
+     */
+    public QualityGateResult() {
+        this(QualityGateStatus.INACTIVE);
+    }
+
+    /**
+     * Creates a new instance of {@link QualityGateResult} with the specified overall status.
+     *
+     * @param overallStatus
+     *         the overall status of all quality gates
+     */
+    public QualityGateResult(final QualityGateStatus overallStatus) {
+        this.overallStatus = overallStatus;
+    }
 
     /**
      * Adds another quality gate result to the aggregated result.
