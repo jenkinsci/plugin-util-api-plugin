@@ -29,35 +29,14 @@ import jenkins.model.Jenkins;
 public abstract class QualityGate extends AbstractDescribableImpl<QualityGate> implements Serializable {
     private static final long serialVersionUID = -397278599489426668L;
 
-    private double threshold;
+    private double threshold = 0.0;
     private QualityGateCriticality criticality = QualityGateCriticality.UNSTABLE;
 
     /**
      * Creates a new instance of {@link QualityGate}.
-     *
-     * @param threshold
-     *         minimum or maximum value that triggers this quality gate
      */
-    protected QualityGate(final double threshold) {
+    protected QualityGate() {
         super();
-
-        this.threshold = threshold;
-    }
-
-    /**
-     * Creates a new instance of {@link QualityGate}.
-     *
-     * @param threshold
-     *         minimum or maximum value that triggers this quality gate
-     */
-    protected QualityGate(final int threshold) {
-        super();
-
-        this.threshold = threshold;
-    }
-
-    public final double getThreshold() {
-        return threshold;
     }
 
     /**
@@ -66,6 +45,21 @@ public abstract class QualityGate extends AbstractDescribableImpl<QualityGate> i
      * @return a human-readable name
      */
     public abstract String getName();
+
+    /**
+     * Sets the threshold of the quality gate.
+     *
+     * @param threshold
+     *         the threshold of the quality gate
+     */
+    @DataBoundSetter
+    public final void setThreshold(final double threshold) {
+        this.threshold = threshold;
+    }
+
+    public final double getThreshold() {
+        return threshold;
+    }
 
     private int asInt(final double value) {
         return Double.valueOf(value).intValue();
