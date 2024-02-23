@@ -18,7 +18,7 @@
   <url>https://github.com/jenkinsci/plugin-util-api-plugin</url>
 
   <properties>
-    <revision>3.9.0</revision>
+    <revision>4.0.0</revision>
     <changelist>-SNAPSHOT</changelist>
 
     <module.name>${project.groupId}.plugin.util.api</module.name>
