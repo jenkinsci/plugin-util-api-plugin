@@ -1,0 +1,299 @@
+@startuml
+skinparam defaultTextAlignment center
+skinparam rectangle {
+  BackgroundColor<<optional>> beige
+  BackgroundColor<<test>> lightGreen
+  BackgroundColor<<runtime>> lightBlue
+  BackgroundColor<<provided>> lightGray
+}
+rectangle "plugin-util-api\n\n4.0.0-SNAPSHOT" as io_jenkins_plugins_plugin_util_api_hpi
+rectangle "codingstyle\n\n3.42.0" as edu_hm_hafner_codingstyle_jar<<provided>>
+rectangle "error_prone_annotations\n\n2.25.0" as com_google_errorprone_error_prone_annotations_jar<<provided>>
+rectangle "j2html\n\n1.4.0" as com_j2html_j2html_jar<<provided>>
+rectangle "streamex\n\n0.8.2" as one_util_streamex_jar<<provided>>
+rectangle "workflow-api\n\n1291.v51fd2a_625da_7" as org_jenkins_ci_plugins_workflow_workflow_api_jar
+rectangle "workflow-step-api\n\n657.v03b_e8115821b_" as org_jenkins_ci_plugins_workflow_workflow_step_api_jar
+rectangle "scm-api\n\n683.vb_16722fb_b_80b_" as org_jenkins_ci_plugins_scm_api_jar
+rectangle "structs\n\n337.v1b_04ea_4df7c8" as org_jenkins_ci_plugins_structs_jar
+rectangle "workflow-support\n\n865.v43e78cc44e0d" as org_jenkins_ci_plugins_workflow_workflow_support_jar
+rectangle "script-security\n\n1326.vdb_c154de8669" as org_jenkins_ci_plugins_script_security_jar
+rectangle "groovy-sandbox\n\n1.33" as org_kohsuke_groovy_sandbox_jar
+rectangle "caffeine-api\n\n3.1.8-133.v17b_1ff2e0599" as io_jenkins_plugins_caffeine_api_jar
+rectangle "caffeine\n\n3.1.8" as com_github_ben_manes_caffeine_caffeine_jar
+rectangle "jboss-marshalling-river\n\n2.1.2.Final" as org_jboss_marshalling_jboss_marshalling_river_jar
+rectangle "jboss-marshalling\n\n2.1.2.Final" as org_jboss_marshalling_jboss_marshalling_jar
+rectangle "slf4j-api\n\n2.0.12" as org_slf4j_slf4j_api_jar<<provided>>
+rectangle "commons-lang3-api\n\n3.13.0-62.v7d18e55f51e2" as io_jenkins_plugins_commons_lang3_api_jar
+rectangle "commons-lang3\n\n3.13.0" as org_apache_commons_commons_lang3_jar
+rectangle "commons-text-api\n\n1.11.0-95.v22a_d30ee5d36" as io_jenkins_plugins_commons_text_api_jar
+rectangle "commons-text\n\n1.11.0" as org_apache_commons_commons_text_jar
+rectangle "jenkins-core\n\n2.426.3" as org_jenkins_ci_main_jenkins_core_jar<<provided>>
+rectangle "cli\n\n2.426.3" as org_jenkins_ci_main_cli_jar<<provided>>
+rectangle "remoting\n\n3160.vd76b_9ddd10cc" as org_jenkins_ci_main_remoting_jar<<provided>>
+rectangle "args4j\n\n2.33" as args4j_args4j_jar<<provided>>
+rectangle "spotbugs-annotations\n\n4.7.3" as com_github_spotbugs_spotbugs_annotations_jar<<provided>>
+rectangle "guava\n\n32.1.2-jre" as com_google_guava_guava_jar<<provided>>
+rectangle "failureaccess\n\n1.0.1" as com_google_guava_failureaccess_jar<<provided>>
+rectangle "listenablefuture\n\n9999.0-empty-to-avoid-conflict-with-guava" as com_google_guava_listenablefuture_jar<<provided>>
+rectangle "jsr305\n\n3.0.1" as com_google_code_findbugs_jsr305_jar<<provided>><<optional>>
+rectangle "guice\n\n6.0.0" as com_google_inject_guice_jar<<provided>>
+rectangle "javax.inject\n\n1" as javax_inject_javax_inject_jar<<provided>>
+rectangle "jakarta.inject-api\n\n2.0.1" as jakarta_inject_jakarta_inject_api_jar<<provided>>
+rectangle "bridge-method-annotation\n\n1.29" as com_infradna_tool_bridge_method_annotation_jar<<provided>>
+rectangle "annotation-indexer\n\n1.17" as org_jenkins_ci_annotation_indexer_jar<<provided>>
+rectangle "jzlib\n\n1.1.3-kohsuke-1" as com_jcraft_jzlib_jar<<provided>>
+rectangle "embedded_su4j\n\n1.1" as com_sun_solaris_embedded_su4j_jar<<provided>>
+rectangle "txw2\n\n20110809" as com_sun_xml_txw2_txw2_jar<<provided>>
+rectangle "relaxngDatatype\n\n20020414" as relaxngDatatype_relaxngDatatype_jar<<provided>>
+rectangle "xstream\n\n1.4.20" as com_thoughtworks_xstream_xstream_jar<<provided>>
+rectangle "mxparser\n\n1.2.2" as io_github_x_stream_mxparser_jar<<provided>>
+rectangle "commons-beanutils\n\n1.9.4" as commons_beanutils_commons_beanutils_jar<<provided>>
+rectangle "commons-logging\n\n1.2" as commons_logging_commons_logging_jar<<provided>>
+rectangle "commons-collections\n\n3.2.2" as commons_collections_commons_collections_jar<<provided>>
+rectangle "commons-codec\n\n1.16.0" as commons_codec_commons_codec_jar<<provided>>
+rectangle "commons-fileupload\n\n1.5" as commons_fileupload_commons_fileupload_jar<<provided>>
+rectangle "commons-io\n\n2.13.0" as commons_io_commons_io_jar<<provided>>
+rectangle "commons-jelly-tags-fmt\n\n1.0" as commons_jelly_commons_jelly_tags_fmt_jar<<provided>>
+rectangle "commons-jelly-tags-xml\n\n1.1" as commons_jelly_commons_jelly_tags_xml_jar<<provided>>
+rectangle "jaxen\n\n2.0.0" as jaxen_jaxen_jar<<provided>>
+rectangle "commons-lang\n\n2.6" as commons_lang_commons_lang_jar<<provided>>
+rectangle "jenkins-stapler-support\n\n1.1" as io_jenkins_stapler_jenkins_stapler_support_jar<<provided>>
+rectangle "jakarta.servlet.jsp.jstl-api\n\n1.2.7" as jakarta_servlet_jsp_jstl_jakarta_servlet_jsp_jstl_api_jar<<provided>>
+rectangle "jline\n\n2.14.6" as jline_jline_jar<<provided>>
+rectangle "jna\n\n5.13.0" as net_java_dev_jna_jna_jar<<provided>>
+rectangle "sezpoz\n\n1.13" as net_java_sezpoz_sezpoz_jar<<provided>>
+rectangle "jcip-annotations\n\n1.0" as net_jcip_jcip_annotations_jar<<provided>>
+rectangle "antlr4-runtime\n\n4.13.1" as org_antlr_antlr4_runtime_jar<<provided>>
+rectangle "ant\n\n1.10.14" as org_apache_ant_ant_jar<<provided>>
+rectangle "ant-launcher\n\n1.10.14" as org_apache_ant_ant_launcher_jar<<provided>>
+rectangle "commons-compress\n\n1.24.0" as org_apache_commons_commons_compress_jar<<provided>>
+rectangle "groovy-all\n\n2.4.21" as org_codehaus_groovy_groovy_all_jar<<provided>>
+rectangle "jbcrypt\n\n1.0.0" as org_connectbot_jbcrypt_jbcrypt_jar<<provided>>
+rectangle "jansi\n\n1.11" as org_fusesource_jansi_jansi_jar<<provided>>
+rectangle "commons-jexl\n\n1.1-jenkins-20111212" as org_jenkins_ci_commons_jexl_jar<<provided>>
+rectangle "crypto-util\n\n1.9" as org_jenkins_ci_crypto_util_jar<<provided>>
+rectangle "memory-monitor\n\n1.12" as org_jenkins_ci_memory_monitor_jar<<provided>>
+rectangle "symbol-annotation\n\n1.24" as org_jenkins_ci_symbol_annotation_jar<<provided>>
+rectangle "task-reactor\n\n1.8" as org_jenkins_ci_task_reactor_jar<<provided>>
+rectangle "version-number\n\n1.11" as org_jenkins_ci_version_number_jar<<provided>>
+rectangle "websocket-spi\n\n2.426.3" as org_jenkins_ci_main_websocket_spi_jar<<provided>>
+rectangle "jfreechart\n\n1.0.19" as org_jfree_jfreechart_jar<<provided>>
+rectangle "jcommon\n\n1.0.23" as org_jfree_jcommon_jar<<provided>>
+rectangle "commons-jelly-tags-define\n\n1.1-jenkins-20230713" as org_jvnet_hudson_commons_jelly_tags_define_jar<<provided>>
+rectangle "localizer\n\n1.31" as org_jvnet_localizer_localizer_jar<<provided>>
+rectangle "robust-http-client\n\n1.2" as org_jvnet_robust_http_client_robust_http_client_jar<<provided>>
+rectangle "winp\n\n1.30" as org_jvnet_winp_winp_jar<<provided>>
+rectangle "access-modifier-annotation\n\n1.33" as org_kohsuke_access_modifier_annotation_jar<<provided>>
+rectangle "windows-package-checker\n\n1.2" as org_kohsuke_windows_package_checker_jar<<provided>>
+rectangle "j-interopdeps\n\n2.0.8-kohsuke-1" as org_kohsuke_jinterop_j_interopdeps_jar<<provided>>
+rectangle "jcifs\n\n1.3.18-kohsuke-1" as org_samba_jcifs_jcifs_jar<<provided>>
+rectangle "j-interop\n\n2.0.8-kohsuke-1" as org_kohsuke_jinterop_j_interop_jar<<provided>>
+rectangle "json-lib\n\n2.4-jenkins-3" as org_kohsuke_stapler_json_lib_jar<<provided>>
+rectangle "ezmorph\n\n1.0.6" as net_sf_ezmorph_ezmorph_jar<<provided>>
+rectangle "stapler\n\n1814.vdc9dd5217ee2" as org_kohsuke_stapler_stapler_jar<<provided>>
+rectangle "commons-discovery\n\n0.5" as commons_discovery_commons_discovery_jar<<provided>>
+rectangle "jakarta.annotation-api\n\n2.1.1" as jakarta_annotation_jakarta_annotation_api_jar<<provided>>
+rectangle "javax.annotation-api\n\n1.3.2" as javax_annotation_javax_annotation_api_jar<<provided>>
+rectangle "tiger-types\n\n2.2" as org_jvnet_tiger_types_jar<<provided>>
+rectangle "stapler-adjunct-codemirror\n\n1.3" as org_kohsuke_stapler_stapler_adjunct_codemirror_jar<<provided>>
+rectangle "stapler-adjunct-timeline\n\n1.5" as org_kohsuke_stapler_stapler_adjunct_timeline_jar<<provided>>
+rectangle "stapler-jelly\n\n1814.vdc9dd5217ee2" as org_kohsuke_stapler_stapler_jelly_jar<<provided>>
+rectangle "dom4j\n\n2.1.4" as org_dom4j_dom4j_jar<<provided>>
+rectangle "commons-jelly\n\n1.1-jenkins-20230713" as org_jenkins_ci_commons_jelly_jar<<provided>>
+rectangle "stapler-groovy\n\n1814.vdc9dd5217ee2" as org_kohsuke_stapler_stapler_groovy_jar<<provided>>
+rectangle "asm\n\n9.6" as org_ow2_asm_asm_jar<<provided>>
+rectangle "asm-analysis\n\n9.6" as org_ow2_asm_asm_analysis_jar<<provided>>
+rectangle "asm-tree\n\n9.6" as org_ow2_asm_asm_tree_jar<<provided>>
+rectangle "asm-commons\n\n9.6" as org_ow2_asm_asm_commons_jar<<provided>>
+rectangle "asm-util\n\n9.6" as org_ow2_asm_asm_util_jar<<provided>>
+rectangle "jcl-over-slf4j\n\n2.0.9" as org_slf4j_jcl_over_slf4j_jar<<provided>>
+rectangle "log4j-over-slf4j\n\n2.0.9" as org_slf4j_log4j_over_slf4j_jar<<provided>>
+rectangle "spring-security-core\n\n5.8.7" as org_springframework_security_spring_security_core_jar<<provided>>
+rectangle "spring-security-crypto\n\n5.8.7" as org_springframework_security_spring_security_crypto_jar<<provided>>
+rectangle "spring-aop\n\n5.3.29" as org_springframework_spring_aop_jar<<provided>>
+rectangle "spring-beans\n\n5.3.29" as org_springframework_spring_beans_jar<<provided>>
+rectangle "spring-context\n\n5.3.29" as org_springframework_spring_context_jar<<provided>>
+rectangle "spring-core\n\n5.3.29" as org_springframework_spring_core_jar<<provided>>
+rectangle "spring-expression\n\n5.3.29" as org_springframework_spring_expression_jar<<provided>>
+rectangle "spring-security-web\n\n5.8.7" as org_springframework_security_spring_security_web_jar<<provided>>
+rectangle "spring-web\n\n5.3.29" as org_springframework_spring_web_jar<<provided>>
+rectangle "xpp3\n\n1.1.4c" as xpp3_xpp3_jar<<provided>>
+rectangle "jakarta.servlet-api\n\n4.0.4" as jakarta_servlet_jakarta_servlet_api_jar<<provided>>
+io_jenkins_plugins_plugin_util_api_hpi -[#000000]-> edu_hm_hafner_codingstyle_jar
+io_jenkins_plugins_plugin_util_api_hpi -[#000000]-> com_google_errorprone_error_prone_annotations_jar
+io_jenkins_plugins_plugin_util_api_hpi -[#000000]-> com_j2html_j2html_jar
+io_jenkins_plugins_plugin_util_api_hpi -[#000000]-> one_util_streamex_jar
+org_jenkins_ci_plugins_workflow_workflow_api_jar .[#ABABAB].> org_jenkins_ci_plugins_workflow_workflow_step_api_jar
+org_jenkins_ci_plugins_scm_api_jar .[#ABABAB].> org_jenkins_ci_plugins_structs_jar
+org_jenkins_ci_plugins_workflow_workflow_api_jar -[#000000]-> org_jenkins_ci_plugins_scm_api_jar
+io_jenkins_plugins_plugin_util_api_hpi -[#000000]-> org_jenkins_ci_plugins_workflow_workflow_api_jar
+org_jenkins_ci_plugins_workflow_workflow_step_api_jar -[#000000]-> org_jenkins_ci_plugins_structs_jar
+io_jenkins_plugins_plugin_util_api_hpi -[#000000]-> org_jenkins_ci_plugins_workflow_workflow_step_api_jar
+org_jenkins_ci_plugins_workflow_workflow_support_jar .[#ABABAB].> org_jenkins_ci_plugins_workflow_workflow_step_api_jar
+org_jenkins_ci_plugins_workflow_workflow_support_jar .[#ABABAB].> org_jenkins_ci_plugins_workflow_workflow_api_jar
+org_jenkins_ci_plugins_workflow_workflow_support_jar .[#ABABAB].> org_jenkins_ci_plugins_scm_api_jar
+org_jenkins_ci_plugins_script_security_jar -[#000000]-> org_kohsuke_groovy_sandbox_jar
+org_jenkins_ci_plugins_script_security_jar .[#ABABAB].> io_jenkins_plugins_caffeine_api_jar
+org_jenkins_ci_plugins_workflow_workflow_support_jar -[#000000]-> org_jenkins_ci_plugins_script_security_jar
+io_jenkins_plugins_caffeine_api_jar -[#000000]-> com_github_ben_manes_caffeine_caffeine_jar
+org_jenkins_ci_plugins_workflow_workflow_support_jar -[#000000]-> io_jenkins_plugins_caffeine_api_jar
+org_jboss_marshalling_jboss_marshalling_river_jar -[#000000]-> org_jboss_marshalling_jboss_marshalling_jar
+org_jenkins_ci_plugins_workflow_workflow_support_jar -[#000000]-> org_jboss_marshalling_jboss_marshalling_river_jar
+io_jenkins_plugins_plugin_util_api_hpi -[#000000]-> org_jenkins_ci_plugins_workflow_workflow_support_jar
+io_jenkins_plugins_plugin_util_api_hpi -[#000000]-> org_slf4j_slf4j_api_jar
+io_jenkins_plugins_commons_lang3_api_jar -[#000000]-> org_apache_commons_commons_lang3_jar
+io_jenkins_plugins_plugin_util_api_hpi -[#000000]-> io_jenkins_plugins_commons_lang3_api_jar
+io_jenkins_plugins_commons_text_api_jar -[#000000]-> org_apache_commons_commons_text_jar
+io_jenkins_plugins_commons_text_api_jar .[#ABABAB].> io_jenkins_plugins_commons_lang3_api_jar
+io_jenkins_plugins_plugin_util_api_hpi -[#000000]-> io_jenkins_plugins_commons_text_api_jar
+org_jenkins_ci_main_jenkins_core_jar -[#000000]-> org_jenkins_ci_main_cli_jar
+org_jenkins_ci_main_jenkins_core_jar -[#000000]-> org_jenkins_ci_main_remoting_jar
+org_jenkins_ci_main_jenkins_core_jar -[#000000]-> args4j_args4j_jar
+org_jenkins_ci_main_jenkins_core_jar -[#000000]-> com_github_spotbugs_spotbugs_annotations_jar
+com_google_guava_guava_jar -[#000000]-> com_google_guava_failureaccess_jar
+com_google_guava_guava_jar -[#000000]-> com_google_guava_listenablefuture_jar
+com_google_guava_guava_jar -[#000000]-> com_google_code_findbugs_jsr305_jar
+org_jenkins_ci_main_jenkins_core_jar -[#000000]-> com_google_guava_guava_jar
+com_google_inject_guice_jar -[#000000]-> javax_inject_javax_inject_jar
+com_google_inject_guice_jar -[#000000]-> jakarta_inject_jakarta_inject_api_jar
+com_google_inject_guice_jar .[#ABABAB].> com_google_guava_guava_jar
+org_jenkins_ci_main_jenkins_core_jar -[#000000]-> com_google_inject_guice_jar
+com_infradna_tool_bridge_method_annotation_jar .[#ABABAB].> org_jenkins_ci_annotation_indexer_jar
+org_jenkins_ci_main_jenkins_core_jar -[#000000]-> com_infradna_tool_bridge_method_annotation_jar
+org_jenkins_ci_main_jenkins_core_jar -[#000000]-> com_jcraft_jzlib_jar
+org_jenkins_ci_main_jenkins_core_jar -[#000000]-> com_sun_solaris_embedded_su4j_jar
+com_sun_xml_txw2_txw2_jar -[#000000]-> relaxngDatatype_relaxngDatatype_jar
+org_jenkins_ci_main_jenkins_core_jar -[#000000]-> com_sun_xml_txw2_txw2_jar
+com_thoughtworks_xstream_xstream_jar -[#000000]-> io_github_x_stream_mxparser_jar
+org_jenkins_ci_main_jenkins_core_jar -[#000000]-> com_thoughtworks_xstream_xstream_jar
+commons_beanutils_commons_beanutils_jar .[#ABABAB].> commons_logging_commons_logging_jar
+commons_beanutils_commons_beanutils_jar .[#ABABAB].> commons_collections_commons_collections_jar
+org_jenkins_ci_main_jenkins_core_jar -[#000000]-> commons_beanutils_commons_beanutils_jar
+org_jenkins_ci_main_jenkins_core_jar -[#000000]-> commons_codec_commons_codec_jar
+org_jenkins_ci_main_jenkins_core_jar -[#000000]-> commons_collections_commons_collections_jar
+commons_fileupload_commons_fileupload_jar .[#ABABAB].> commons_io_commons_io_jar
+org_jenkins_ci_main_jenkins_core_jar -[#000000]-> commons_fileupload_commons_fileupload_jar
+org_jenkins_ci_main_jenkins_core_jar -[#000000]-> commons_io_commons_io_jar
+org_jenkins_ci_main_jenkins_core_jar -[#000000]-> commons_jelly_commons_jelly_tags_fmt_jar
+commons_jelly_commons_jelly_tags_xml_jar .[#ABABAB].> commons_beanutils_commons_beanutils_jar
+commons_jelly_commons_jelly_tags_xml_jar .[#ABABAB].> commons_collections_commons_collections_jar
+commons_jelly_commons_jelly_tags_xml_jar .[#ABABAB].> commons_logging_commons_logging_jar
+commons_jelly_commons_jelly_tags_xml_jar .[#ABABAB].> jaxen_jaxen_jar
+org_jenkins_ci_main_jenkins_core_jar -[#000000]-> commons_jelly_commons_jelly_tags_xml_jar
+org_jenkins_ci_main_jenkins_core_jar -[#000000]-> commons_lang_commons_lang_jar
+org_jenkins_ci_main_jenkins_core_jar -[#000000]-> io_jenkins_stapler_jenkins_stapler_support_jar
+org_jenkins_ci_main_jenkins_core_jar -[#000000]-> jakarta_servlet_jsp_jstl_jakarta_servlet_jsp_jstl_api_jar
+org_jenkins_ci_main_jenkins_core_jar -[#000000]-> jaxen_jaxen_jar
+org_jenkins_ci_main_jenkins_core_jar -[#000000]-> jline_jline_jar
+org_jenkins_ci_main_jenkins_core_jar -[#000000]-> net_java_dev_jna_jna_jar
+org_jenkins_ci_main_jenkins_core_jar -[#000000]-> net_java_sezpoz_sezpoz_jar
+org_jenkins_ci_main_jenkins_core_jar -[#000000]-> net_jcip_jcip_annotations_jar
+org_jenkins_ci_main_jenkins_core_jar -[#000000]-> org_antlr_antlr4_runtime_jar
+org_apache_ant_ant_jar -[#000000]-> org_apache_ant_ant_launcher_jar
+org_jenkins_ci_main_jenkins_core_jar -[#000000]-> org_apache_ant_ant_jar
+org_jenkins_ci_main_jenkins_core_jar -[#000000]-> org_apache_commons_commons_compress_jar
+org_jenkins_ci_main_jenkins_core_jar -[#000000]-> org_codehaus_groovy_groovy_all_jar
+org_jenkins_ci_main_jenkins_core_jar -[#000000]-> org_connectbot_jbcrypt_jbcrypt_jar
+org_jenkins_ci_main_jenkins_core_jar -[#000000]-> org_fusesource_jansi_jansi_jar
+org_jenkins_ci_main_jenkins_core_jar -[#000000]-> org_jenkins_ci_annotation_indexer_jar
+org_jenkins_ci_commons_jexl_jar .[#ABABAB].> commons_logging_commons_logging_jar
+org_jenkins_ci_main_jenkins_core_jar -[#000000]-> org_jenkins_ci_commons_jexl_jar
+org_jenkins_ci_crypto_util_jar .[#ABABAB].> commons_codec_commons_codec_jar
+org_jenkins_ci_main_jenkins_core_jar -[#000000]-> org_jenkins_ci_crypto_util_jar
+org_jenkins_ci_memory_monitor_jar .[#ABABAB].> net_java_dev_jna_jna_jar
+org_jenkins_ci_main_jenkins_core_jar -[#000000]-> org_jenkins_ci_memory_monitor_jar
+org_jenkins_ci_symbol_annotation_jar .[#ABABAB].> org_jenkins_ci_annotation_indexer_jar
+org_jenkins_ci_main_jenkins_core_jar -[#000000]-> org_jenkins_ci_symbol_annotation_jar
+org_jenkins_ci_main_jenkins_core_jar -[#000000]-> org_jenkins_ci_task_reactor_jar
+org_jenkins_ci_main_jenkins_core_jar -[#000000]-> org_jenkins_ci_version_number_jar
+org_jenkins_ci_main_jenkins_core_jar -[#000000]-> org_jenkins_ci_main_websocket_spi_jar
+org_jfree_jfreechart_jar -[#000000]-> org_jfree_jcommon_jar
+org_jenkins_ci_main_jenkins_core_jar -[#000000]-> org_jfree_jfreechart_jar
+org_jenkins_ci_main_jenkins_core_jar -[#000000]-> org_jvnet_hudson_commons_jelly_tags_define_jar
+org_jenkins_ci_main_jenkins_core_jar -[#000000]-> org_jvnet_localizer_localizer_jar
+org_jenkins_ci_main_jenkins_core_jar -[#000000]-> org_jvnet_robust_http_client_robust_http_client_jar
+org_jenkins_ci_main_jenkins_core_jar -[#000000]-> org_jvnet_winp_winp_jar
+org_kohsuke_access_modifier_annotation_jar .[#ABABAB].> org_jenkins_ci_annotation_indexer_jar
+org_jenkins_ci_main_jenkins_core_jar -[#000000]-> org_kohsuke_access_modifier_annotation_jar
+org_jenkins_ci_main_jenkins_core_jar -[#000000]-> org_kohsuke_windows_package_checker_jar
+org_kohsuke_jinterop_j_interopdeps_jar -[#000000]-> org_samba_jcifs_jcifs_jar
+org_kohsuke_jinterop_j_interop_jar -[#000000]-> org_kohsuke_jinterop_j_interopdeps_jar
+org_jenkins_ci_main_jenkins_core_jar -[#000000]-> org_kohsuke_jinterop_j_interop_jar
+org_kohsuke_stapler_json_lib_jar .[#ABABAB].> commons_beanutils_commons_beanutils_jar
+org_kohsuke_stapler_json_lib_jar .[#ABABAB].> commons_collections_commons_collections_jar
+org_kohsuke_stapler_json_lib_jar .[#ABABAB].> commons_lang_commons_lang_jar
+org_kohsuke_stapler_json_lib_jar .[#ABABAB].> commons_logging_commons_logging_jar
+net_sf_ezmorph_ezmorph_jar .[#ABABAB].> commons_lang_commons_lang_jar
+org_kohsuke_stapler_json_lib_jar -[#000000]-> net_sf_ezmorph_ezmorph_jar
+org_jenkins_ci_main_jenkins_core_jar -[#000000]-> org_kohsuke_stapler_json_lib_jar
+org_kohsuke_stapler_stapler_jar .[#ABABAB].> com_jcraft_jzlib_jar
+org_kohsuke_stapler_stapler_jar .[#ABABAB].> commons_beanutils_commons_beanutils_jar
+org_kohsuke_stapler_stapler_jar .[#ABABAB].> commons_codec_commons_codec_jar
+commons_discovery_commons_discovery_jar .[#ABABAB].> commons_logging_commons_logging_jar
+org_kohsuke_stapler_stapler_jar -[#000000]-> commons_discovery_commons_discovery_jar
+org_kohsuke_stapler_stapler_jar .[#ABABAB].> commons_fileupload_commons_fileupload_jar
+org_kohsuke_stapler_stapler_jar .[#ABABAB].> commons_io_commons_io_jar
+org_kohsuke_stapler_stapler_jar -[#000000]-> jakarta_annotation_jakarta_annotation_api_jar
+org_kohsuke_stapler_stapler_jar -[#000000]-> javax_annotation_javax_annotation_api_jar
+org_kohsuke_stapler_stapler_jar -[#000000]-> org_jvnet_tiger_types_jar
+org_kohsuke_stapler_stapler_jar .[#ABABAB].> org_jvnet_localizer_localizer_jar
+org_kohsuke_stapler_stapler_jar .[#ABABAB].> org_kohsuke_stapler_json_lib_jar
+org_jenkins_ci_main_jenkins_core_jar -[#000000]-> org_kohsuke_stapler_stapler_jar
+org_kohsuke_stapler_stapler_adjunct_codemirror_jar .[#ABABAB].> org_kohsuke_stapler_stapler_jar
+org_jenkins_ci_main_jenkins_core_jar -[#000000]-> org_kohsuke_stapler_stapler_adjunct_codemirror_jar
+org_kohsuke_stapler_stapler_adjunct_timeline_jar .[#ABABAB].> org_kohsuke_stapler_stapler_jar
+org_jenkins_ci_main_jenkins_core_jar -[#000000]-> org_kohsuke_stapler_stapler_adjunct_timeline_jar
+org_kohsuke_stapler_stapler_jelly_jar .[#ABABAB].> org_kohsuke_stapler_stapler_jar
+org_kohsuke_stapler_stapler_jelly_jar -[#000000]-> org_dom4j_dom4j_jar
+org_jenkins_ci_commons_jelly_jar .[#ABABAB].> commons_beanutils_commons_beanutils_jar
+org_jenkins_ci_commons_jelly_jar .[#ABABAB].> commons_collections_commons_collections_jar
+org_jenkins_ci_commons_jelly_jar .[#ABABAB].> org_jenkins_ci_commons_jexl_jar
+org_kohsuke_stapler_stapler_jelly_jar -[#000000]-> org_jenkins_ci_commons_jelly_jar
+org_kohsuke_stapler_stapler_groovy_jar -[#000000]-> org_kohsuke_stapler_stapler_jelly_jar
+org_kohsuke_stapler_stapler_groovy_jar .[#ABABAB].> org_codehaus_groovy_groovy_all_jar
+org_jenkins_ci_main_jenkins_core_jar -[#000000]-> org_kohsuke_stapler_stapler_groovy_jar
+org_jenkins_ci_main_jenkins_core_jar -[#000000]-> org_ow2_asm_asm_jar
+org_ow2_asm_asm_analysis_jar .[#ABABAB].> org_ow2_asm_asm_tree_jar
+org_jenkins_ci_main_jenkins_core_jar -[#000000]-> org_ow2_asm_asm_analysis_jar
+org_ow2_asm_asm_commons_jar .[#ABABAB].> org_ow2_asm_asm_jar
+org_ow2_asm_asm_commons_jar .[#ABABAB].> org_ow2_asm_asm_tree_jar
+org_jenkins_ci_main_jenkins_core_jar -[#000000]-> org_ow2_asm_asm_commons_jar
+org_ow2_asm_asm_tree_jar .[#ABABAB].> org_ow2_asm_asm_jar
+org_jenkins_ci_main_jenkins_core_jar -[#000000]-> org_ow2_asm_asm_tree_jar
+org_ow2_asm_asm_util_jar .[#ABABAB].> org_ow2_asm_asm_jar
+org_ow2_asm_asm_util_jar .[#ABABAB].> org_ow2_asm_asm_tree_jar
+org_ow2_asm_asm_util_jar .[#ABABAB].> org_ow2_asm_asm_analysis_jar
+org_jenkins_ci_main_jenkins_core_jar -[#000000]-> org_ow2_asm_asm_util_jar
+org_slf4j_jcl_over_slf4j_jar .[#ABABAB].> org_slf4j_slf4j_api_jar
+org_jenkins_ci_main_jenkins_core_jar -[#000000]-> org_slf4j_jcl_over_slf4j_jar
+org_slf4j_log4j_over_slf4j_jar .[#ABABAB].> org_slf4j_slf4j_api_jar
+org_jenkins_ci_main_jenkins_core_jar -[#000000]-> org_slf4j_log4j_over_slf4j_jar
+org_springframework_security_spring_security_core_jar -[#000000]-> org_springframework_security_spring_security_crypto_jar
+org_springframework_security_spring_security_core_jar .[#ABABAB].> org_springframework_spring_aop_jar
+org_springframework_security_spring_security_core_jar .[#ABABAB].> org_springframework_spring_beans_jar
+org_springframework_security_spring_security_core_jar .[#ABABAB].> org_springframework_spring_context_jar
+org_springframework_security_spring_security_core_jar .[#ABABAB].> org_springframework_spring_core_jar
+org_springframework_security_spring_security_core_jar .[#ABABAB].> org_springframework_spring_expression_jar
+org_springframework_security_spring_security_web_jar -[#000000]-> org_springframework_security_spring_security_core_jar
+org_springframework_security_spring_security_web_jar -[#000000]-> org_springframework_spring_core_jar
+org_springframework_spring_aop_jar .[#ABABAB].> org_springframework_spring_beans_jar
+org_springframework_spring_aop_jar .[#ABABAB].> org_springframework_spring_core_jar
+org_springframework_security_spring_security_web_jar -[#000000]-> org_springframework_spring_aop_jar
+org_springframework_spring_beans_jar .[#ABABAB].> org_springframework_spring_core_jar
+org_springframework_security_spring_security_web_jar -[#000000]-> org_springframework_spring_beans_jar
+org_springframework_spring_context_jar .[#ABABAB].> org_springframework_spring_aop_jar
+org_springframework_spring_context_jar .[#ABABAB].> org_springframework_spring_beans_jar
+org_springframework_spring_context_jar .[#ABABAB].> org_springframework_spring_core_jar
+org_springframework_spring_context_jar .[#ABABAB].> org_springframework_spring_expression_jar
+org_springframework_security_spring_security_web_jar -[#000000]-> org_springframework_spring_context_jar
+org_springframework_spring_expression_jar .[#ABABAB].> org_springframework_spring_core_jar
+org_springframework_security_spring_security_web_jar -[#000000]-> org_springframework_spring_expression_jar
+org_springframework_spring_web_jar .[#ABABAB].> org_springframework_spring_beans_jar
+org_springframework_spring_web_jar .[#ABABAB].> org_springframework_spring_core_jar
+org_springframework_security_spring_security_web_jar -[#000000]-> org_springframework_spring_web_jar
+org_jenkins_ci_main_jenkins_core_jar -[#000000]-> org_springframework_security_spring_security_web_jar
+org_jenkins_ci_main_jenkins_core_jar -[#000000]-> xpp3_xpp3_jar
+io_jenkins_plugins_plugin_util_api_hpi -[#000000]-> org_jenkins_ci_main_jenkins_core_jar
+io_jenkins_plugins_plugin_util_api_hpi -[#000000]-> jakarta_servlet_jakarta_servlet_api_jar
+io_jenkins_plugins_plugin_util_api_hpi -[#000000]-> commons_logging_commons_logging_jar
+@enduml
