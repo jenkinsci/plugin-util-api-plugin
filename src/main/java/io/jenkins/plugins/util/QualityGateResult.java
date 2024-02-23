@@ -6,6 +6,11 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.kohsuke.stapler.export.Exported;
+import org.kohsuke.stapler.export.ExportedBean;
+import org.jenkinsci.plugins.scriptsecurity.sandbox.whitelists.Whitelisted;
+import hudson.model.Result;
+
 /**
  * Result of a quality gate evaluation. Aggregates the individual results of the quality gates into an overall status.
  *
@@ -14,8 +19,26 @@ import java.util.stream.Collectors;
 public class QualityGateResult implements Serializable {
     private static final long serialVersionUID = -4306601972076922976L;
 
-    private QualityGateStatus overallStatus = QualityGateStatus.INACTIVE;
+    private QualityGateStatus overallStatus;
     private final List<QualityGateResultItem> items = new ArrayList<>();
+
+    /**
+     * Creates a new instance of {@link QualityGateResult} that has its overall status set to
+     * {@link QualityGateStatus#INACTIVE}.
+     */
+    public QualityGateResult() {
+        this(QualityGateStatus.INACTIVE);
+    }
+
+    /**
+     * Creates a new instance of {@link QualityGateResult} with the specified overall status.
+     *
+     * @param overallStatus
+     *         the overall status of all quality gates
+     */
+    public QualityGateResult(final QualityGateStatus overallStatus) {
+        this.overallStatus = overallStatus;
+    }
 
     /**
      * Adds another quality gate result to the aggregated result.
@@ -40,10 +63,12 @@ public class QualityGateResult implements Serializable {
         return items;
     }
 
+    @Whitelisted
     public QualityGateStatus getOverallStatus() {
         return overallStatus;
     }
 
+    @Whitelisted
     public boolean isSuccessful() {
         return overallStatus.isSuccessful();
     }
@@ -57,11 +82,16 @@ public class QualityGateResult implements Serializable {
     }
 
     private String createMessage(final QualityGateResultItem item) {
-        return String.format("-> [%s]: ≪%s≫ - (Actual value: %s, Quality gate: %.2f)",
+        return String.format("[%s]: ≪%s≫ - (Actual value: %s, Quality gate: %.2f)",
                 item.getQualityGate().getName(),
                 item.getStatus().getDescription(),
                 item.getActualValue(),
                 item.getQualityGate().getThreshold());
+    }
+
+    @Override
+    public String toString() {
+        return getOverallStatus().toString();
     }
 
     /**
@@ -90,6 +120,75 @@ public class QualityGateResult implements Serializable {
 
         public String getActualValue() {
             return actualValue;
+        }
+    }
+
+    /**
+     * Remote API to list the overview of the quality gate evaluation.
+     */
+    @ExportedBean
+    public static class QualityGateResultApi {
+        private final QualityGateResult qualityGateResult;
+
+        /**
+         * Creates a new instance of {@link QualityGateResultApi}.
+         *
+         * @param qualityGateResult
+         *         the quality gate result to show
+         */
+        public QualityGateResultApi(final QualityGateResult qualityGateResult) {
+            this.qualityGateResult = qualityGateResult;
+        }
+
+        @Exported(inline = true)
+        public QualityGateStatus getOverallResult() {
+            return qualityGateResult.getOverallStatus();
+        }
+
+        @Exported(inline = true)
+        public Collection<QualityGateItemApi> getResultItems() {
+            return qualityGateResult.getResultItems()
+                    .stream()
+                    .map(QualityGateItemApi::new)
+                    .collect(Collectors.toList());
+        }
+    }
+
+    /**
+     * Remote API to show the content of an individual quality gate item.
+     */
+    @ExportedBean
+    public static class QualityGateItemApi {
+        private final QualityGateResultItem item;
+
+        /**
+         * Creates a new instance of {@link QualityGateItemApi}.
+         *
+         * @param item
+         *         the quality gate result item to show
+         */
+        public QualityGateItemApi(final QualityGateResultItem item) {
+            this.item = item;
+        }
+
+        @Exported
+        public String getQualityGate() {
+            return item.getQualityGate().getName();
+        }
+
+        @Exported
+        public double getThreshold() {
+            return item.getQualityGate().getThreshold();
+        }
+
+        @Exported(inline = true)
+        public Result getResult() {
+            return item.getStatus().getResult();
+        }
+
+        @Exported
+        public String getValue() {
+            return item.getActualValue();
         }
     }
 }

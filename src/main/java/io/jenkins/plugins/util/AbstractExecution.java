@@ -125,7 +125,7 @@ public abstract class AbstractExecution<T> extends SynchronousNonBlockingStepExe
 
     /**
      * Returns the default charset for the specified encoding string. If the default encoding is empty or {@code null},
-     * or if the charset is not valid then the default encoding of the platform is returned.
+     * or if the charset is not valid, then the default encoding of the platform is returned.
      *
      * @param charset
      *         identifier of the character set
@@ -144,8 +144,28 @@ public abstract class AbstractExecution<T> extends SynchronousNonBlockingStepExe
      *         if the user canceled the execution
      * @throws IOException
      *         if the required {@link FlowNode} instance is not found
+     * @deprecated use {@link #createResultHandler()} instead
      */
+    @Deprecated
     protected StageResultHandler createStageResultHandler() throws InterruptedException, IOException {
+        return createPipelineResultHandler();
+    }
+
+    /**
+     * Creates a {@link ResultHandler} that sets build result of the {@link Run} or stage.
+     *
+     * @return a {@link ResultHandler} that sets the build result of the {@link Run} or stage
+     * @throws InterruptedException
+     *         if the user canceled the execution
+     * @throws IOException
+     *         if the required {@link FlowNode} instance is not found
+     *
+     */
+    protected ResultHandler createResultHandler() throws InterruptedException, IOException {
+        return createPipelineResultHandler();
+    }
+
+    private PipelineResultHandler createPipelineResultHandler() throws IOException, InterruptedException {
         return new PipelineResultHandler(getRun(), getContext().get(FlowNode.class));
     }
 }

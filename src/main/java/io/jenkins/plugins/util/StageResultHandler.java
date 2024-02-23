@@ -5,8 +5,10 @@ import hudson.model.Result;
 /**
  * Handles the setting of the results of a stage.
  *
- *  @author Devin Nusbaum
+ * @author Devin Nusbaum
+ * @deprecated use {@link ResultHandler} instead
  */
+@Deprecated
 public interface StageResultHandler {
     /**
      * Called to set the {@link Result} of a stage.

@@ -15,10 +15,16 @@ public enum QualityGateStatus {
     /** Quality gate has been passed. */
     PASSED(Result.SUCCESS),
 
+    /** Quality gate has been missed: severity is a note. */
+    NOTE(Result.UNSTABLE),
+
     /** Quality gate has been missed: severity is a warning. */
     WARNING(Result.UNSTABLE),
 
     /** Quality gate has been missed: severity is an error. */
+    ERROR(Result.FAILURE),
+
+    /** Quality gate has been missed: severity is a failure. */
     FAILED(Result.FAILURE);
 
     private final Result result;
