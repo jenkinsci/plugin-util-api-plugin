@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.Optional;
 
+import edu.hm.hafner.util.Ensure;
+
 import org.jenkinsci.plugins.workflow.graph.FlowNode;
 import org.jenkinsci.plugins.workflow.steps.StepContext;
 import org.jenkinsci.plugins.workflow.steps.SynchronousNonBlockingStepExecution;
@@ -166,6 +168,14 @@ public abstract class AbstractExecution<T> extends SynchronousNonBlockingStepExe
     }
 
     private PipelineResultHandler createPipelineResultHandler() throws IOException, InterruptedException {
-        return new PipelineResultHandler(getRun(), getContext().get(FlowNode.class));
+        return new PipelineResultHandler(getRun(), getFlowNode());
+    }
+
+    private FlowNode getFlowNode() throws IOException, InterruptedException {
+        var flowNode = getContext().get(FlowNode.class);
+
+        Ensure.that(flowNode).isNotNull("FlowNode is not defined in the context of " + this);
+
+        return flowNode;
     }
 }
