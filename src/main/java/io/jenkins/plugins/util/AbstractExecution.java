@@ -2,7 +2,6 @@ package io.jenkins.plugins.util;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
-import java.util.Objects;
 import java.util.Optional;
 
 import org.jenkinsci.plugins.workflow.graph.FlowNode;
@@ -173,6 +172,10 @@ public abstract class AbstractExecution<T> extends SynchronousNonBlockingStepExe
     private FlowNode getFlowNode() throws IOException, InterruptedException {
         var flowNode = getContext().get(FlowNode.class);
 
-        return Objects.requireNonNull(flowNode, "FlowNode is not defined in the context of " + this);
+        if (flowNode != null) {
+            return flowNode;
+        }
+
+        throw new IllegalStateException("FlowNode is not defined in the context of " + this);
     }
 }
