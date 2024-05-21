@@ -166,6 +166,16 @@ public abstract class AbstractExecution<T> extends SynchronousNonBlockingStepExe
     }
 
     private PipelineResultHandler createPipelineResultHandler() throws IOException, InterruptedException {
-        return new PipelineResultHandler(getRun(), getContext().get(FlowNode.class));
+        return new PipelineResultHandler(getRun(), getFlowNode());
+    }
+
+    private FlowNode getFlowNode() throws IOException, InterruptedException {
+        var flowNode = getContext().get(FlowNode.class);
+
+        if (flowNode != null) {
+            return flowNode;
+        }
+
+        throw new IllegalStateException("FlowNode is not defined in the context of " + this);
     }
 }

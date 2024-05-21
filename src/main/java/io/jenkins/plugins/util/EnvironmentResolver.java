@@ -17,7 +17,7 @@ public class EnvironmentResolver {
     /** Maximum number of times that the environment expansion is executed. */
     private static final int RESOLVE_VARIABLE_DEPTH_DEFAULT = 10;
 
-    private int resolveVariablesDepth;
+    private final int resolveVariablesDepth;
 
     /**
      * Creates a new instance of {@link EnvironmentResolver}. Attempts up to {@link #RESOLVE_VARIABLE_DEPTH_DEFAULT}
@@ -47,12 +47,16 @@ public class EnvironmentResolver {
         if (environment != null && !environment.isEmpty()) {
             for (int i = 0; i < resolveVariablesDepth && StringUtils.isNotBlank(expanded); i++) {
                 String old = expanded;
-                expanded = Util.replaceMacro(expanded, environment);
+                expanded = expand(environment, expanded);
                 if (old.equals(expanded)) {
                     return expanded;
                 }
             }
         }
         return expanded;
+    }
+
+    private String expand(final EnvVars environment, final String expanded) {
+        return StringUtils.defaultString(Util.replaceMacro(expanded, environment));
     }
 }

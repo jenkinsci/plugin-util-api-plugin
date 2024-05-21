@@ -374,7 +374,7 @@ public abstract class IntegrationTest extends ResourceTest {
         return jenkins.getNode(agent.getNodeName());
     }
 
-    @SuppressWarnings("BusyWait")
+    @SuppressWarnings({"BusyWait", "PMD.DoNotUseThreads"})
     private void waitForAgentConnected(final Node node) throws InterruptedException {
         int count = 0;
         while (!Objects.requireNonNull(node.toComputer()).isOnline() && count < 150) {
@@ -870,7 +870,7 @@ public abstract class IntegrationTest extends ResourceTest {
     /**
      * Docker container to be used as Jenkins build agent. Provides tools like make, gcc, java 11, or maven.
      */
-    public static class AgentContainer extends GenericContainer<AgentContainer> {
+    public static final class AgentContainer extends GenericContainer<AgentContainer> {
         /**
          * Creates a new container that exposes port {@link #SSH_PORT} for SSH connections.
          */

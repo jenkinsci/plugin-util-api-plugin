@@ -62,7 +62,7 @@ public abstract class QualityGate extends AbstractDescribableImpl<QualityGate> i
     }
 
     private int asInt(final double value) {
-        return Double.valueOf(value).intValue();
+        return (int) value;
     }
 
     /**
