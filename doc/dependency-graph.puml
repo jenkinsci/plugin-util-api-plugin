@@ -11,7 +11,7 @@ rectangle "codingstyle\n\n4.10.0" as edu_hm_hafner_codingstyle_jar<<provided>>
 rectangle "error_prone_annotations\n\n2.28.0" as com_google_errorprone_error_prone_annotations_jar<<provided>>
 rectangle "j2html\n\n1.4.0" as com_j2html_j2html_jar<<provided>>
 rectangle "streamex\n\n0.8.2" as one_util_streamex_jar<<provided>>
-rectangle "workflow-api\n\n1311.v4250456a_e552" as org_jenkins_ci_plugins_workflow_workflow_api_jar
+rectangle "workflow-api\n\n1316.v33eb_726c50b_a_" as org_jenkins_ci_plugins_workflow_workflow_api_jar
 rectangle "workflow-step-api\n\n657.v03b_e8115821b_" as org_jenkins_ci_plugins_workflow_workflow_step_api_jar
 rectangle "asm-api\n\n9.7-33.v4d23ef79fcc8" as io_jenkins_plugins_asm_api_jar
 rectangle "asm\n\n9.6" as org_ow2_asm_asm_jar
@@ -22,7 +22,7 @@ rectangle "asm-util\n\n9.6" as org_ow2_asm_asm_util_jar
 rectangle "scm-api\n\n690.vfc8b_54395023" as org_jenkins_ci_plugins_scm_api_jar
 rectangle "structs\n\n337.v1b_04ea_4df7c8" as org_jenkins_ci_plugins_structs_jar
 rectangle "workflow-support\n\n907.v6713a_ed8a_573" as org_jenkins_ci_plugins_workflow_workflow_support_jar
-rectangle "script-security\n\n1336.vf33a_a_9863911" as org_jenkins_ci_plugins_script_security_jar
+rectangle "script-security\n\n1341.va_2819b_414686" as org_jenkins_ci_plugins_script_security_jar
 rectangle "groovy-sandbox\n\n1.34" as org_kohsuke_groovy_sandbox_jar
 rectangle "caffeine-api\n\n3.1.8-133.v17b_1ff2e0599" as io_jenkins_plugins_caffeine_api_jar
 rectangle "caffeine\n\n3.1.8" as com_github_ben_manes_caffeine_caffeine_jar
