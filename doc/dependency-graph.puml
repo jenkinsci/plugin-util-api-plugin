@@ -8,7 +8,7 @@ skinparam rectangle {
 }
 rectangle "plugin-util-api\n\n4.2.0-SNAPSHOT" as io_jenkins_plugins_plugin_util_api_hpi
 rectangle "codingstyle\n\n4.10.0" as edu_hm_hafner_codingstyle_jar<<provided>>
-rectangle "error_prone_annotations\n\n2.30.0" as com_google_errorprone_error_prone_annotations_jar<<provided>>
+rectangle "error_prone_annotations\n\n2.31.0" as com_google_errorprone_error_prone_annotations_jar<<provided>>
 rectangle "j2html\n\n1.4.0" as com_j2html_j2html_jar<<provided>>
 rectangle "streamex\n\n0.8.2" as one_util_streamex_jar<<provided>>
 rectangle "workflow-api\n\n1316.v33eb_726c50b_a_" as org_jenkins_ci_plugins_workflow_workflow_api_jar
