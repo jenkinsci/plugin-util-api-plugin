@@ -573,7 +573,7 @@ public abstract class IntegrationTest extends ResourceTest {
 
         String jenkinsFile = script.toString();
         logJenkinsFile(jenkinsFile);
-        return new CpsFlowDefinition(jenkinsFile, true);
+        return createPipelineScript(jenkinsFile);
     }
 
     /**
@@ -622,7 +622,22 @@ public abstract class IntegrationTest extends ResourceTest {
     protected FlowDefinition readJenkinsFile(final String fileName) {
         String script = toString(fileName);
         logJenkinsFile(script);
-        return new CpsFlowDefinition(script, true);
+        return createPipelineScript(script);
+    }
+
+    /**
+     * Creates {@link CpsFlowDefinition a pipeline} from the specified script.
+     *
+     * @param script the pipeline script (scripted pipeline)
+     * @return the pipeline definition
+     */
+    protected CpsFlowDefinition createPipelineScript(final String script) {
+        try {
+            return new CpsFlowDefinition(script, true);
+        }
+        catch (FormException exception) {
+            throw new AssertionError(exception);
+        }
     }
 
     /**
