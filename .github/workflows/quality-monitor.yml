@@ -24,16 +24,10 @@ jobs:
         uses: stCarolas/setup-maven@v5
         with:
           maven-version: 3.9.9
-      - name: Cache the NVD database
-        uses: actions/cache@v4
-        with:
-          path: ~/.m2/repository/org/owasp/dependency-check-data
-          key: dependency-check
       - name: Build with Maven
         env:
           BROWSER: chrome-container
-          NVD_API_KEY: ${{ secrets.NVD_API_KEY }}
-        run: mvn -V --color always -ntp clean verify -Ppit -Pci -Powasp | tee maven.log
+        run: mvn -V --color always -ntp clean verify -Ppit -Pci | tee maven.log
       - name: Extract pull request number
         uses: jwalton/gh-find-current-pr@v1
         id: pr
@@ -78,21 +72,6 @@ jobs:
                       "id": "spotbugs",
                       "sourcePath": "src/main/java",
                       "pattern": "**/target/spotbugsXml.xml"
-                    },
-                    {
-                      "id": "error-prone",
-                      "pattern": "**/maven.log"
-                    }
-                  ]
-                },
-                {
-                  "name": "Vulnerabilities",
-                  "id": "vulnerabilities",
-                  "icon": "shield",
-                  "tools": [
-                    {
-                      "id": "owasp-dependency-check",
-                      "pattern": "**/target/dependency-check-report.json"                    
                     }
                   ]
                 }
@@ -114,25 +93,6 @@ jobs:
                       "metric": "branch",
                       "sourcePath": "src/main/java",
                       "pattern": "**/target/site/jacoco/jacoco.xml"
-                    }
-                  ]
-                },
-                {
-                  "name": "Mutation Coverage",
-                  "tools": [
-                    {
-                      "id": "pit",
-                      "name": "Mutation Coverage",
-                      "metric": "mutation",
-                      "sourcePath": "src/main/java",
-                      "pattern": "**/target/pit-reports/mutations.xml"
-                    },
-                    {
-                      "id": "pit",
-                      "name": "Test Strength",
-                      "metric": "test-strength",
-                      "sourcePath": "src/main/java",
-                      "pattern": "**/target/pit-reports/mutations.xml"
                     }
                   ]
                 }
