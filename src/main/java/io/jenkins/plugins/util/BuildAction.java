@@ -95,7 +95,7 @@ public abstract class BuildAction<T> implements LastBuildAction, RunAction2, Ser
     }
 
     /**
-     * Called after de-serialization to improve the memory usage.
+     * Called after deserialization to improve the memory usage.
      *
      * @return this
      */

@@ -45,7 +45,7 @@ public class GlobalConfigurationItem extends GlobalConfiguration {
     }
 
     /**
-     * Called after de-serialization to restore transient fields.
+     * Called after deserialization to restore transient fields.
      *
      * @return this
      */
