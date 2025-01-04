@@ -59,7 +59,7 @@ public abstract class QualityGateEvaluator<T extends QualityGate> {
                 log.logInfo("-> All quality gates have been passed");
             }
             else {
-                var message = String.format("-> Some quality gates have been missed: overall result is %s",
+                var message = "-> Some quality gates have been missed: overall result is %s".formatted(
                         result.getOverallStatus().getResult());
                 log.logInfo(message);
                 resultHandler.publishResult(result.getOverallStatus(), message);

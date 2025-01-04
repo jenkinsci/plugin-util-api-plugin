@@ -42,7 +42,7 @@ public class PipelineResultHandler implements StageResultHandler, ResultHandler 
     }
 
     private void setStageResult(final Result result, final String message) {
-        WarningAction existing = flowNode.getPersistentAction(WarningAction.class);
+        var existing = flowNode.getPersistentAction(WarningAction.class);
         if (existing == null || existing.getResult().isBetterThan(result)) {
             flowNode.addOrReplaceAction(new WarningAction(result).withMessage(message));
         }

@@ -40,7 +40,7 @@ class AgentFileVisitorTest extends SerializableTest<StringScanner> {
     @CsvSource({"true, enabled", "false, disabled"})
     @ParameterizedTest(name = "{index} => followSymbolicLinks={0}, message={1}")
     void shouldReportErrorOnEmptyResults(final boolean followLinks, final String message) {
-        StringScanner scanner = new StringScanner(PATTERN, ENCODING, followLinks, true,
+        var scanner = new StringScanner(PATTERN, ENCODING, followLinks, true,
                 createFileSystemFacade(followLinks));
 
         FileVisitorResult<String> actualResult = scanner.invoke(workspace, null);
@@ -59,7 +59,7 @@ class AgentFileVisitorTest extends SerializableTest<StringScanner> {
     @CsvSource({"true, enabled", "false, disabled"})
     @ParameterizedTest(name = "{index} => followSymbolicLinks={0}, message={1}")
     void shouldReturnSingleResult(final boolean followLinks, final String message) {
-        StringScanner scanner = new StringScanner(PATTERN, ENCODING, followLinks, true,
+        var scanner = new StringScanner(PATTERN, ENCODING, followLinks, true,
                 createFileSystemFacade(followLinks, "/one.txt"));
 
         FileVisitorResult<String> actualResult = scanner.invoke(workspace, null);
@@ -77,7 +77,7 @@ class AgentFileVisitorTest extends SerializableTest<StringScanner> {
     @CsvSource({"true, enabled", "false, disabled"})
     @ParameterizedTest(name = "{index} => followSymbolicLinks={0}, message={1}")
     void shouldReturnMultipleResults(final boolean followLinks, final String message) {
-        StringScanner scanner = new StringScanner(PATTERN, ENCODING, followLinks, true,
+        var scanner = new StringScanner(PATTERN, ENCODING, followLinks, true,
                 createFileSystemFacade(followLinks, "/one.txt", "/two.txt"));
 
         FileVisitorResult<String> actualResult = scanner.invoke(workspace, null);
@@ -95,18 +95,18 @@ class AgentFileVisitorTest extends SerializableTest<StringScanner> {
     @Test
     @DisplayName("Should log error for empty or forbidden files")
     void shouldLogErrorForEmptyAndForbiddenFiles() {
-        FileSystemFacade fileSystemFacade = createFileSystemFacade(true,
+        var fileSystemFacade = createFileSystemFacade(true,
                 "/one.txt", "/two.txt", "empty.txt", "not-readable.txt");
 
-        Path empty = workspace.toPath().resolve("empty.txt");
+        var empty = workspace.toPath().resolve("empty.txt");
         when(fileSystemFacade.resolve(workspace, "empty.txt")).thenReturn(empty);
         when(fileSystemFacade.isEmpty(empty)).thenReturn(true);
 
-        Path notReadable = workspace.toPath().resolve("not-readable.txt");
+        var notReadable = workspace.toPath().resolve("not-readable.txt");
         when(fileSystemFacade.resolve(workspace, "not-readable.txt")).thenReturn(notReadable);
         when(fileSystemFacade.isNotReadable(notReadable)).thenReturn(true);
 
-        StringScanner scanner = new StringScanner(PATTERN, ENCODING, true, true,
+        var scanner = new StringScanner(PATTERN, ENCODING, true, true,
                 fileSystemFacade);
 
         FileVisitorResult<String> actualResult = scanner.invoke(workspace, null);
@@ -125,14 +125,14 @@ class AgentFileVisitorTest extends SerializableTest<StringScanner> {
     @Test
     @DisplayName("Should skip logging of errors when parsing empty files")
     void shouldSkipLoggingOfErrorsForEmptyFiles() {
-        FileSystemFacade fileSystemFacade = createFileSystemFacade(true,
+        var fileSystemFacade = createFileSystemFacade(true,
                 "/one.txt", "/two.txt", "empty.txt");
 
-        Path empty = workspace.toPath().resolve("empty.txt");
+        var empty = workspace.toPath().resolve("empty.txt");
         when(fileSystemFacade.resolve(workspace, "empty.txt")).thenReturn(empty);
         when(fileSystemFacade.isEmpty(empty)).thenReturn(true);
 
-        StringScanner scanner = new StringScanner(PATTERN, ENCODING, true, false,
+        var scanner = new StringScanner(PATTERN, ENCODING, true, false,
                 fileSystemFacade);
 
         FileVisitorResult<String> actualResult = scanner.invoke(workspace, null);
@@ -150,9 +150,9 @@ class AgentFileVisitorTest extends SerializableTest<StringScanner> {
     @Test
     @DisplayName("Should log error if no results are returned")
     void shouldLogErrorIfNoResultIsAvailable() {
-        FileSystemFacade fileSystemFacade = createFileSystemFacade(false, "/one.txt");
+        var fileSystemFacade = createFileSystemFacade(false, "/one.txt");
 
-        EmptyScanner scanner = new EmptyScanner(fileSystemFacade);
+        var scanner = new EmptyScanner(fileSystemFacade);
 
         FileVisitorResult<String> actualResult = scanner.invoke(workspace, null);
         assertThat(actualResult.getResults()).isEmpty();

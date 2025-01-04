@@ -27,7 +27,7 @@ public class PluginLogger {
             this.pluginName = pluginName + " ";
         }
         else {
-            this.pluginName = String.format("[%s] ", pluginName);
+            this.pluginName = "[%s] ".formatted(pluginName);
         }
         delegate = logger;
     }
@@ -44,7 +44,7 @@ public class PluginLogger {
      */
     @FormatMethod
     public void log(final String format, final Object... args) {
-        print(String.format(format, args));
+        print(format.formatted(args));
     }
 
     /**

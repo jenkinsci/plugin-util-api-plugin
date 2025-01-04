@@ -29,15 +29,15 @@ class LogHandlerTest {
     @ValueSource(booleans = {true, false})
     @ParameterizedTest(name = "Log some messages and evaluate quiet flag value (quiet = {0})")
     void shouldLogInfoAndErrorMessage(final boolean quiet) {
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        PrintStream printStream = new PrintStream(outputStream);
-        TaskListener taskListener = createTaskListener(printStream);
+        var outputStream = new ByteArrayOutputStream();
+        var printStream = new PrintStream(outputStream);
+        var taskListener = createTaskListener(printStream);
 
-        FilteredLog logger = new FilteredLog("Title");
+        var logger = new FilteredLog("Title");
         logger.logInfo(NOT_SHOWN);
         logger.logError(NOT_SHOWN);
 
-        LogHandler logHandler = new LogHandler(taskListener, LOG_HANDLER_NAME, logger);
+        var logHandler = new LogHandler(taskListener, LOG_HANDLER_NAME, logger);
         logHandler.setQuiet(quiet);
 
         logger.logInfo(MESSAGE);
@@ -49,7 +49,7 @@ class LogHandlerTest {
             assertThat(outputStream.toString()).isEmpty();
         }
         else {
-            assertThat(outputStream.toString()).isEqualTo(String.format(
+            assertThat(outputStream).hasToString(String.format(
                     "[%s] [-ERROR-] %s%n"
                             + "[%s] %s%n",
                     LOG_HANDLER_NAME, MESSAGE, LOG_HANDLER_NAME, MESSAGE));
@@ -62,7 +62,7 @@ class LogHandlerTest {
             assertThat(outputStream.toString()).isEmpty();
         }
         else {
-            assertThat(outputStream.toString()).isEqualTo(String.format(
+            assertThat(outputStream).hasToString(String.format(
                     "[%s] [-ERROR-] %s%n"
                             + "[%s] %s%n"
                             + "[%s] [-ERROR-] %s%n"
@@ -74,15 +74,14 @@ class LogHandlerTest {
 
     @Test
     void shouldLogFormattedMessage() {
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        PrintStream printStream = new PrintStream(outputStream);
-        TaskListener taskListener = createTaskListener(printStream);
-        LogHandler logHandler = new LogHandler(taskListener, LOG_HANDLER_NAME);
+        var outputStream = new ByteArrayOutputStream();
+        var printStream = new PrintStream(outputStream);
+        var taskListener = createTaskListener(printStream);
+        var logHandler = new LogHandler(taskListener, LOG_HANDLER_NAME);
 
         logHandler.log(LOGGER_MESSAGE);
 
-        assertThat(outputStream.toString())
-                .isEqualTo(String.format("[%s] %s%n", LOG_HANDLER_NAME, LOGGER_MESSAGE));
+        assertThat(outputStream).hasToString("[%s] %s%n".formatted(LOG_HANDLER_NAME, LOGGER_MESSAGE));
     }
 
     private TaskListener createTaskListener(final PrintStream printStream) {

@@ -73,7 +73,7 @@ class PipelineResultHandlerTest {
         if (!(action instanceof WarningAction)) {
             return false;
         }
-        WarningAction warningAction = (WarningAction) action;
+        var warningAction = (WarningAction) action;
         return result.equals(warningAction.getResult()) && MESSAGE.equals(warningAction.getMessage());
     }
 }

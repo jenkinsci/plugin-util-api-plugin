@@ -131,7 +131,7 @@ public final class PluginArchitectureRules {
                 return;
             }
             events.add(SimpleConditionEvent.violated(item,
-                    String.format("JenkinsFacade.hasPermission() not called in %s in %s",
+                    "JenkinsFacade.hasPermission() not called in %s in %s".formatted(
                             item.getDescription(), item.getSourceCodeLocation())));
         }
     }

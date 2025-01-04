@@ -51,7 +51,7 @@ public abstract class AbstractXmlStream<T> {
     protected abstract T createDefaultValue();
 
     private XStream2 createStream() {
-        XStream2 xStream2 = new XStream2();
+        var xStream2 = new XStream2();
         xStream2.registerConverter(new TreeStringConverter());
         configureXStream(xStream2);
         return xStream2;
@@ -102,7 +102,7 @@ public abstract class AbstractXmlStream<T> {
 
     private T readXml(final XmlFile dataFile, final T defaultValue) {
         try {
-            Object restored = dataFile.read();
+            var restored = dataFile.read();
 
             if (type.isInstance(restored)) {
                 LOGGER.log(Level.FINE, "Loaded data file " + dataFile);
@@ -129,7 +129,7 @@ public abstract class AbstractXmlStream<T> {
 
         @Override
         public Object unmarshal(final HierarchicalStreamReader reader, final UnmarshallingContext context) {
-            TreeStringBuilder builder = (TreeStringBuilder) context.get(TreeStringBuilder.class);
+            var builder = (TreeStringBuilder) context.get(TreeStringBuilder.class);
             if (builder == null) {
                 builder = new TreeStringBuilder();
                 context.put(TreeStringBuilder.class, builder);

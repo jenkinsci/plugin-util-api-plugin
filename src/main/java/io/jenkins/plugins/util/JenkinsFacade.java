@@ -1,5 +1,6 @@
 package io.jenkins.plugins.util;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Optional;
@@ -38,6 +39,7 @@ import jenkins.model.Jenkins;
  */
 @SuppressWarnings("PMD.ExcessiveImports")
 public class JenkinsFacade implements Serializable {
+    @Serial
     private static final long serialVersionUID = 1904631270145841113L;
 
     /**
@@ -289,7 +291,7 @@ public class JenkinsFacade implements Serializable {
 
     private String getAbsoluteUrl(final String url) {
         try {
-            String rootUrl = getJenkins().getRootUrl();
+            var rootUrl = getJenkins().getRootUrl();
             if (rootUrl != null) {
                 return rootUrl + url;
             }

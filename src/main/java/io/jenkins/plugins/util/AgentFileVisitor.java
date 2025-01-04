@@ -2,6 +2,7 @@ package io.jenkins.plugins.util;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.Serial;
 import java.io.Serializable;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
@@ -38,6 +39,7 @@ import io.jenkins.plugins.util.AgentFileVisitor.FileVisitorResult;
  */
 public abstract class AgentFileVisitor<T extends Serializable>
         extends MasterToSlaveFileCallable<FileVisitorResult<T>> {
+    @Serial
     private static final long serialVersionUID = 2216842481400265078L;
 
     private final String filePattern;
@@ -76,12 +78,12 @@ public abstract class AgentFileVisitor<T extends Serializable>
 
     @Override
     public final FileVisitorResult<T> invoke(final File workspace, final VirtualChannel channel) {
-        FilteredLog log = new FilteredLog("Errors during parsing");
+        var log = new FilteredLog("Errors during parsing");
         log.logInfo("Searching for all files in '%s' that match the pattern '%s'",
                 fileSystemFacade.getAbsolutePath(workspace), filePattern);
         log.logInfo("Traversing of symbolic links: %s", followSymbolicLinks ? "enabled" : "disabled");
 
-        String[] fileNames = fileSystemFacade.find(filePattern, followSymbolicLinks, workspace);
+        var fileNames = fileSystemFacade.find(filePattern, followSymbolicLinks, workspace);
         if (fileNames.length == 0) {
             log.logError("No files found for pattern '%s'. Configuration error?", filePattern);
 
@@ -97,7 +99,7 @@ public abstract class AgentFileVisitor<T extends Serializable>
     private List<T> scanFiles(final File workspace, final String[] fileNames, final FilteredLog log) {
         List<T> results = new ArrayList<>();
         for (String fileName : fileNames) {
-            Path file = fileSystemFacade.resolve(workspace, fileName);
+            var file = fileSystemFacade.resolve(workspace, fileName);
 
             if (fileSystemFacade.isNotReadable(file)) {
                 log.logError("Skipping file '%s' because Jenkins has no permission to read the file", fileName);
@@ -135,7 +137,7 @@ public abstract class AgentFileVisitor<T extends Serializable>
      * @return the message
      */
     protected String plural(final int count, @SuppressWarnings("SameParameterValue") final String itemName) {
-        return String.format("%d %s%s", count, itemName, count == 1 ? "" : "s");
+        return "%d %s%s".formatted(count, itemName, count == 1 ? "" : "s");
     }
 
     protected abstract Optional<T> processFile(Path file, Charset charset, FilteredLog log);
@@ -144,6 +146,7 @@ public abstract class AgentFileVisitor<T extends Serializable>
      * File system facade that can be replaced by a stub in unit tests.
      */
     static class FileSystemFacade implements Serializable {
+        @Serial
         private static final long serialVersionUID = 4052720703351280685L;
 
         String getAbsolutePath(final File file) {
@@ -178,6 +181,7 @@ public abstract class AgentFileVisitor<T extends Serializable>
      * @author Ullrich Hafner
      */
     static class FileFinder extends MasterToSlaveFileCallable<String[]> {
+        @Serial
         private static final long serialVersionUID = 2970029366847565970L;
 
         private final String includesPattern;
@@ -221,13 +225,13 @@ public abstract class AgentFileVisitor<T extends Serializable>
          */
         public String[] find(final File workspace) {
             try {
-                FileSet fileSet = new FileSet();
-                Project antProject = new Project();
+                var fileSet = new FileSet();
+                var antProject = new Project();
                 fileSet.setProject(antProject);
                 fileSet.setDir(workspace);
                 fileSet.setIncludes(includesPattern);
-                TypeSelector selector = new TypeSelector();
-                FileType fileType = new FileType();
+                var selector = new TypeSelector();
+                var fileType = new FileType();
                 fileType.setValue(FileType.FILE);
                 selector.setType(fileType);
                 fileSet.addType(selector);
@@ -252,6 +256,7 @@ public abstract class AgentFileVisitor<T extends Serializable>
      *         the type of the results
      */
     public static class FileVisitorResult<T extends Serializable> implements Serializable {
+        @Serial
         private static final long serialVersionUID = 2122230867938547733L;
 
         private final FilteredLog log;

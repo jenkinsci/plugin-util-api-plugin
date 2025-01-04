@@ -1,11 +1,12 @@
 package io.jenkins.plugins.util;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.lang.ref.WeakReference;
 import java.nio.file.Path;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Optional;
+import java.util.Set;
 import java.util.concurrent.locks.ReentrantLock;
 
 import edu.hm.hafner.util.VisibleForTesting;
@@ -29,6 +30,7 @@ import jenkins.tasks.SimpleBuildStep.LastBuildAction;
  */
 // FIXME: this action does not work for multiple instantiations
 public abstract class BuildAction<T> implements LastBuildAction, RunAction2, Serializable {
+    @Serial
     private static final long serialVersionUID = -2074456133028895573L;
 
     private transient Run<?, ?> owner;
@@ -107,7 +109,7 @@ public abstract class BuildAction<T> implements LastBuildAction, RunAction2, Ser
 
     @Override
     public Collection<? extends Action> getProjectActions() {
-        return Collections.singleton(createProjectAction());
+        return Set.of(createProjectAction());
     }
 
     protected abstract JobAction<? extends BuildAction<T>> createProjectAction();
@@ -125,7 +127,7 @@ public abstract class BuildAction<T> implements LastBuildAction, RunAction2, Ser
             if (resultReference == null) {
                 return readResult();
             }
-            T result = this.resultReference.get();
+            var result = this.resultReference.get();
             if (result == null) {
                 return readResult();
             }

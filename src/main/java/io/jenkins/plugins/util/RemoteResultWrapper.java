@@ -1,5 +1,6 @@
 package io.jenkins.plugins.util;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -14,6 +15,7 @@ import edu.hm.hafner.util.FilteredLog;
  * @author Ullrich Hafner
  */
 public class RemoteResultWrapper<T extends Serializable> extends FilteredLog {
+    @Serial
     private static final long serialVersionUID = -6411417555105688927L;
 
     private final T result;
