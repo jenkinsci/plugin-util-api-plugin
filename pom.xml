@@ -4,7 +4,7 @@
   <parent>
     <groupId>org.jvnet.hudson.plugins</groupId>
     <artifactId>analysis-pom</artifactId>
-    <version>10.0.0</version>
+    <version>10.1.0</version>
     <relativePath />
   </parent>
 
@@ -14,11 +14,11 @@
   <name>Plugin Utilities API Plugin</name>
   <version>${revision}${changelist}</version>
 
-  <description>Provides several utility classes that can be used to accelerate plugin development.</description>
+  <description>Provides several utility classes that can be used to speed up plugin development.</description>
   <url>https://github.com/jenkinsci/plugin-util-api-plugin</url>
 
   <properties>
-    <revision>5.2.0</revision>
+    <revision>6.0.0</revision>
     <changelist>-SNAPSHOT</changelist>
 
     <module.name>${project.groupId}.plugin.util.api</module.name>
@@ -27,7 +27,7 @@
     <j2html.version>1.4.0</j2html.version>
     <streamex.version>0.8.3</streamex.version>
     <testcontainers.version>1.20.4</testcontainers.version>
-    <codingstyle.library.version>5.2.0</codingstyle.library.version>
+    <codingstyle.library.version>5.3.0</codingstyle.library.version>
   </properties>
 
   <licenses>
