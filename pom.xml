@@ -27,7 +27,7 @@
     <j2html.version>1.4.0</j2html.version>
     <streamex.version>0.8.3</streamex.version>
     <testcontainers.version>1.20.4</testcontainers.version>
-    <codingstyle.library.version>5.2.0</codingstyle.library.version>
+    <codingstyle.library.version>5.4.0</codingstyle.library.version>
   </properties>
 
   <licenses>
