@@ -118,7 +118,7 @@ public abstract class AbstractXmlStream<T> {
     }
 
     /**
-     * Default {@link Converter} implementation for XStream that does interning scoped to one unmarshalling.
+     * Default {@link Converter} implementation for XStream that does intern scoped to one unmarshalling.
      */
     private static final class TreeStringConverter implements Converter {
         @Override

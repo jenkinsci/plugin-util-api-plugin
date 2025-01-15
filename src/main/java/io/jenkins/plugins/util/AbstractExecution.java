@@ -139,21 +139,6 @@ public abstract class AbstractExecution<T> extends SynchronousNonBlockingStepExe
     }
 
     /**
-     * Creates a {@link StageResultHandler} that sets the overall build result of the {@link Run}.
-     *
-     * @return a {@link StageResultHandler} that sets the overall build result of the {@link Run}
-     * @throws InterruptedException
-     *         if the user canceled the execution
-     * @throws IOException
-     *         if the required {@link FlowNode} instance is not found
-     * @deprecated use {@link #createResultHandler()} instead
-     */
-    @Deprecated
-    protected StageResultHandler createStageResultHandler() throws InterruptedException, IOException {
-        return createPipelineResultHandler();
-    }
-
-    /**
      * Creates a {@link ResultHandler} that sets build result of the {@link Run} or stage.
      *
      * @return a {@link ResultHandler} that sets the build result of the {@link Run} or stage

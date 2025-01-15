@@ -101,6 +101,7 @@ public abstract class BuildAction<T> implements LastBuildAction, RunAction2, Ser
      *
      * @return this
      */
+    @Serial
     protected Object readResolve() {
         lock = new ReentrantLock();
 

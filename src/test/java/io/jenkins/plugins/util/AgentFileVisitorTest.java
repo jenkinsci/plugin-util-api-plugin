@@ -1,6 +1,7 @@
 package io.jenkins.plugins.util;
 
 import java.io.File;
+import java.io.Serial;
 import java.nio.charset.Charset;
 import java.nio.file.Path;
 import java.util.Optional;
@@ -180,6 +181,7 @@ class AgentFileVisitorTest extends SerializableTest<StringScanner> {
     }
 
     static class StringScanner extends AgentFileVisitor<String> {
+        @Serial
         private static final long serialVersionUID = -6902473746775046311L;
         private int counter = 1;
 
@@ -207,6 +209,7 @@ class AgentFileVisitorTest extends SerializableTest<StringScanner> {
     }
 
     private static class EmptyScanner extends AgentFileVisitor<String> {
+        @Serial
         private static final long serialVersionUID = 3700448215163706213L;
 
         @VisibleForTesting

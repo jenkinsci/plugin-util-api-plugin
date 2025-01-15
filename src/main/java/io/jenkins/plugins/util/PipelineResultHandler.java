@@ -11,8 +11,7 @@ import hudson.model.Run;
  *
  * @author Devin Nusbaum
  */
-@SuppressWarnings("deprecation")
-public class PipelineResultHandler implements StageResultHandler, ResultHandler {
+public class PipelineResultHandler implements ResultHandler {
     private final Run<?, ?> run;
     private final FlowNode flowNode;
 
@@ -27,11 +26,6 @@ public class PipelineResultHandler implements StageResultHandler, ResultHandler 
     public PipelineResultHandler(final Run<?, ?> run, final FlowNode flowNode) {
         this.run = run;
         this.flowNode = flowNode;
-    }
-
-    @Override
-    public void setResult(final Result result, final String message) {
-        publishResult(result, message);
     }
 
     @Override
@@ -57,7 +51,7 @@ public class PipelineResultHandler implements StageResultHandler, ResultHandler 
                 break;
             case WARNING:
             case FAILED:
-                setResult(status.getResult(), message);
+                publishResult(status.getResult(), message);
                 break;
             default:
                 // ignore and do nothing
