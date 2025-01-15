@@ -285,61 +285,6 @@
         <artifactId>revapi-maven-plugin</artifactId>
         <configuration>
           <skip>true</skip>
-          <analysisConfiguration>
-            <revapi.differences id="manually-vetted">
-              <attachments>
-                <vetted>ok</vetted>
-              </attachments>
-              <differences combine.children="append">
-                <item>
-                  <ignore>true</ignore>
-                  <regex>true</regex>
-                  <code>java.class.externalClassExposedInAPI</code>
-                  <classQualifiedName>jenkins.model.*</classQualifiedName>
-                  <justification>New dependency added.</justification>
-                </item>
-                <item>
-                  <ignore>true</ignore>
-                  <regex>true</regex>
-                  <code>java.class.externalClassExposedInAPI</code>
-                  <classQualifiedName>org.jenkinsci.plugins.workflow.*</classQualifiedName>
-                  <justification>New dependency added.</justification>
-                </item>
-                <item>
-                  <ignore>true</ignore>
-                  <regex>true</regex>
-                  <code>java.class.externalClassExposedInAPI</code>
-                  <classQualifiedName>com.google.common.*</classQualifiedName>
-                  <justification>New dependency added.</justification>
-                </item>
-                <item>
-                  <ignore>true</ignore>
-                  <regex>true</regex>
-                  <code>java.class.nonPublicPartOfAPI</code>
-                  <classQualifiedName>j2html.utils.*</classQualifiedName>
-                  <justification>Exception is not used in our code yet.</justification>
-                </item>
-                <item>
-                  <ignore>true</ignore>
-                  <code>java.class.nonPublicPartOfAPI</code>
-                  <classQualifiedName>one.util.streamex.Joining.Accumulator</classQualifiedName>
-                  <justification>This type can be ignored since it is not used in our code.</justification>
-                </item>
-                <item>
-                  <ignore>true</ignore>
-                  <code>java.class.removed</code>
-                  <classQualifiedName>edu.hm.hafner.util.StringContainsUtils</classQualifiedName>
-                  <justification>This type is not used in our code.</justification>
-                </item>
-                <item>
-                  <ignore>true</ignore>
-                  <code>java.class.removed</code>
-                  <classQualifiedName>edu.hm.hafner.util.NoSuchElementException</classQualifiedName>
-                  <justification>This type is not used in our code.</justification>
-                </item>
-              </differences>
-            </revapi.differences>
-          </analysisConfiguration>
         </configuration>
       </plugin>
     </plugins>
