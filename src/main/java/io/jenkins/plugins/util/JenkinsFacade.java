@@ -14,7 +14,7 @@ import org.springframework.security.access.AccessDeniedException;
 import edu.umd.cs.findbugs.annotations.CheckForNull;
 
 import org.kohsuke.stapler.Stapler;
-import org.kohsuke.stapler.StaplerRequest;
+import org.kohsuke.stapler.StaplerRequest2;
 import hudson.DescriptorExtensionList;
 import hudson.ExtensionPoint;
 import hudson.model.AbstractItem;
@@ -268,7 +268,7 @@ public class JenkinsFacade implements Serializable {
     }
 
     private String getContextPath() {
-        StaplerRequest currentRequest = Stapler.getCurrentRequest();
+        StaplerRequest2 currentRequest = Stapler.getCurrentRequest2();
         if (currentRequest != null) {
             return currentRequest.getContextPath();
         }
