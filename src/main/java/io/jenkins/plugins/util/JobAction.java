@@ -3,8 +3,8 @@ package io.jenkins.plugins.util;
 import java.io.IOException;
 import java.util.Optional;
 
-import org.kohsuke.stapler.StaplerRequest;
-import org.kohsuke.stapler.StaplerResponse;
+import org.kohsuke.stapler.StaplerRequest2;
+import org.kohsuke.stapler.StaplerResponse2;
 import hudson.model.Action;
 import hudson.model.Job;
 
@@ -60,7 +60,7 @@ public abstract class JobAction<T extends BuildAction<?>> implements Action {
      *         in case of an error
      */
     @SuppressWarnings("unused") // Called by jelly view
-    public void doIndex(final StaplerRequest request, final StaplerResponse response) throws IOException {
+    public void doIndex(final StaplerRequest2 request, final StaplerResponse2 response) throws IOException {
         Optional<T> action = getLatestAction();
         if (action.isPresent()) {
             T buildAction = action.get();
