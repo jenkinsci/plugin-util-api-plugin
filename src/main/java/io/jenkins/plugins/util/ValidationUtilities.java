@@ -132,7 +132,7 @@ public class ValidationUtilities {
     public FormValidation doCheckPattern(final AbstractProject<?, ?> project, final String pattern) {
         if (project != null) { // there is no workspace in pipelines
             try {
-                FilePath workspace = project.getSomeWorkspace();
+                var workspace = project.getSomeWorkspace();
                 if (workspace != null && workspace.exists()) {
                     return validatePatternInWorkspace(pattern, workspace);
                 }
@@ -147,7 +147,7 @@ public class ValidationUtilities {
 
     private FormValidation validatePatternInWorkspace(final String pattern, final FilePath workspace)
             throws IOException, InterruptedException {
-        String result = workspace.validateAntFileMask(pattern, FilePath.VALIDATE_ANT_FILE_MASK_BOUND);
+        var result = workspace.validateAntFileMask(pattern, FilePath.VALIDATE_ANT_FILE_MASK_BOUND);
         if (result != null) {
             return FormValidation.error(result);
         }

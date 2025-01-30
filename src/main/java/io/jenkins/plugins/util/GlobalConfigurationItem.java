@@ -5,7 +5,7 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import net.sf.json.JSONObject;
 
-import org.kohsuke.stapler.StaplerRequest;
+import org.kohsuke.stapler.StaplerRequest2;
 import jenkins.model.GlobalConfiguration;
 
 /**
@@ -57,7 +57,7 @@ public class GlobalConfigurationItem extends GlobalConfiguration {
     }
 
     @Override
-    public boolean configure(final StaplerRequest req, final JSONObject json) throws FormException {
+    public boolean configure(final StaplerRequest2 req, final JSONObject json) throws FormException {
         clearRepeatableProperties();
 
         return super.configure(req, json);

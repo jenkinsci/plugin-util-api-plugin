@@ -1,5 +1,6 @@
 package io.jenkins.plugins.util;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Optional;
@@ -14,11 +15,10 @@ import org.springframework.security.access.AccessDeniedException;
 import edu.umd.cs.findbugs.annotations.CheckForNull;
 
 import org.kohsuke.stapler.Stapler;
-import org.kohsuke.stapler.StaplerRequest;
+import org.kohsuke.stapler.StaplerRequest2;
 import hudson.DescriptorExtensionList;
 import hudson.ExtensionPoint;
 import hudson.model.AbstractItem;
-import hudson.model.BallColor;
 import hudson.model.Describable;
 import hudson.model.Descriptor;
 import hudson.model.Item;
@@ -38,6 +38,7 @@ import jenkins.model.Jenkins;
  */
 @SuppressWarnings("PMD.ExcessiveImports")
 public class JenkinsFacade implements Serializable {
+    @Serial
     private static final long serialVersionUID = 1904631270145841113L;
 
     /**
@@ -49,7 +50,7 @@ public class JenkinsFacade implements Serializable {
      * @param <T>
      *         type of the extension
      *
-     * @return the discovered instances, might be an empty list
+     * @return the discovered instances - might be an empty list
      */
     public <T> List<T> getExtensionsFor(final Class<T> extensionType) {
         return getJenkins().getExtensionList(extensionType);
@@ -65,7 +66,7 @@ public class JenkinsFacade implements Serializable {
      * @param describableType
      *         the base type that represents the descriptor of the describable
      *
-     * @return the discovered instances, might be an empty list
+     * @return the discovered instances - might be an empty list
      */
     public <T extends Describable<T>, D extends Descriptor<T>> DescriptorExtensionList<T, D> getDescriptorsFor(
             final Class<T> describableType) {
@@ -228,21 +229,6 @@ public class JenkinsFacade implements Serializable {
     }
 
     /**
-     * Returns the absolute URL for the specified ball icon.
-     *
-     * @param color
-     *         the color
-     *
-     * @return the absolute URL
-     * @deprecated BallColor should not be used anymore, use the {@code icon} tag in jelly views or the icon class name
-     *         of {@link BallColor}
-     */
-    @Deprecated
-    public String getImagePath(final BallColor color) {
-        return getContextPath() + "/images/16x16/" + color.getImage();
-    }
-
-    /**
      * Returns a symbol that can be embedded in a page. The returned String is a well formatted HTML snippet that can
      * be embedded in a page.
      *
@@ -268,7 +254,7 @@ public class JenkinsFacade implements Serializable {
     }
 
     private String getContextPath() {
-        StaplerRequest currentRequest = Stapler.getCurrentRequest();
+        StaplerRequest2 currentRequest = Stapler.getCurrentRequest2();
         if (currentRequest != null) {
             return currentRequest.getContextPath();
         }
@@ -289,7 +275,7 @@ public class JenkinsFacade implements Serializable {
 
     private String getAbsoluteUrl(final String url) {
         try {
-            String rootUrl = getJenkins().getRootUrl();
+            var rootUrl = getJenkins().getRootUrl();
             if (rootUrl != null) {
                 return rootUrl + url;
             }

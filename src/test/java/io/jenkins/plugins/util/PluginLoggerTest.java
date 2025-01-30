@@ -24,13 +24,13 @@ class PluginLoggerTest {
     @SuppressWarnings("PMD.CloseResource")
     void shouldLogSingleAndMultipleLines() {
         PrintStream printStream = mock(PrintStream.class);
-        PluginLogger logger = new PluginLogger(printStream, TOOL_NAME);
+        var logger = new PluginLogger(printStream, TOOL_NAME);
 
         logger.log(LOG_MESSAGE);
 
         verify(printStream).println(EXPECTED_TOOL_PREFIX + " " + LOG_MESSAGE);
 
-        PluginLogger loggerWithBraces = new PluginLogger(printStream, EXPECTED_TOOL_PREFIX);
+        var loggerWithBraces = new PluginLogger(printStream, EXPECTED_TOOL_PREFIX);
 
         loggerWithBraces.log(LOG_MESSAGE);
 

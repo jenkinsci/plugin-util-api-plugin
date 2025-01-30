@@ -8,27 +8,14 @@
     <relativePath />
   </parent>
 
-  <artifactId>plugin-util-api</artifactId>
   <groupId>io.jenkins.plugins</groupId>
+  <artifactId>plugin-util-api</artifactId>
+  <version>${revision}${changelist}</version>
   <packaging>hpi</packaging>
   <name>Plugin Utilities API Plugin</name>
-  <version>${revision}${changelist}</version>
 
-  <description>Provides several utility classes that can be used to accelerate plugin development.</description>
+  <description>Provides several utility classes that can be used to speed up plugin development.</description>
   <url>https://github.com/jenkinsci/plugin-util-api-plugin</url>
-
-  <properties>
-    <revision>5.2.0</revision>
-    <changelist>-SNAPSHOT</changelist>
-
-    <module.name>${project.groupId}.plugin.util.api</module.name>
-
-    <error-prone.version>2.36.0</error-prone.version>
-    <j2html.version>1.4.0</j2html.version>
-    <streamex.version>0.8.3</streamex.version>
-    <testcontainers.version>1.20.4</testcontainers.version>
-    <codingstyle.library.version>5.2.0</codingstyle.library.version>
-  </properties>
 
   <licenses>
     <license>
@@ -44,6 +31,26 @@
       <email>ullrich.hafner@gmail.com</email>
     </developer>
   </developers>
+
+  <scm>
+    <connection>scm:git:https://github.com/jenkinsci/${project.artifactId}-plugin.git</connection>
+    <developerConnection>scm:git:git@github.com:jenkinsci/${project.artifactId}-plugin.git</developerConnection>
+    <url>https://github.com/jenkinsci/${project.artifactId}-plugin</url>
+    <tag>${scmTag}</tag>
+  </scm>
+
+  <properties>
+    <revision>6.0.0</revision>
+    <changelist>-SNAPSHOT</changelist>
+
+    <module.name>${project.groupId}.plugin.util.api</module.name>
+
+    <error-prone.version>2.36.0</error-prone.version>
+    <j2html.version>1.4.0</j2html.version>
+    <streamex.version>0.8.3</streamex.version>
+    <testcontainers.version>1.20.4</testcontainers.version>
+    <codingstyle.library.version>5.5.0</codingstyle.library.version>
+  </properties>
 
   <dependencies>
     <!-- Library Dependencies -->
@@ -78,7 +85,6 @@
     <dependency>
       <groupId>com.google.errorprone</groupId>
       <artifactId>error_prone_annotations</artifactId>
-      <version>${error-prone.version}</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
@@ -176,6 +182,24 @@
 
   </dependencies>
 
+  <repositories>
+    <repository>
+      <id>repo.jenkins-ci.org</id>
+      <url>https://repo.jenkins-ci.org/public/</url>
+    </repository>
+    <repository>
+      <id>incrementals.jenkins-ci.org</id>
+      <url>https://repo.jenkins-ci.org/incrementals/</url>
+    </repository>
+  </repositories>
+
+  <pluginRepositories>
+    <pluginRepository>
+      <id>repo.jenkins-ci.org</id>
+      <url>https://repo.jenkins-ci.org/public/</url>
+    </pluginRepository>
+  </pluginRepositories>
+
   <build>
     <plugins>
       <plugin>
@@ -261,89 +285,9 @@
         <artifactId>revapi-maven-plugin</artifactId>
         <configuration>
           <skip>true</skip>
-          <analysisConfiguration>
-            <revapi.differences id="manually-vetted">
-              <attachments>
-                <vetted>ok</vetted>
-              </attachments>
-              <differences combine.children="append">
-                <item>
-                  <ignore>true</ignore>
-                  <regex>true</regex>
-                  <code>java.class.externalClassExposedInAPI</code>
-                  <classQualifiedName>jenkins.model.*</classQualifiedName>
-                  <justification>New dependency added.</justification>
-                </item>
-                <item>
-                  <ignore>true</ignore>
-                  <regex>true</regex>
-                  <code>java.class.externalClassExposedInAPI</code>
-                  <classQualifiedName>org.jenkinsci.plugins.workflow.*</classQualifiedName>
-                  <justification>New dependency added.</justification>
-                </item>
-                <item>
-                  <ignore>true</ignore>
-                  <regex>true</regex>
-                  <code>java.class.externalClassExposedInAPI</code>
-                  <classQualifiedName>com.google.common.*</classQualifiedName>
-                  <justification>New dependency added.</justification>
-                </item>
-                <item>
-                  <ignore>true</ignore>
-                  <regex>true</regex>
-                  <code>java.class.nonPublicPartOfAPI</code>
-                  <classQualifiedName>j2html.utils.*</classQualifiedName>
-                  <justification>Exception is not used in our code yet.</justification>
-                </item>
-                <item>
-                  <ignore>true</ignore>
-                  <code>java.class.nonPublicPartOfAPI</code>
-                  <classQualifiedName>one.util.streamex.Joining.Accumulator</classQualifiedName>
-                  <justification>This type can be ignored since it is not used in our code.</justification>
-                </item>
-                <item>
-                  <ignore>true</ignore>
-                  <code>java.class.removed</code>
-                  <classQualifiedName>edu.hm.hafner.util.StringContainsUtils</classQualifiedName>
-                  <justification>This type is not used in our code.</justification>
-                </item>
-                <item>
-                  <ignore>true</ignore>
-                  <code>java.class.removed</code>
-                  <classQualifiedName>edu.hm.hafner.util.NoSuchElementException</classQualifiedName>
-                  <justification>This type is not used in our code.</justification>
-                </item>
-              </differences>
-            </revapi.differences>
-          </analysisConfiguration>
         </configuration>
       </plugin>
     </plugins>
   </build>
-
-  <scm>
-    <connection>scm:git:https://github.com/jenkinsci/${project.artifactId}-plugin.git</connection>
-    <developerConnection>scm:git:git@github.com:jenkinsci/${project.artifactId}-plugin.git</developerConnection>
-    <url>https://github.com/jenkinsci/${project.artifactId}-plugin</url>
-    <tag>${scmTag}</tag>
-  </scm>
-
-  <repositories>
-    <repository>
-      <id>repo.jenkins-ci.org</id>
-      <url>https://repo.jenkins-ci.org/public/</url>
-    </repository>
-    <repository>
-      <id>incrementals.jenkins-ci.org</id>
-      <url>https://repo.jenkins-ci.org/incrementals/</url>
-    </repository>
-  </repositories>
-
-  <pluginRepositories>
-    <pluginRepository>
-      <id>repo.jenkins-ci.org</id>
-      <url>https://repo.jenkins-ci.org/public/</url>
-    </pluginRepository>
-  </pluginRepositories>
 
 </project>

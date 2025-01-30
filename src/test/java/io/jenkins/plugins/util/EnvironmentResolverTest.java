@@ -25,8 +25,8 @@ class EnvironmentResolverTest {
      */
     @Test
     void shouldReturnUnmodifiedOutputForEmptyInput() {
-        EnvironmentResolver environmentResolver = new EnvironmentResolver();
-        String expanded = environmentResolver.expandEnvironmentVariables(new EnvVars(), "");
+        var environmentResolver = new EnvironmentResolver();
+        var expanded = environmentResolver.expandEnvironmentVariables(new EnvVars(), "");
 
         assertThat(expanded).isEmpty();
     }
@@ -36,8 +36,8 @@ class EnvironmentResolverTest {
      */
     @Test
     void shouldReturnSameOutputAsInput() {
-        EnvironmentResolver environmentResolver = new EnvironmentResolver();
-        String expanded = environmentResolver.expandEnvironmentVariables(new EnvVars(), "TestString");
+        var environmentResolver = new EnvironmentResolver();
+        var expanded = environmentResolver.expandEnvironmentVariables(new EnvVars(), "TestString");
 
         assertThat(expanded).isEqualTo("TestString");
     }
@@ -47,8 +47,8 @@ class EnvironmentResolverTest {
      */
     @Test
     void shouldReturnSameOutputAsInputForAnEnvironmentWhichIsNull() {
-        EnvironmentResolver environmentResolver = new EnvironmentResolver();
-        String expanded = environmentResolver.expandEnvironmentVariables(null, "TestStringForNull");
+        var environmentResolver = new EnvironmentResolver();
+        var expanded = environmentResolver.expandEnvironmentVariables(null, "TestStringForNull");
 
         assertThat(expanded).isEqualTo("TestStringForNull");
     }
@@ -58,11 +58,11 @@ class EnvironmentResolverTest {
      */
     @Test
     void shouldReturnNonAdjustedOutputForDefinedInput() {
-        EnvironmentResolver environmentResolver = new EnvironmentResolver();
-        EnvVars envVars = new EnvVars();
+        var environmentResolver = new EnvironmentResolver();
+        var envVars = new EnvVars();
         envVars.put(KEY, VALUE);
-        String expected = "TestTesting";
-        String expanded = environmentResolver.expandEnvironmentVariables(envVars, expected);
+        var expected = "TestTesting";
+        var expanded = environmentResolver.expandEnvironmentVariables(envVars, expected);
 
         assertThat(expanded).isEqualTo(expected);
     }
@@ -72,11 +72,11 @@ class EnvironmentResolverTest {
      */
     @Test
     void shouldReturnAdjustedOutputForDefinedInput() {
-        EnvironmentResolver environmentResolver = new EnvironmentResolver();
-        EnvVars envVars = new EnvVars();
+        var environmentResolver = new EnvironmentResolver();
+        var envVars = new EnvVars();
         envVars.put(KEY, VALUE);
-        String previous = "$" + KEY;
-        String expanded = environmentResolver.expandEnvironmentVariables(envVars, previous);
+        var previous = "$" + KEY;
+        var expanded = environmentResolver.expandEnvironmentVariables(envVars, previous);
 
         assertThat(expanded).isEqualTo(VALUE);
     }
@@ -86,12 +86,12 @@ class EnvironmentResolverTest {
      */
     @Test
     void shouldReplaceTheFirstKeyWithFirstValueAndThenReplaceFirstValueWithResult() {
-        EnvironmentResolver environmentResolver = new EnvironmentResolver();
-        EnvVars envVars = new EnvVars();
+        var environmentResolver = new EnvironmentResolver();
+        var envVars = new EnvVars();
         envVars.put(KEY, "$" + VALUE);
         envVars.put(VALUE, RESULT);
-        String previous = "$" + KEY;
-        String expanded = environmentResolver.expandEnvironmentVariables(envVars, previous);
+        var previous = "$" + KEY;
+        var expanded = environmentResolver.expandEnvironmentVariables(envVars, previous);
 
         assertThat(expanded).isEqualTo(RESULT);
     }
@@ -102,12 +102,12 @@ class EnvironmentResolverTest {
      */
     @Test
     void shouldReturnAdjustedOutputForAGivenInputBasedOnDollarSigns() {
-        EnvironmentResolver environmentResolver = new EnvironmentResolver();
-        EnvVars envVars = new EnvVars();
+        var environmentResolver = new EnvironmentResolver();
+        var envVars = new EnvVars();
         envVars.put(KEY, VALUE);
-        String previous = "$$Test$$Testing$TestString$$Testing$Test";
-        String expanded = environmentResolver.expandEnvironmentVariables(envVars, previous);
-        String expected = "$Test$Testing$TestString$Testing$Test";
+        var previous = "$$Test$$Testing$TestString$$Testing$Test";
+        var expanded = environmentResolver.expandEnvironmentVariables(envVars, previous);
+        var expected = "$Test$Testing$TestString$Testing$Test";
 
         assertThat(expanded).isEqualTo(expected);
     }
@@ -117,10 +117,10 @@ class EnvironmentResolverTest {
      */
     @Test
     void shouldRunZeroTimesThroughTheLoopAndLeaveTheInputUnmodified() {
-        EnvVars envVars = new EnvVars();
+        var envVars = new EnvVars();
         envVars.put(KEY, VALUE);
-        String nonExpanded = "$";
-        String expected = "$";
+        var nonExpanded = "$";
+        var expected = "$";
 
         checkLoopWithNumberOfRuns(0, envVars, nonExpanded, expected);
     }
@@ -130,10 +130,10 @@ class EnvironmentResolverTest {
      */
     @Test
     void shouldRunOneTimeThroughTheLoopAndModifyTheInput() {
-        EnvVars envVars = new EnvVars();
+        var envVars = new EnvVars();
         envVars.put(KEY, VALUE);
-        String nonExpanded = "$$";
-        String expected = "$";
+        var nonExpanded = "$$";
+        var expected = "$";
 
         checkLoopWithNumberOfRuns(1, envVars, nonExpanded, expected);
     }
@@ -144,10 +144,10 @@ class EnvironmentResolverTest {
      */
     @Test
     void shouldExitAfterSetRetriesHasExceededAndHenceLeaveTheInputUnmodified() {
-        EnvironmentResolver environmentResolver = new EnvironmentResolver();
-        EnvVars envVars = new EnvVars();
+        var environmentResolver = new EnvironmentResolver();
+        var envVars = new EnvVars();
         envVars.put(KEY, VALUE);
-        String expanded = environmentResolver.expandEnvironmentVariables(envVars, createDollarString());
+        var expanded = environmentResolver.expandEnvironmentVariables(envVars, createDollarString());
 
         assertThat(expanded).isEqualTo("$");
     }
@@ -157,12 +157,12 @@ class EnvironmentResolverTest {
      */
     @Test
     void shouldExitAfterSetRetriesHasExceededAndHenceLeaveTheInputUnmodifiedTestTheSecondShortCircuitCondition() {
-        EnvironmentResolver environmentResolver = new EnvironmentResolver();
-        EnvVars envVars = new EnvVars();
+        var environmentResolver = new EnvironmentResolver();
+        var envVars = new EnvVars();
         envVars.put(KEY, VALUE);
-        String expanded = environmentResolver.expandEnvironmentVariables(envVars, " ");
+        var expanded = environmentResolver.expandEnvironmentVariables(envVars, " ");
 
-        assertThat(expanded).isEqualTo(expanded);
+        assertThat(expanded).isBlank();
     }
 
     private String createDollarString() {
@@ -173,8 +173,8 @@ class EnvironmentResolverTest {
 
     private void checkLoopWithNumberOfRuns(final int resolveVariablesDepth, final EnvVars environment,
             final String nonExpanded, final String expected) {
-        EnvironmentResolver environmentResolver = new EnvironmentResolver(resolveVariablesDepth);
-        String expanded = environmentResolver.expandEnvironmentVariables(environment, nonExpanded);
+        var environmentResolver = new EnvironmentResolver(resolveVariablesDepth);
+        var expanded = environmentResolver.expandEnvironmentVariables(environment, nonExpanded);
 
         assertThat(expanded).isEqualTo(expected);
     }

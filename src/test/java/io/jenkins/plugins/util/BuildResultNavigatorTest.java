@@ -16,7 +16,7 @@ import static org.mockito.Mockito.*;
 class BuildResultNavigatorTest {
     @Test
     void shouldNavigateToSelectedBuild() {
-        BuildResultNavigator navigator = new BuildResultNavigator();
+        var navigator = new BuildResultNavigator();
 
         FreeStyleBuild current = mock(FreeStyleBuild.class);
         FreeStyleProject job = mock(FreeStyleProject.class);
@@ -43,7 +43,7 @@ class BuildResultNavigatorTest {
 
     @Test
     void shouldNavigateToSameBuild() {
-        BuildResultNavigator navigator = new BuildResultNavigator();
+        var navigator = new BuildResultNavigator();
 
         FreeStyleBuild current = mock(FreeStyleBuild.class);
         FreeStyleProject job = mock(FreeStyleProject.class);
@@ -73,7 +73,7 @@ class BuildResultNavigatorTest {
 
     @Test
     void shouldNotFindBuildForUrl() {
-        BuildResultNavigator navigator = new BuildResultNavigator();
+        var navigator = new BuildResultNavigator();
 
         FreeStyleBuild current = mock(FreeStyleBuild.class);
         FreeStyleProject job = mock(FreeStyleProject.class);
@@ -94,7 +94,7 @@ class BuildResultNavigatorTest {
 
     @Test
     void shouldNotFindBuildIfThereIsNoLastBuild() {
-        BuildResultNavigator navigator = new BuildResultNavigator();
+        var navigator = new BuildResultNavigator();
 
         FreeStyleBuild current = mock(FreeStyleBuild.class);
         FreeStyleProject job = mock(FreeStyleProject.class);

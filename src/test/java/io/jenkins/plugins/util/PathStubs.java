@@ -20,7 +20,7 @@ public final class PathStubs {
      * @param directories
      *         the directories as an array
      *
-     * @return the directories as an collection
+     * @return the directories as a collection
      */
     public static Collection<FilePath> asSourceDirectories(final FilePath... directories) {
         return Arrays.asList(directories);

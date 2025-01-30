@@ -1,6 +1,7 @@
 package io.jenkins.plugins.util;
 
 import java.io.IOException;
+import java.io.Serial;
 import java.nio.charset.Charset;
 import java.util.Optional;
 
@@ -23,6 +24,7 @@ import hudson.remoting.VirtualChannel;
  * @author Ullrich Hafner
  */
 public abstract class AbstractExecution<T> extends SynchronousNonBlockingStepExecution<T> {
+    @Serial
     private static final long serialVersionUID = -127479018279069250L;
 
     /**
@@ -64,7 +66,7 @@ public abstract class AbstractExecution<T> extends SynchronousNonBlockingStepExe
      *         if the user canceled the run
      */
     protected Optional<VirtualChannel> getChannel() throws IOException, InterruptedException {
-        Computer computer = getContext().get(Computer.class);
+        var computer = getContext().get(Computer.class);
 
         if (computer == null) {
             return Optional.empty();
@@ -96,7 +98,7 @@ public abstract class AbstractExecution<T> extends SynchronousNonBlockingStepExe
      *         if the user canceled the execution
      */
     protected FilePath getWorkspace() throws IOException, InterruptedException {
-        FilePath workspace = getContext().get(FilePath.class);
+        var workspace = getContext().get(FilePath.class);
 
         if (workspace == null) {
             throw new IOException("No workspace available for " + this);
@@ -116,7 +118,7 @@ public abstract class AbstractExecution<T> extends SynchronousNonBlockingStepExe
      *         if the task listener could not be resolved
      */
     protected TaskListener getTaskListener() throws InterruptedException, IOException {
-        TaskListener listener = getContext().get(TaskListener.class);
+        var listener = getContext().get(TaskListener.class);
         if (listener != null) {
             return listener;
         }
@@ -134,21 +136,6 @@ public abstract class AbstractExecution<T> extends SynchronousNonBlockingStepExe
      */
     protected Charset getCharset(final String charset) {
         return new ValidationUtilities().getCharset(charset);
-    }
-
-    /**
-     * Creates a {@link StageResultHandler} that sets the overall build result of the {@link Run}.
-     *
-     * @return a {@link StageResultHandler} that sets the overall build result of the {@link Run}
-     * @throws InterruptedException
-     *         if the user canceled the execution
-     * @throws IOException
-     *         if the required {@link FlowNode} instance is not found
-     * @deprecated use {@link #createResultHandler()} instead
-     */
-    @Deprecated
-    protected StageResultHandler createStageResultHandler() throws InterruptedException, IOException {
-        return createPipelineResultHandler();
     }
 
     /**

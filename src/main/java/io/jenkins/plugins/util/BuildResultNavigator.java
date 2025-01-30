@@ -52,7 +52,7 @@ public class BuildResultNavigator {
      */
     public Optional<String> getSameUrlForOtherBuild(final Run<?, ?> currentBuild, final String viewUrl,
             final String resultId, final Run<?, ?> selectedBuild) {
-        String match = SLASH + currentBuild.getNumber() + SLASH + resultId;
+        var match = SLASH + currentBuild.getNumber() + SLASH + resultId;
         if (viewUrl.contains(match)) {
             return Optional.of(viewUrl.replaceFirst(
                     match + ".*", SLASH + selectedBuild.getNumber() + SLASH + resultId));

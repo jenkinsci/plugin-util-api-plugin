@@ -43,10 +43,10 @@ public class EnvironmentResolver {
      * @return the expanded value
      */
     public String expandEnvironmentVariables(@CheckForNull final EnvVars environment, final String nonExpandedValue) {
-        String expanded = nonExpandedValue;
+        var expanded = nonExpandedValue;
         if (environment != null && !environment.isEmpty()) {
             for (int i = 0; i < resolveVariablesDepth && StringUtils.isNotBlank(expanded); i++) {
-                String old = expanded;
+                var old = expanded;
                 expanded = expand(environment, expanded);
                 if (old.equals(expanded)) {
                     return expanded;

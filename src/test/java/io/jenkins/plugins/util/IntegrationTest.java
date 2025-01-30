@@ -4,12 +4,9 @@ import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
-import java.io.Reader;
-import java.net.URL;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Objects;
@@ -18,7 +15,6 @@ import java.util.function.Function;
 import org.junit.jupiter.api.Tag;
 import org.jvnet.hudson.test.JenkinsRule;
 import org.jvnet.hudson.test.JenkinsRule.JSONWebResponse;
-import org.jvnet.hudson.test.JenkinsRule.WebClient;
 import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.images.builder.ImageFromDockerfile;
 import org.w3c.dom.Document;
@@ -55,7 +51,6 @@ import hudson.slaves.EnvironmentVariablesNodeProperty.Entry;
 import hudson.tasks.BatchFile;
 import hudson.tasks.Builder;
 import hudson.tasks.Shell;
-import jenkins.model.Jenkins;
 import jenkins.model.ParameterizedJobMixIn.ParameterizedJob;
 
 import static org.assertj.core.api.Assertions.*;
@@ -100,9 +95,9 @@ public abstract class IntegrationTest extends ResourceTest {
      */
     protected void createFileInWorkspace(final TopLevelItem job, final String fileName, final String content) {
         try {
-            FilePath workspace = getWorkspace(job);
+            var workspace = getWorkspace(job);
 
-            FilePath child = workspace.child(fileName);
+            var child = workspace.child(fileName);
             child.copyFrom(new ByteArrayInputStream(content.getBytes(UTF_8)));
         }
         catch (IOException | InterruptedException e) {
@@ -119,7 +114,7 @@ public abstract class IntegrationTest extends ResourceTest {
      *         the files to copy
      */
     protected void copyMultipleFilesToWorkspace(final TopLevelItem job, final String... fileNames) {
-        copyWorkspaceFiles(job, fileNames, file -> Paths.get(file).getFileName().toString());
+        copyWorkspaceFiles(job, fileNames, file -> Path.of(file).getFileName().toString());
     }
 
     /**
@@ -131,7 +126,7 @@ public abstract class IntegrationTest extends ResourceTest {
      *         the file to copy
      */
     protected void copySingleFileToWorkspace(final TopLevelItem job, final String fileName) {
-        FilePath workspace = getWorkspace(job);
+        var workspace = getWorkspace(job);
 
         copySingleFileToWorkspace(workspace, fileName, fileName);
     }
@@ -147,7 +142,7 @@ public abstract class IntegrationTest extends ResourceTest {
      *         the file name in the workspace
      */
     protected void copySingleFileToWorkspace(final TopLevelItem job, final String from, final String to) {
-        FilePath workspace = getWorkspace(job);
+        var workspace = getWorkspace(job);
 
         copySingleFileToWorkspace(workspace, from, to);
     }
@@ -195,7 +190,7 @@ public abstract class IntegrationTest extends ResourceTest {
      *         the file to copy
      */
     protected void copyFileToWorkspace(final TopLevelItem job, final String fileName) {
-        FilePath workspace = getWorkspace(job);
+        var workspace = getWorkspace(job);
 
         copyFileToWorkspace(workspace, fileName, fileName);
     }
@@ -211,7 +206,7 @@ public abstract class IntegrationTest extends ResourceTest {
      *         the file name in the workspace
      */
     protected void copyFileToWorkspace(final TopLevelItem job, final String from, final String to) {
-        FilePath workspace = getWorkspace(job);
+        var workspace = getWorkspace(job);
 
         copyFileToWorkspace(workspace, from, to);
     }
@@ -238,9 +233,9 @@ public abstract class IntegrationTest extends ResourceTest {
      */
     protected void copyDirectoryToWorkspace(final TopLevelItem job, final String directory) {
         try {
-            URL resource = getTestResourceClass().getResource(directory);
+            var resource = getTestResourceClass().getResource(directory);
             assertThat(resource).as("No such file: %s", directory).isNotNull();
-            FilePath destination = new FilePath(new File(resource.getFile()));
+            var destination = new FilePath(new File(resource.getFile()));
             assertThat(destination.exists()).as("Directory %s does not exist", resource.getFile()).isTrue();
             destination.copyRecursiveTo(getWorkspace(job));
         }
@@ -268,7 +263,7 @@ public abstract class IntegrationTest extends ResourceTest {
      * @return the workspace
      */
     protected FilePath getWorkspace(final TopLevelItem job) {
-        FilePath workspace = getJenkins().jenkins.getWorkspaceFor(job);
+        var workspace = getJenkins().jenkins.getWorkspaceFor(job);
         assertThat(workspace).isNotNull();
         return workspace;
     }
@@ -327,7 +322,7 @@ public abstract class IntegrationTest extends ResourceTest {
      */
     protected Node createDockerAgent(final AgentContainer agentContainer, final String label) {
         try {
-            Node agent = createDockerAgent(agentContainer);
+            var agent = createDockerAgent(agentContainer);
             agent.setLabelString(label);
             return agent;
         }
@@ -346,7 +341,7 @@ public abstract class IntegrationTest extends ResourceTest {
      */
     protected Node createDockerAgent(final AgentContainer agentContainer) {
         try {
-            Node node = createPermanentAgent(agentContainer.getHost(), agentContainer.getMappedPort(SSH_PORT));
+            var node = createPermanentAgent(agentContainer.getHost(), agentContainer.getMappedPort(SSH_PORT));
             waitForAgentConnected(node);
             return node;
         }
@@ -357,19 +352,17 @@ public abstract class IntegrationTest extends ResourceTest {
 
     private Node createPermanentAgent(final String host, final int sshPort)
             throws Descriptor.FormException, IOException {
-        String privateKey = toString("/ssh/rsa_private_key");
-        BasicSSHUserPrivateKey.DirectEntryPrivateKeySource privateKeySource
-                = new BasicSSHUserPrivateKey.DirectEntryPrivateKeySource(privateKey);
-        BasicSSHUserPrivateKey credentials
-                = new BasicSSHUserPrivateKey(CredentialsScope.SYSTEM, SSH_CREDENTIALS_ID, USER, privateKeySource,
+        var privateKey = toString("/ssh/rsa_private_key");
+        var privateKeySource = new BasicSSHUserPrivateKey.DirectEntryPrivateKeySource(privateKey);
+        var credentials = new BasicSSHUserPrivateKey(CredentialsScope.SYSTEM, SSH_CREDENTIALS_ID, USER, privateKeySource,
                 PASSPHRASE, "Private Key ssh credentials");
         SystemCredentialsProvider.getInstance().getDomainCredentialsMap().put(Domain.global(),
                 Collections.singletonList(credentials));
-        SSHLauncher launcher = new SSHLauncher(host, sshPort, SSH_CREDENTIALS_ID);
+        var launcher = new SSHLauncher(host, sshPort, SSH_CREDENTIALS_ID);
         launcher.setSshHostKeyVerificationStrategy(new NonVerifyingKeyVerificationStrategy());
-        DumbSlave agent = new DumbSlave(DOCKER_AGENT_NAME, AGENT_WORK_DIR, launcher);
+        var agent = new DumbSlave(DOCKER_AGENT_NAME, AGENT_WORK_DIR, launcher);
         agent.setNodeProperties(Collections.singletonList(new EnvironmentVariablesNodeProperty(new Entry("JAVA_HOME", "/usr/lib/jvm/java-11-openjdk-amd64"))));
-        Jenkins jenkins = getJenkins().jenkins;
+        var jenkins = getJenkins().jenkins;
         jenkins.addNode(agent);
         return jenkins.getNode(agent.getNodeName());
     }
@@ -395,9 +388,9 @@ public abstract class IntegrationTest extends ResourceTest {
      */
     protected Slave createAgentWithEnabledSecurity(final String label) {
         try {
-            Slave agent = createAgent(label);
+            var agent = createAgent(label);
 
-            FilePath child = getJenkins().getInstance()
+            var child = getJenkins().getInstance()
                     .getRootPath()
                     .child("secrets/filepath-filters.d/30-default.conf");
             child.delete();
@@ -421,7 +414,7 @@ public abstract class IntegrationTest extends ResourceTest {
      * @return path to the workspace
      */
     protected FilePath getAgentWorkspace(final Node agent, final TopLevelItem job) {
-        FilePath workspace = agent.getWorkspaceFor(job);
+        var workspace = agent.getWorkspaceFor(job);
         assertThat(workspace).isNotNull();
         return workspace;
     }
@@ -441,8 +434,8 @@ public abstract class IntegrationTest extends ResourceTest {
     protected void createFileInAgentWorkspace(final Node agent, final TopLevelItem job, final String fileName,
             final String content) {
         try {
-            FilePath workspace = getAgentWorkspace(agent, job);
-            FilePath child = workspace.child(fileName);
+            var workspace = getAgentWorkspace(agent, job);
+            var child = workspace.child(fileName);
             child.copyFrom(new ByteArrayInputStream(content.getBytes(StandardCharsets.UTF_8)));
         }
         catch (IOException | InterruptedException e) {
@@ -481,7 +474,7 @@ public abstract class IntegrationTest extends ResourceTest {
      */
     protected void copySingleFileToAgentWorkspace(final Node agent, final TopLevelItem job,
             final String from, final String to) {
-        FilePath workspace = getAgentWorkspace(agent, job);
+        var workspace = getAgentWorkspace(agent, job);
 
         copyFileToWorkspace(workspace, from, to);
     }
@@ -505,7 +498,7 @@ public abstract class IntegrationTest extends ResourceTest {
      * @return the created job
      */
     protected FreeStyleProject createFreeStyleProjectWithWorkspaceFiles(final String... fileNames) {
-        FreeStyleProject job = createFreeStyleProject();
+        var job = createFreeStyleProject();
         copyFilesToWorkspace(job, fileNames);
         return job;
     }
@@ -560,7 +553,7 @@ public abstract class IntegrationTest extends ResourceTest {
      */
     @SuppressWarnings({"UseOfSystemOutOrSystemErr", "PMD.ConsecutiveLiteralAppends"})
     protected CpsFlowDefinition asStage(final String... steps) {
-        StringBuilder script = new StringBuilder(1024);
+        var script = new StringBuilder(1024);
         script.append("node {\n");
         script.append("  stage ('Integration Test') {\n");
         for (String step : steps) {
@@ -571,7 +564,7 @@ public abstract class IntegrationTest extends ResourceTest {
         script.append("  }\n");
         script.append("}\n");
 
-        String jenkinsFile = script.toString();
+        var jenkinsFile = script.toString();
         logJenkinsFile(jenkinsFile);
         return createPipelineScript(jenkinsFile);
     }
@@ -585,7 +578,7 @@ public abstract class IntegrationTest extends ResourceTest {
      * @return the pipeline job
      */
     protected WorkflowJob createPipelineWithWorkspaceFiles(final String... fileNames) {
-        WorkflowJob job = createPipeline();
+        var job = createPipeline();
         copyFilesToWorkspace(job, fileNames);
         return job;
     }
@@ -620,7 +613,7 @@ public abstract class IntegrationTest extends ResourceTest {
      * @return the JenkinsFile as {@link FlowDefinition} instance
      */
     protected FlowDefinition readJenkinsFile(final String fileName) {
-        String script = toString(fileName);
+        var script = toString(fileName);
         logJenkinsFile(script);
         return createPipelineScript(script);
     }
@@ -712,8 +705,8 @@ public abstract class IntegrationTest extends ResourceTest {
      */
     protected void printConsoleLog(final Run<?, ?> build) {
         System.out.println("----- Console Log -----");
-        try (Reader reader = build.getLogReader()) {
-            try (BufferedReader bufferedReader = new BufferedReader(reader)) {
+        try (var reader = build.getLogReader()) {
+            try (var bufferedReader = new BufferedReader(reader)) {
                 bufferedReader.lines().forEach(System.out::println);
             }
         }
@@ -739,7 +732,7 @@ public abstract class IntegrationTest extends ResourceTest {
      *         the specified file
      */
     protected void makeFileUnreadable(final String absolutePath) {
-        File nonReadableFile = new File(absolutePath);
+        var nonReadableFile = new File(absolutePath);
         if (Functions.isWindows()) {
             setAccessModeOnWindows(absolutePath, WINDOWS_FILE_DENY, WINDOWS_FILE_ACCESS_READ_ONLY);
         }
@@ -753,7 +746,7 @@ public abstract class IntegrationTest extends ResourceTest {
 
     private void setAccessModeOnWindows(final String path, final String command, final String accessMode) {
         try {
-            Process process = Runtime.getRuntime()
+            var process = Runtime.getRuntime()
                     .exec("icacls \"" + path + "\" " + command + " *S-1-1-0:" + accessMode);
             process.waitFor();
         }
@@ -838,7 +831,7 @@ public abstract class IntegrationTest extends ResourceTest {
      * @return the concatenated string
      */
     protected String join(final String... arguments) {
-        StringBuilder builder = new StringBuilder();
+        var builder = new StringBuilder();
         for (String argument : arguments) {
             builder.append(", ");
             builder.append(argument);
@@ -873,7 +866,7 @@ public abstract class IntegrationTest extends ResourceTest {
      */
     protected Document callXmlRemoteApi(final String url) {
         try {
-            try (WebClient webClient = getJenkins().createWebClient()) {
+            try (var webClient = getJenkins().createWebClient()) {
                 return webClient.goToXml(url).getXmlDocument();
             }
         }

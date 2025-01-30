@@ -20,7 +20,7 @@ public class LogHandler {
 
     private int infoPosition;
     private int errorPosition;
-    private boolean quiet = false;
+    private boolean quiet;
 
     /**
      * Creates a new {@link LogHandler}.
@@ -57,7 +57,7 @@ public class LogHandler {
     }
 
     private PluginLogger createErrorLogger(final TaskListener listener, final String name) {
-        return createLogger(listener, String.format("[%s] [-ERROR-]", name));
+        return createLogger(listener, "[%s] [-ERROR-]".formatted(name));
     }
 
     private PluginLogger createLogger(final TaskListener listener, final String name) {

@@ -8,8 +8,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
-import hudson.util.ComboBoxModel;
-
 import static io.jenkins.plugins.util.FormValidationAssert.assertThat;
 import static io.jenkins.plugins.util.ValidationUtilities.*;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -25,7 +23,7 @@ import static org.assertj.core.api.Assertions.*;
 class ValidationUtilitiesTest {
     @Test
     void shouldValidateCharsets() {
-        ValidationUtilities model = new ValidationUtilities();
+        var model = new ValidationUtilities();
 
         assertThat(model.validateCharset("")).isOk();
         assertThat(model.validateCharset("UTF-8")).isOk();
@@ -36,15 +34,15 @@ class ValidationUtilitiesTest {
 
     @Test
     void shouldContainDefaultCharsets() {
-        ValidationUtilities model = new ValidationUtilities();
+        var model = new ValidationUtilities();
 
-        ComboBoxModel allCharsets = model.getAllCharsets();
+        var allCharsets = model.getAllCharsets();
         assertThat(allCharsets).isNotEmpty().contains("UTF-8", "ISO-8859-1");
     }
 
     @Test
     void shouldFallbackToPlatformCharset() {
-        ValidationUtilities model = new ValidationUtilities();
+        var model = new ValidationUtilities();
 
         assertThat(model.getCharset("UTF-8")).isEqualTo(StandardCharsets.UTF_8);
         assertThat(model.getCharset("nothing")).isEqualTo(Charset.defaultCharset());
@@ -56,7 +54,7 @@ class ValidationUtilitiesTest {
     @ValueSource(strings = {"a b", "a/b", "a#b", "äöü", "aö", ".", ".."})
     @DisplayName("should reject IDs")
     void shouldRejectId(final String id) {
-        ValidationUtilities model = new ValidationUtilities();
+        var model = new ValidationUtilities();
 
         assertThat(model.validateId(id)).isError().hasMessage(createInvalidIdMessage(id));
         assertThatIllegalArgumentException().isThrownBy(() -> model.ensureValidId(id));
@@ -66,7 +64,7 @@ class ValidationUtilitiesTest {
     @ValueSource(strings = {"", "a", "awordb", "a-b", "a_b", "0", "a0b", "12a34", "A", "aBc", "a.b-c_e", "z.."})
     @DisplayName("should accept IDs")
     void shouldAcceptId(final String id) {
-        ValidationUtilities model = new ValidationUtilities();
+        var model = new ValidationUtilities();
 
         assertThat(model.validateId(id)).isOk();
         assertThatCode(() -> model.ensureValidId(id)).doesNotThrowAnyException();
