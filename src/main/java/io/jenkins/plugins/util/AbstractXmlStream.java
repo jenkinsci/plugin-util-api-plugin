@@ -50,7 +50,7 @@ public abstract class AbstractXmlStream<T> {
      */
     protected abstract T createDefaultValue();
 
-    private XStream2 createStream() {
+    protected final XStream2 createStream() {
         var xStream2 = new XStream2();
         xStream2.registerConverter(new TreeStringConverter());
         configureXStream(xStream2);
