@@ -70,10 +70,9 @@ class PipelineResultHandlerTest {
     }
 
     private boolean hasFlowNode(final Action action, final Result result) {
-        if (!(action instanceof WarningAction)) {
-            return false;
+        if (action instanceof WarningAction warningAction) {
+            return result.equals(warningAction.getResult()) && MESSAGE.equals(warningAction.getMessage());
         }
-        WarningAction warningAction = (WarningAction) action;
-        return result.equals(warningAction.getResult()) && MESSAGE.equals(warningAction.getMessage());
+        return false;
     }
 }

@@ -1,5 +1,6 @@
 package io.jenkins.plugins.util;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -17,6 +18,7 @@ import hudson.model.Result;
  * @author Ullrich Hafner
  */
 public class QualityGateResult implements Serializable {
+    @Serial
     private static final long serialVersionUID = -4306601972076922976L;
 
     private QualityGateStatus overallStatus;
@@ -82,7 +84,7 @@ public class QualityGateResult implements Serializable {
     }
 
     private String createMessage(final QualityGateResultItem item) {
-        return String.format("[%s]: ≪%s≫ - (Actual value: %s, Quality gate: %.2f)",
+        return "[%s]: ≪%s≫ - (Actual value: %s, Quality gate: %.2f)".formatted(
                 item.getQualityGate().getName(),
                 item.getStatus().getDescription(),
                 item.getActualValue(),
@@ -98,6 +100,7 @@ public class QualityGateResult implements Serializable {
      * Represents a single item of the quality gate results.
      */
     public static class QualityGateResultItem implements Serializable {
+        @Serial
         private static final long serialVersionUID = -4011767393049355487L;
 
         private final QualityGateStatus status;
@@ -192,4 +195,3 @@ public class QualityGateResult implements Serializable {
         }
     }
 }
-

@@ -8,8 +8,7 @@ import hudson.model.Run;
  *
  * @author Devin Nusbaum
  */
-@SuppressWarnings("deprecation")
-public class RunResultHandler implements StageResultHandler, ResultHandler {
+public class RunResultHandler implements ResultHandler {
     private final Run<?, ?> run;
 
     /**
@@ -23,11 +22,6 @@ public class RunResultHandler implements StageResultHandler, ResultHandler {
     }
 
     @Override
-    public void setResult(final Result result, final String message) {
-        publishResult(result, message);
-    }
-
-    @Override
     public void publishResult(final Result result, final String message) {
         if (result.equals(Result.UNSTABLE) || result.equals(Result.FAILURE)) {
             run.setResult(result);
@@ -36,6 +30,6 @@ public class RunResultHandler implements StageResultHandler, ResultHandler {
 
     @Override
     public void publishResult(final QualityGateStatus status, final String message) {
-        setResult(status.getResult(), message);
+        publishResult(status.getResult(), message);
     }
 }

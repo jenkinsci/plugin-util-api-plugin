@@ -1,5 +1,6 @@
 package io.jenkins.plugins.util;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 import edu.hm.hafner.util.VisibleForTesting;
@@ -27,6 +28,7 @@ import jenkins.model.Jenkins;
  * @author Johannes Walter
  */
 public abstract class QualityGate extends AbstractDescribableImpl<QualityGate> implements Serializable {
+    @Serial
     private static final long serialVersionUID = -397278599489426668L;
 
     private double threshold = 0.0;
@@ -83,7 +85,7 @@ public abstract class QualityGate extends AbstractDescribableImpl<QualityGate> i
 
     @Override
     public String toString() {
-        return getName() + String.format(" - %s: %f", getCriticality(), getThreshold());
+        return getName() + " - %s: %f".formatted(getCriticality(), getThreshold());
     }
 
     /**
@@ -172,7 +174,7 @@ public abstract class QualityGate extends AbstractDescribableImpl<QualityGate> i
         @SuppressWarnings("unused") // used by Stapler view data binding
         public ListBoxModel doFillCriticalityItems(@AncestorInPath final BuildableItem project) {
             if (jenkins.hasPermission(Jenkins.READ)) {
-                ListBoxModel options = new ListBoxModel();
+                var options = new ListBoxModel();
                 if (project instanceof FreeStyleProject) {
                     options.add(Messages.QualityGate_Unstable(), QualityGateCriticality.UNSTABLE.name());
                     options.add(Messages.QualityGate_Failure(), QualityGateCriticality.FAILURE.name());
