@@ -10,7 +10,7 @@
 
   <groupId>io.jenkins.plugins</groupId>
   <artifactId>plugin-util-api</artifactId>
-  <version>6.0.0</version>
+  <version>${revision}${changelist}</version>
   <packaging>hpi</packaging>
   <name>Plugin Utilities API Plugin</name>
 
@@ -36,11 +36,11 @@
     <connection>scm:git:https://github.com/jenkinsci/${project.artifactId}-plugin.git</connection>
     <developerConnection>scm:git:git@github.com:jenkinsci/${project.artifactId}-plugin.git</developerConnection>
     <url>https://github.com/jenkinsci/${project.artifactId}-plugin</url>
-    <tag>v6.0.0</tag>
+    <tag>${scmTag}</tag>
   </scm>
 
   <properties>
-    <revision>6.0.0</revision>
+    <revision>6.1.0</revision>
     <changelist>-SNAPSHOT</changelist>
 
     <module.name>${project.groupId}.plugin.util.api</module.name>
