@@ -7,7 +7,7 @@ skinparam rectangle {
   BackgroundColor<<provided>> lightGray
 }
 rectangle "plugin-util-api\n\n6.1.0-SNAPSHOT" as io_jenkins_plugins_plugin_util_api_hpi
-rectangle "codingstyle\n\n5.7.0" as edu_hm_hafner_codingstyle_jar<<provided>>
+rectangle "codingstyle\n\n5.8.0" as edu_hm_hafner_codingstyle_jar<<provided>>
 rectangle "error_prone_annotations\n\n2.18.0" as com_google_errorprone_error_prone_annotations_jar<<provided>>
 rectangle "j2html\n\n1.4.0" as com_j2html_j2html_jar<<provided>>
 rectangle "streamex\n\n0.8.3" as one_util_streamex_jar<<provided>>
@@ -22,10 +22,10 @@ rectangle "asm-util\n\n9.7.1" as org_ow2_asm_asm_util_jar
 rectangle "scm-api\n\n703.v72ff4b_259600" as org_jenkins_ci_plugins_scm_api_jar
 rectangle "structs\n\n338.v848422169819" as org_jenkins_ci_plugins_structs_jar
 rectangle "workflow-support\n\n946.v2a_79d8a_4b_e14" as org_jenkins_ci_plugins_workflow_workflow_support_jar
-rectangle "script-security\n\n1369.v9b_98a_4e95b_2d" as org_jenkins_ci_plugins_script_security_jar
+rectangle "script-security\n\n1373.vb_b_4a_a_c26fa_00" as org_jenkins_ci_plugins_script_security_jar
 rectangle "groovy-sandbox\n\n1.34" as org_kohsuke_groovy_sandbox_jar
-rectangle "caffeine-api\n\n3.1.8-133.v17b_1ff2e0599" as io_jenkins_plugins_caffeine_api_jar
-rectangle "caffeine\n\n3.1.8" as com_github_ben_manes_caffeine_caffeine_jar
+rectangle "caffeine-api\n\n3.2.0-161.v691ef352cee1" as io_jenkins_plugins_caffeine_api_jar
+rectangle "caffeine\n\n3.2.0" as com_github_ben_manes_caffeine_caffeine_jar
 rectangle "jboss-marshalling-river\n\n2.2.2.Final" as org_jboss_marshalling_jboss_marshalling_river_jar
 rectangle "jboss-marshalling\n\n2.2.2.Final" as org_jboss_marshalling_jboss_marshalling_jar
 rectangle "slf4j-api\n\n2.0.16" as org_slf4j_slf4j_api_jar<<provided>>
