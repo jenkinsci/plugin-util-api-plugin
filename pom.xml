@@ -284,10 +284,75 @@
         <groupId>org.revapi</groupId>
         <artifactId>revapi-maven-plugin</artifactId>
         <configuration>
-          <skip>true</skip>
+          <checkDependencies>false</checkDependencies>
+          <failBuildOnProblemsFound>true</failBuildOnProblemsFound>
+          <analysisConfiguration>
+            <revapi.differences id="manually-vetted">
+              <attachments>
+                <vetted>ok</vetted>
+              </attachments>
+              <differences combine.children="append">
+
+              </differences>
+            </revapi.differences>
+            <revapi.filter>
+              <elements>
+                <exclude>
+                  <item>
+                    <matcher>java</matcher>
+                    <match>type ^**./.*GlobalConfiguration/ {}</match>
+                  </item>
+                  <item>
+                    <matcher>java-package</matcher>
+                    <match>/org\.jenkinsci\.plugins\.workflow(\..*)?/</match>
+                  </item>
+                  <item>
+                    <matcher>java-package</matcher>
+                    <match>/org\.jenkins\.ui\.symbol(\..*)?/</match>
+                  </item>
+                  <item>
+                    <matcher>java-package</matcher>
+                    <match>/org\.jvnet(\..*)?/</match>
+                  </item>
+                  <item>
+                    <matcher>java-package</matcher>
+                    <match>/net\.sf\.json(\..*)?/</match>
+                  </item>
+                  <item>
+                    <matcher>java-package</matcher>
+                    <match>/hudson(\..*)?/</match>
+                  </item>
+                  <item>
+                    <matcher>java-package</matcher>
+                    <match>/org.kohsuke(\..*)?/</match>
+                  </item>
+                </exclude>
+              </elements>
+            </revapi.filter>
+          </analysisConfiguration>
         </configuration>
       </plugin>
     </plugins>
   </build>
+
+  <profiles>
+    <profile>
+      <id>hello</id>
+      <activation>
+        <property>
+          <name>maven.test.failure.ignore</name>
+          <value>true</value>
+        </property>
+      </activation>
+      <properties>
+        <maven.test.failure.ignore>true</maven.test.failure.ignore>
+        <checkstyle.failOnViolation>false</checkstyle.failOnViolation>
+        <pmd.failOnViolation>false</pmd.failOnViolation>
+        <spotbugs.failOnError>false</spotbugs.failOnError>
+        <revapi.failBuildOnProblemsFound>true</revapi.failBuildOnProblemsFound>
+      </properties>
+    </profile>
+
+  </profiles>
 
 </project>
