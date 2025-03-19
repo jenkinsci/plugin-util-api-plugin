@@ -4,7 +4,7 @@
   <parent>
     <groupId>org.jvnet.hudson.plugins</groupId>
     <artifactId>analysis-pom</artifactId>
-    <version>10.6.0</version>
+    <version>10.7.0</version>
     <relativePath />
   </parent>
 
@@ -285,46 +285,30 @@
         <artifactId>revapi-maven-plugin</artifactId>
         <configuration>
           <checkDependencies>false</checkDependencies>
-          <failBuildOnProblemsFound>true</failBuildOnProblemsFound>
           <analysisConfiguration>
             <revapi.differences id="manually-vetted">
-              <attachments>
-                <vetted>ok</vetted>
-              </attachments>
               <differences combine.children="append">
-
+                <item>
+                  <ignore>true</ignore>
+                  <regex>true</regex>
+                  <code>java.class.nonPublicPartOfAPI</code>
+                  <classQualifiedName>(one.util.streamex.Joining.*|j2html.utils.JSMin.*)</classQualifiedName>
+                  <justification>These libraries are part of the API</justification>
+                </item>
+                <item>
+                  <ignore>true</ignore>
+                  <code>java.method.parameterTypeChanged</code>
+                  <classQualifiedName>io.jenkins.plugins.datatables.TableConfiguration</classQualifiedName>
+                  <justification>This enum is safe to be exposed.</justification>
+                </item>
               </differences>
             </revapi.differences>
             <revapi.filter>
-              <elements>
-                <exclude>
+              <elements >
+                <exclude combine.children="append">
                   <item>
                     <matcher>java</matcher>
                     <match>type ^**./.*GlobalConfiguration/ {}</match>
-                  </item>
-                  <item>
-                    <matcher>java-package</matcher>
-                    <match>/org\.jenkinsci\.plugins\.workflow(\..*)?/</match>
-                  </item>
-                  <item>
-                    <matcher>java-package</matcher>
-                    <match>/org\.jenkins\.ui\.symbol(\..*)?/</match>
-                  </item>
-                  <item>
-                    <matcher>java-package</matcher>
-                    <match>/org\.jvnet(\..*)?/</match>
-                  </item>
-                  <item>
-                    <matcher>java-package</matcher>
-                    <match>/net\.sf\.json(\..*)?/</match>
-                  </item>
-                  <item>
-                    <matcher>java-package</matcher>
-                    <match>/hudson(\..*)?/</match>
-                  </item>
-                  <item>
-                    <matcher>java-package</matcher>
-                    <match>/org.kohsuke(\..*)?/</match>
                   </item>
                 </exclude>
               </elements>
