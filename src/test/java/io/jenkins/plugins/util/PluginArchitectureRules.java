@@ -1,9 +1,5 @@
 package io.jenkins.plugins.util;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
-
 import com.tngtech.archunit.base.DescribedPredicate;
 import com.tngtech.archunit.core.domain.JavaClass;
 import com.tngtech.archunit.core.domain.JavaMethod;
@@ -12,6 +8,10 @@ import com.tngtech.archunit.lang.ArchCondition;
 import com.tngtech.archunit.lang.ArchRule;
 import com.tngtech.archunit.lang.ConditionEvents;
 import com.tngtech.archunit.lang.SimpleConditionEvent;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.DataBoundSetter;
@@ -47,8 +47,8 @@ public final class PluginArchitectureRules {
 
     /**
      * Direct calls to {@link Jenkins#getInstance()} or {@link Jenkins#getInstanceOrNull()}} are prohibited since these
-     * methods require a running Jenkins instance. Otherwise the accessor of this method cannot be unit tested. Create a
-     * new {@link JenkinsFacade} object to access the running Jenkins instance. If your required method is missing you
+     * methods require a running Jenkins instance. Otherwise, the accessor of this method cannot be unit tested. Create a
+     * new {@link JenkinsFacade} object to access the running Jenkins instance. If your required method is missing, you
      * need to add it to {@link JenkinsFacade}.
      */
     public static final ArchRule NO_JENKINS_INSTANCE_CALL =

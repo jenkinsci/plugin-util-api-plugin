@@ -1,10 +1,12 @@
-package io.jenkins.plugins.util;
+package io.jenkins.plugins.archunit;
 
 import com.tngtech.archunit.junit.AnalyzeClasses;
 import com.tngtech.archunit.junit.ArchTest;
 import com.tngtech.archunit.lang.ArchRule;
 
 import edu.hm.hafner.util.ArchitectureRules;
+
+import io.jenkins.plugins.util.PluginArchitectureRules;
 
 /**
  * Checks several architecture rules for the plugin utilities.

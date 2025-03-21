@@ -4,7 +4,7 @@
   <parent>
     <groupId>org.jvnet.hudson.plugins</groupId>
     <artifactId>analysis-pom</artifactId>
-    <version>10.5.0</version>
+    <version>10.7.0</version>
     <relativePath />
   </parent>
 
@@ -284,10 +284,59 @@
         <groupId>org.revapi</groupId>
         <artifactId>revapi-maven-plugin</artifactId>
         <configuration>
-          <skip>true</skip>
+          <checkDependencies>false</checkDependencies>
+          <analysisConfiguration>
+            <revapi.differences id="manually-vetted">
+              <differences combine.children="append">
+                <item>
+                  <ignore>true</ignore>
+                  <regex>true</regex>
+                  <code>java.class.nonPublicPartOfAPI</code>
+                  <classQualifiedName>(one.util.streamex.Joining.*|j2html.utils.JSMin.*)</classQualifiedName>
+                  <justification>These libraries are part of the API</justification>
+                </item>
+                <item>
+                  <ignore>true</ignore>
+                  <code>java.method.parameterTypeChanged</code>
+                  <classQualifiedName>io.jenkins.plugins.datatables.TableConfiguration</classQualifiedName>
+                  <justification>This enum is safe to be exposed.</justification>
+                </item>
+              </differences>
+            </revapi.differences>
+            <revapi.filter>
+              <elements >
+                <exclude combine.children="append">
+                  <item>
+                    <matcher>java</matcher>
+                    <match>type ^**./.*GlobalConfiguration/ {}</match>
+                  </item>
+                </exclude>
+              </elements>
+            </revapi.filter>
+          </analysisConfiguration>
         </configuration>
       </plugin>
     </plugins>
   </build>
+
+  <profiles>
+    <profile>
+      <id>hello</id>
+      <activation>
+        <property>
+          <name>maven.test.failure.ignore</name>
+          <value>true</value>
+        </property>
+      </activation>
+      <properties>
+        <maven.test.failure.ignore>true</maven.test.failure.ignore>
+        <checkstyle.failOnViolation>false</checkstyle.failOnViolation>
+        <pmd.failOnViolation>false</pmd.failOnViolation>
+        <spotbugs.failOnError>false</spotbugs.failOnError>
+        <revapi.failBuildOnProblemsFound>true</revapi.failBuildOnProblemsFound>
+      </properties>
+    </profile>
+
+  </profiles>
 
 </project>
