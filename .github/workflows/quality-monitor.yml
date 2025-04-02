@@ -55,7 +55,7 @@ jobs:
                 "name": "Tests",
                 "tools": [
                   {
-                    "id": "test",
+                    "id": "junit",
                     "name": "Unit Tests",
                     "pattern": "**/target/surefire-reports/TEST*util*.xml"
                   },
