@@ -13,7 +13,7 @@ rectangle "j2html\n\n1.4.0" as com_j2html_j2html_jar<<provided>>
 rectangle "streamex\n\n0.8.3" as one_util_streamex_jar<<provided>>
 rectangle "workflow-api\n\n1366.vf1fb_e1a_f6b_22" as org_jenkins_ci_plugins_workflow_workflow_api_jar
 rectangle "workflow-step-api\n\n700.v6e45cb_a_5a_a_21" as org_jenkins_ci_plugins_workflow_workflow_step_api_jar
-rectangle "asm-api\n\n9.7.1-97.v4cc844130d97" as io_jenkins_plugins_asm_api_jar
+rectangle "asm-api\n\n9.7.1-129.vf5618e98eed1" as io_jenkins_plugins_asm_api_jar
 rectangle "asm\n\n9.7.1" as org_ow2_asm_asm_jar
 rectangle "asm-analysis\n\n9.7.1" as org_ow2_asm_asm_analysis_jar
 rectangle "asm-tree\n\n9.7.1" as org_ow2_asm_asm_tree_jar
@@ -24,12 +24,12 @@ rectangle "structs\n\n343.vdcf37b_a_c81d5" as org_jenkins_ci_plugins_structs_jar
 rectangle "workflow-support\n\n963.va_600813d04a_a_" as org_jenkins_ci_plugins_workflow_workflow_support_jar
 rectangle "script-security\n\n1373.vb_b_4a_a_c26fa_00" as org_jenkins_ci_plugins_script_security_jar
 rectangle "groovy-sandbox\n\n1.34" as org_kohsuke_groovy_sandbox_jar
-rectangle "caffeine-api\n\n3.2.0-161.v691ef352cee1" as io_jenkins_plugins_caffeine_api_jar
+rectangle "caffeine-api\n\n3.2.0-166.v72a_6d74b_870f" as io_jenkins_plugins_caffeine_api_jar
 rectangle "caffeine\n\n3.2.0" as com_github_ben_manes_caffeine_caffeine_jar
 rectangle "jboss-marshalling-river\n\n2.2.2.Final" as org_jboss_marshalling_jboss_marshalling_river_jar
 rectangle "jboss-marshalling\n\n2.2.2.Final" as org_jboss_marshalling_jboss_marshalling_jar
 rectangle "slf4j-api\n\n2.0.16" as org_slf4j_slf4j_api_jar<<provided>>
-rectangle "commons-lang3-api\n\n3.17.0-84.vb_b_938040b_078" as io_jenkins_plugins_commons_lang3_api_jar
+rectangle "commons-lang3-api\n\n3.17.0-87.v5cf526e63b_8b_" as io_jenkins_plugins_commons_lang3_api_jar
 rectangle "commons-lang3\n\n3.17.0" as org_apache_commons_commons_lang3_jar
 rectangle "commons-text-api\n\n1.13.0-153.v91dcd89e2a_22" as io_jenkins_plugins_commons_text_api_jar
 rectangle "commons-text\n\n1.13.0" as org_apache_commons_commons_text_jar
