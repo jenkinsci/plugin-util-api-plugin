@@ -1,10 +1,10 @@
 package io.jenkins.plugins.util;
 
-import java.util.Objects;
-
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.text.StringEscapeUtils;
 import org.assertj.core.api.AbstractAssert;
+
+import java.util.Objects;
 
 import hudson.util.FormValidation;
 import hudson.util.FormValidation.Kind;
@@ -14,7 +14,7 @@ import hudson.util.FormValidation.Kind;
  *
  * @author Ullrich Hafner
  */
-@SuppressWarnings({"NonBooleanMethodNameMayNotStartWithQuestion", "PMD.LinguisticNaming"})
+@SuppressWarnings("NonBooleanMethodNameMayNotStartWithQuestion")
 public class FormValidationAssert extends AbstractAssert<FormValidationAssert, FormValidation> {
     private static final String EXPECTED_BUT_WAS_MESSAGE = "%nExpecting %s of:%n <%s>%nto be:%n <%s>%nbut was:%n <%s>.";
 

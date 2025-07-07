@@ -291,8 +291,8 @@
                 <item>
                   <ignore>true</ignore>
                   <regex>true</regex>
-                  <code>java.class.nonPublicPartOfAPI</code>
-                  <classQualifiedName>(one.util.streamex.Joining.*|j2html.utils.JSMin.*)</classQualifiedName>
+                  <code>java.*</code>
+                  <classQualifiedName>(one.util.*|j2html.utils.JSMin.*)</classQualifiedName>
                   <justification>These libraries are part of the API</justification>
                 </item>
                 <item>

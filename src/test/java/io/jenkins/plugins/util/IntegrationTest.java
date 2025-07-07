@@ -1,17 +1,5 @@
 package io.jenkins.plugins.util;
 
-import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.IOException;
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Path;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Objects;
-import java.util.function.Function;
-
 import org.junit.jupiter.api.Tag;
 import org.jvnet.hudson.test.JenkinsRule;
 import org.jvnet.hudson.test.JenkinsRule.JSONWebResponse;
@@ -27,6 +15,18 @@ import com.cloudbees.plugins.credentials.domains.Domain;
 
 import edu.hm.hafner.util.PathUtil;
 import edu.hm.hafner.util.ResourceTest;
+
+import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Path;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Objects;
+import java.util.function.Function;
 
 import org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition;
 import org.jenkinsci.plugins.workflow.flow.FlowDefinition;
@@ -62,7 +62,7 @@ import static org.assertj.core.api.Assumptions.*;
  * @author Ullrich Hafner
  */
 @Tag("IntegrationTest")
-@SuppressWarnings({"ClassDataAbstractionCoupling", "ClassFanOutComplexity", "SameParameterValue", "PMD.SystemPrintln", "PMD.GodClass", "PMD.ExcessiveClassLength", "PMD.ExcessiveImports", "PMD.CouplingBetweenObjects", "PMD.CyclomaticComplexity", "unused"})
+@SuppressWarnings({"ClassDataAbstractionCoupling", "ClassFanOutComplexity", "SameParameterValue", "PMD.SystemPrintln", "PMD.CouplingBetweenObjects", "PMD.CyclomaticComplexity", "unused"})
 public abstract class IntegrationTest extends ResourceTest {
     private static final Charset UTF_8 = StandardCharsets.UTF_8;
 
