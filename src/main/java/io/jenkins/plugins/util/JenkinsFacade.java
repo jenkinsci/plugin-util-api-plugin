@@ -1,18 +1,18 @@
 package io.jenkins.plugins.util;
 
-import java.io.Serial;
-import java.io.Serializable;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
-
 import org.apache.commons.lang3.StringUtils;
 import org.jenkins.ui.symbol.Symbol;
 import org.jenkins.ui.symbol.SymbolRequest;
 import org.springframework.security.access.AccessDeniedException;
 
 import edu.umd.cs.findbugs.annotations.CheckForNull;
+
+import java.io.Serial;
+import java.io.Serializable;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.kohsuke.stapler.Stapler;
 import org.kohsuke.stapler.StaplerRequest2;
@@ -36,7 +36,6 @@ import jenkins.model.Jenkins;
  *
  * @author Ullrich Hafner
  */
-@SuppressWarnings("PMD.ExcessiveImports")
 public class JenkinsFacade implements Serializable {
     @Serial
     private static final long serialVersionUID = 1904631270145841113L;

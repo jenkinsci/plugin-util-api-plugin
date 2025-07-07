@@ -15,9 +15,7 @@ import jenkins.model.GlobalConfiguration;
  */
 @SuppressFBWarnings("IS2_INCONSISTENT_SYNC")
 public class GlobalConfigurationItem extends GlobalConfiguration {
-    @SuppressWarnings("PMD.DoNotUseThreads")
     private transient Runnable actualSave;
-    @SuppressWarnings("PMD.DoNotUseThreads")
     private transient Runnable actualLoad;
 
     /**

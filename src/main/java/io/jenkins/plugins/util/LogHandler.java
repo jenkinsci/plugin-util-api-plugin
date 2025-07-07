@@ -1,10 +1,10 @@
 package io.jenkins.plugins.util;
 
-import java.util.List;
-
 import com.google.errorprone.annotations.FormatMethod;
 
 import edu.hm.hafner.util.FilteredLog;
+
+import java.util.List;
 
 import hudson.model.TaskListener;
 
@@ -13,7 +13,6 @@ import hudson.model.TaskListener;
  *
  * @author Ullrich Hafner
  */
-@SuppressWarnings("PMD.LoggerIsNotStaticFinal")
 public class LogHandler {
     private final PluginLogger errorLogger;
     private final PluginLogger infoLogger;
