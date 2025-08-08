@@ -10,7 +10,7 @@
 
   <groupId>io.jenkins.plugins</groupId>
   <artifactId>plugin-util-api</artifactId>
-  <version>${revision}${changelist}</version>
+  <version>${revision}.${changelist}</version>
   <packaging>hpi</packaging>
   <name>Plugin Utilities API Plugin</name>
 
@@ -40,8 +40,8 @@
   </scm>
 
   <properties>
-    <revision>6.2.0</revision>
-    <changelist>-SNAPSHOT</changelist>
+    <revision>6</revision>
+    <changelist>999999-SNAPSHOT</changelist>
 
     <module.name>${project.groupId}.plugin.util.api</module.name>
 
