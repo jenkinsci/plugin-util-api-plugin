@@ -12,7 +12,7 @@ rectangle "error_prone_annotations\n\n2.18.0" as com_google_errorprone_error_pro
 rectangle "j2html\n\n1.4.0" as com_j2html_j2html_jar<<provided>>
 rectangle "streamex\n\n0.8.4" as one_util_streamex_jar<<provided>>
 rectangle "workflow-api\n\n1373.v7b_813f10efa_b_" as org_jenkins_ci_plugins_workflow_workflow_api_jar
-rectangle "workflow-step-api\n\n700.v6e45cb_a_5a_a_21" as org_jenkins_ci_plugins_workflow_workflow_step_api_jar
+rectangle "workflow-step-api\n\n704.ve4f0967e98fa_" as org_jenkins_ci_plugins_workflow_workflow_step_api_jar
 rectangle "asm-api\n\n9.8-135.vb_2239d08ee90" as io_jenkins_plugins_asm_api_jar
 rectangle "asm\n\n9.7.1" as org_ow2_asm_asm_jar
 rectangle "asm-analysis\n\n9.8" as org_ow2_asm_asm_analysis_jar
@@ -29,8 +29,8 @@ rectangle "caffeine\n\n3.2.0" as com_github_ben_manes_caffeine_caffeine_jar
 rectangle "jboss-marshalling-river\n\n2.2.2.Final" as org_jboss_marshalling_jboss_marshalling_river_jar
 rectangle "jboss-marshalling\n\n2.2.2.Final" as org_jboss_marshalling_jboss_marshalling_jar
 rectangle "slf4j-api\n\n2.0.16" as org_slf4j_slf4j_api_jar<<provided>>
-rectangle "commons-lang3-api\n\n3.17.0-87.v5cf526e63b_8b_" as io_jenkins_plugins_commons_lang3_api_jar
-rectangle "commons-lang3\n\n3.17.0" as org_apache_commons_commons_lang3_jar
+rectangle "commons-lang3-api\n\n3.18.0-98.v3a_674c06072d" as io_jenkins_plugins_commons_lang3_api_jar
+rectangle "commons-lang3\n\n3.18.0" as org_apache_commons_commons_lang3_jar
 rectangle "commons-text-api\n\n1.13.1-176.v74d88f22034b_" as io_jenkins_plugins_commons_text_api_jar
 rectangle "commons-text\n\n1.13.1" as org_apache_commons_commons_text_jar
 rectangle "jenkins-core\n\n2.479.3" as org_jenkins_ci_main_jenkins_core_jar<<provided>>
