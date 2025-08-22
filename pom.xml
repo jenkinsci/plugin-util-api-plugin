@@ -258,7 +258,7 @@
           <execution>
             <configuration>
               <includes combine.children="append">
-                <include>**/util/*</include>
+                <include>**/hafner/**</include>
                 <include>ssh/*</include>
               </includes>
             </configuration>
