@@ -49,7 +49,7 @@
     <j2html.version>1.4.0</j2html.version>
     <streamex.version>0.8.4</streamex.version>
     <testcontainers.version>1.21.3</testcontainers.version>
-    <codingstyle.library.version>5.15.0</codingstyle.library.version>
+    <codingstyle.library.version>5.17.0</codingstyle.library.version>
   </properties>
 
   <dependencies>
