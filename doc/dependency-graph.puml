@@ -7,7 +7,7 @@ skinparam rectangle {
   BackgroundColor<<provided>> lightGray
 }
 rectangle "plugin-util-api\n\n6.999999-SNAPSHOT" as io_jenkins_plugins_plugin_util_api_hpi
-rectangle "codingstyle\n\n5.18.0" as edu_hm_hafner_codingstyle_jar<<provided>>
+rectangle "codingstyle\n\n5.20.0" as edu_hm_hafner_codingstyle_jar<<provided>>
 rectangle "error_prone_annotations\n\n2.18.0" as com_google_errorprone_error_prone_annotations_jar<<provided>>
 rectangle "j2html\n\n1.4.0" as com_j2html_j2html_jar<<provided>>
 rectangle "streamex\n\n0.8.4" as one_util_streamex_jar<<provided>>
