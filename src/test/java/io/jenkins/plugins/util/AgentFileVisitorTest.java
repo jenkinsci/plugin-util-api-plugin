@@ -1,11 +1,5 @@
 package io.jenkins.plugins.util;
 
-import java.io.File;
-import java.io.Serial;
-import java.nio.charset.Charset;
-import java.nio.file.Path;
-import java.util.Optional;
-
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
@@ -16,6 +10,12 @@ import edu.hm.hafner.util.FilteredLog;
 import edu.hm.hafner.util.SerializableTest;
 import edu.hm.hafner.util.VisibleForTesting;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
+import java.io.File;
+import java.io.Serial;
+import java.nio.charset.Charset;
+import java.nio.file.Path;
+import java.util.Optional;
 
 import io.jenkins.plugins.util.AgentFileVisitor.FileSystemFacade;
 import io.jenkins.plugins.util.AgentFileVisitor.FileVisitorResult;
@@ -191,6 +191,7 @@ class AgentFileVisitorTest extends SerializableTest<StringScanner> {
         }
 
         @Override
+        @SuppressWarnings("PMD.AssignmentInOperand")
         protected Optional<String> processFile(final Path file, final Charset charset, final FilteredLog log) {
             return Optional.of(CONTENT + counter++);
         }
