@@ -12,15 +12,15 @@ rectangle "error_prone_annotations\n\n2.18.0" as com_google_errorprone_error_pro
 rectangle "j2html\n\n1.4.0" as com_j2html_j2html_jar<<provided>>
 rectangle "streamex\n\n0.8.4" as one_util_streamex_jar<<provided>>
 rectangle "workflow-api\n\n1384.vdc05a_48f535f" as org_jenkins_ci_plugins_workflow_workflow_api_jar
-rectangle "workflow-step-api\n\n706.v518c5dcb_24c0" as org_jenkins_ci_plugins_workflow_workflow_step_api_jar
+rectangle "workflow-step-api\n\n710.v3e456cc85233" as org_jenkins_ci_plugins_workflow_workflow_step_api_jar
 rectangle "asm-api\n\n9.8-163.vb_2a_96d3f9c3c" as io_jenkins_plugins_asm_api_jar
 rectangle "asm\n\n9.8" as org_ow2_asm_asm_jar
 rectangle "asm-analysis\n\n9.8" as org_ow2_asm_asm_analysis_jar
 rectangle "asm-tree\n\n9.8" as org_ow2_asm_asm_tree_jar
 rectangle "asm-commons\n\n9.8" as org_ow2_asm_asm_commons_jar
 rectangle "asm-util\n\n9.8" as org_ow2_asm_asm_util_jar
-rectangle "scm-api\n\n707.v749f968369d4" as org_jenkins_ci_plugins_scm_api_jar
-rectangle "commons-lang3-api\n\n3.18.0-98.v3a_674c06072d" as io_jenkins_plugins_commons_lang3_api_jar
+rectangle "scm-api\n\n709.v6c27075a_b_1c7" as org_jenkins_ci_plugins_scm_api_jar
+rectangle "commons-lang3-api\n\n3.19.0-104.v12125f33a_255" as io_jenkins_plugins_commons_lang3_api_jar
 rectangle "structs\n\n353.v261ea_40a_80fb_" as org_jenkins_ci_plugins_structs_jar
 rectangle "workflow-support\n\n989.va_20a_1a_57710a_" as org_jenkins_ci_plugins_workflow_workflow_support_jar
 rectangle "script-security\n\n1378.vf25626395f49" as org_jenkins_ci_plugins_script_security_jar
@@ -30,7 +30,7 @@ rectangle "caffeine\n\n3.2.2" as com_github_ben_manes_caffeine_caffeine_jar
 rectangle "jboss-marshalling-river\n\n2.2.2.Final" as org_jboss_marshalling_jboss_marshalling_river_jar
 rectangle "jboss-marshalling\n\n2.2.2.Final" as org_jboss_marshalling_jboss_marshalling_jar
 rectangle "slf4j-api\n\n2.0.17" as org_slf4j_slf4j_api_jar<<provided>>
-rectangle "commons-lang3\n\n3.18.0" as org_apache_commons_commons_lang3_jar
+rectangle "commons-lang3\n\n3.19.0" as org_apache_commons_commons_lang3_jar
 rectangle "commons-text-api\n\n1.14.0-194.v804a_dc3a_1b_d8" as io_jenkins_plugins_commons_text_api_jar
 rectangle "commons-text\n\n1.14.0" as org_apache_commons_commons_text_jar
 rectangle "jenkins-core\n\n2.516.3" as org_jenkins_ci_main_jenkins_core_jar<<provided>>
