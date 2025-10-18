@@ -19,10 +19,10 @@ rectangle "asm-analysis\n\n9.8" as org_ow2_asm_asm_analysis_jar
 rectangle "asm-tree\n\n9.8" as org_ow2_asm_asm_tree_jar
 rectangle "asm-commons\n\n9.8" as org_ow2_asm_asm_commons_jar
 rectangle "asm-util\n\n9.8" as org_ow2_asm_asm_util_jar
-rectangle "scm-api\n\n709.v6c27075a_b_1c7" as org_jenkins_ci_plugins_scm_api_jar
+rectangle "scm-api\n\n710.v7b_a_484d81f45" as org_jenkins_ci_plugins_scm_api_jar
 rectangle "commons-lang3-api\n\n3.19.0-104.v12125f33a_255" as io_jenkins_plugins_commons_lang3_api_jar
 rectangle "structs\n\n353.v261ea_40a_80fb_" as org_jenkins_ci_plugins_structs_jar
-rectangle "workflow-support\n\n989.va_20a_1a_57710a_" as org_jenkins_ci_plugins_workflow_workflow_support_jar
+rectangle "workflow-support\n\n991.v66c18437d509" as org_jenkins_ci_plugins_workflow_workflow_support_jar
 rectangle "script-security\n\n1378.vf25626395f49" as org_jenkins_ci_plugins_script_security_jar
 rectangle "groovy-sandbox\n\n1.34" as org_kohsuke_groovy_sandbox_jar
 rectangle "caffeine-api\n\n3.2.2-178.v353b_8428ed56" as io_jenkins_plugins_caffeine_api_jar
@@ -157,7 +157,7 @@ org_jenkins_ci_main_jenkins_core_jar -[#000000]-> args4j_args4j_jar
 org_jenkins_ci_main_jenkins_core_jar -[#000000]-> com_github_spotbugs_spotbugs_annotations_jar
 com_google_guava_guava_jar -[#000000]-> com_google_guava_failureaccess_jar
 com_google_guava_guava_jar -[#000000]-> com_google_guava_listenablefuture_jar
-com_google_guava_guava_jar -[#000000]-> org_jspecify_jspecify_jar
+com_google_guava_guava_jar .[#ABABAB].> org_jspecify_jspecify_jar
 org_jenkins_ci_main_jenkins_core_jar -[#000000]-> com_google_guava_guava_jar
 com_google_inject_guice_jar -[#000000]-> javax_inject_javax_inject_jar
 com_google_inject_guice_jar -[#000000]-> jakarta_inject_jakarta_inject_api_jar
@@ -277,4 +277,5 @@ org_jenkins_ci_main_jenkins_core_jar -[#000000]-> xpp3_xpp3_jar
 io_jenkins_plugins_plugin_util_api_hpi -[#000000]-> org_jenkins_ci_main_jenkins_core_jar
 io_jenkins_plugins_plugin_util_api_hpi -[#000000]-> jakarta_servlet_jakarta_servlet_api_jar
 io_jenkins_plugins_plugin_util_api_hpi -[#000000]-> commons_logging_commons_logging_jar
+io_jenkins_plugins_plugin_util_api_hpi -[#000000]-> org_jspecify_jspecify_jar
 @enduml
