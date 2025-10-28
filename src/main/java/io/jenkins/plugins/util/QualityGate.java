@@ -1,16 +1,16 @@
 package io.jenkins.plugins.util;
 
+import edu.hm.hafner.util.VisibleForTesting;
+
 import java.io.Serial;
 import java.io.Serializable;
-
-import edu.hm.hafner.util.VisibleForTesting;
 
 import org.kohsuke.stapler.AncestorInPath;
 import org.kohsuke.stapler.DataBoundSetter;
 import org.kohsuke.stapler.verb.POST;
 import hudson.Extension;
-import hudson.model.AbstractDescribableImpl;
 import hudson.model.BuildableItem;
+import hudson.model.Describable;
 import hudson.model.Descriptor;
 import hudson.model.FreeStyleProject;
 import hudson.util.ListBoxModel;
@@ -27,7 +27,7 @@ import jenkins.model.Jenkins;
  *
  * @author Johannes Walter
  */
-public abstract class QualityGate extends AbstractDescribableImpl<QualityGate> implements Serializable {
+public abstract class QualityGate implements Describable<QualityGate>, Serializable {
     @Serial
     private static final long serialVersionUID = -397278599489426668L;
 
