@@ -1,10 +1,5 @@
 package io.jenkins.plugins.util;
 
-import java.io.IOException;
-import java.nio.file.Path;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.converters.Converter;
 import com.thoughtworks.xstream.converters.MarshallingContext;
@@ -15,6 +10,11 @@ import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 import edu.hm.hafner.util.TreeString;
 import edu.hm.hafner.util.TreeStringBuilder;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
+import java.io.IOException;
+import java.nio.file.Path;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import hudson.XmlFile;
 import hudson.util.XStream2;
@@ -139,6 +139,7 @@ public abstract class AbstractXmlStream<T> {
         }
 
         @Override
+        @SuppressWarnings("rawtypes")
         public boolean canConvert(final Class type) {
             return type == TreeString.class;
         }

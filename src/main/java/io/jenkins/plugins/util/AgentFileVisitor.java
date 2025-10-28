@@ -1,5 +1,15 @@
 package io.jenkins.plugins.util;
 
+import org.apache.commons.lang3.StringUtils;
+import org.apache.tools.ant.BuildException;
+import org.apache.tools.ant.Project;
+import org.apache.tools.ant.types.FileSet;
+import org.apache.tools.ant.types.selectors.TypeSelector;
+import org.apache.tools.ant.types.selectors.TypeSelector.FileType;
+
+import edu.hm.hafner.util.FilteredLog;
+import edu.hm.hafner.util.VisibleForTesting;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.Serial;
@@ -11,16 +21,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-
-import org.apache.commons.lang3.StringUtils;
-import org.apache.tools.ant.BuildException;
-import org.apache.tools.ant.Project;
-import org.apache.tools.ant.types.FileSet;
-import org.apache.tools.ant.types.selectors.TypeSelector;
-import org.apache.tools.ant.types.selectors.TypeSelector.FileType;
-
-import edu.hm.hafner.util.FilteredLog;
-import edu.hm.hafner.util.VisibleForTesting;
 
 import hudson.remoting.VirtualChannel;
 import jenkins.MasterToSlaveFileCallable;
@@ -257,10 +257,10 @@ public abstract class AgentFileVisitor<T extends Serializable>
      */
     public static class FileVisitorResult<T extends Serializable> implements Serializable {
         @Serial
-        private static final long serialVersionUID = 2122230867938547733L;
-
+        private static final long serialVersionUID = 5094277468158899325L;
         private final FilteredLog log;
-        private final List<T> results;
+        @SuppressWarnings("PMD.LooseCoupling")
+        private final ArrayList<T> results;
 
         FileVisitorResult(final FilteredLog log) {
             this(log, Collections.emptyList());
