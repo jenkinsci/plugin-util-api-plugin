@@ -8,6 +8,8 @@ skinparam rectangle {
 }
 rectangle "plugin-util-api\n\n6.999999-SNAPSHOT" as io_jenkins_plugins_plugin_util_api_hpi
 rectangle "codingstyle\n\n5.21.0" as edu_hm_hafner_codingstyle_jar<<provided>>
+rectangle "spotbugs-annotations\n\n4.9.3" as com_github_spotbugs_spotbugs_annotations_jar<<provided>>
+rectangle "jsr305\n\n3.0.1" as com_google_code_findbugs_jsr305_jar<<provided>><<optional>>
 rectangle "error_prone_annotations\n\n2.18.0" as com_google_errorprone_error_prone_annotations_jar<<provided>>
 rectangle "j2html\n\n1.4.0" as com_j2html_j2html_jar<<provided>>
 rectangle "streamex\n\n0.8.4" as one_util_streamex_jar<<provided>>
@@ -37,7 +39,6 @@ rectangle "jenkins-core\n\n2.516.3" as org_jenkins_ci_main_jenkins_core_jar<<pro
 rectangle "cli\n\n2.516.3" as org_jenkins_ci_main_cli_jar<<provided>>
 rectangle "remoting\n\n3309.v27b_9314fd1a_4" as org_jenkins_ci_main_remoting_jar<<provided>>
 rectangle "args4j\n\n2.37" as args4j_args4j_jar<<provided>>
-rectangle "spotbugs-annotations\n\n4.9.3" as com_github_spotbugs_spotbugs_annotations_jar<<provided>>
 rectangle "guava\n\n33.4.8-jre" as com_google_guava_guava_jar<<provided>>
 rectangle "failureaccess\n\n1.0.3" as com_google_guava_failureaccess_jar<<provided>>
 rectangle "listenablefuture\n\n9999.0-empty-to-avoid-conflict-with-guava" as com_google_guava_listenablefuture_jar<<provided>>
@@ -111,6 +112,8 @@ rectangle "spring-web\n\n6.2.8" as org_springframework_spring_web_jar<<provided>
 rectangle "xpp3\n\n1.1.4c" as xpp3_xpp3_jar<<provided>>
 rectangle "jakarta.servlet-api\n\n5.0.0" as jakarta_servlet_jakarta_servlet_api_jar<<provided>>
 io_jenkins_plugins_plugin_util_api_hpi -[#000000]-> edu_hm_hafner_codingstyle_jar
+com_github_spotbugs_spotbugs_annotations_jar -[#000000]-> com_google_code_findbugs_jsr305_jar
+io_jenkins_plugins_plugin_util_api_hpi -[#000000]-> com_github_spotbugs_spotbugs_annotations_jar
 io_jenkins_plugins_plugin_util_api_hpi -[#000000]-> com_google_errorprone_error_prone_annotations_jar
 io_jenkins_plugins_plugin_util_api_hpi -[#000000]-> com_j2html_j2html_jar
 io_jenkins_plugins_plugin_util_api_hpi -[#000000]-> one_util_streamex_jar
@@ -154,7 +157,7 @@ io_jenkins_plugins_plugin_util_api_hpi -[#000000]-> io_jenkins_plugins_commons_t
 org_jenkins_ci_main_jenkins_core_jar -[#000000]-> org_jenkins_ci_main_cli_jar
 org_jenkins_ci_main_jenkins_core_jar -[#000000]-> org_jenkins_ci_main_remoting_jar
 org_jenkins_ci_main_jenkins_core_jar -[#000000]-> args4j_args4j_jar
-org_jenkins_ci_main_jenkins_core_jar -[#000000]-> com_github_spotbugs_spotbugs_annotations_jar
+org_jenkins_ci_main_jenkins_core_jar .[#ABABAB].> com_github_spotbugs_spotbugs_annotations_jar
 com_google_guava_guava_jar -[#000000]-> com_google_guava_failureaccess_jar
 com_google_guava_guava_jar -[#000000]-> com_google_guava_listenablefuture_jar
 com_google_guava_guava_jar .[#ABABAB].> org_jspecify_jspecify_jar
