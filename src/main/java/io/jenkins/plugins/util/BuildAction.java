@@ -62,7 +62,7 @@ public abstract class BuildAction<T> implements LastBuildAction, RunAction2, Ser
      *         determines whether the result should be persisted in the build folder
      */
     @SuppressFBWarnings(value = "MC", justification = "getResultXmlPath() is a factory method and overridable by design")
-    @SuppressWarnings({"PMD.ConstructorCallsOverridableMethod", "ConstructorLeaksThis"})
+    @SuppressWarnings({"PMD.ConstructorCallsOverridableMethod", "this-escape"})
     @VisibleForTesting
     public BuildAction(final Run<?, ?> owner, final T result, final boolean canSerialize) {
         this.owner = owner;
