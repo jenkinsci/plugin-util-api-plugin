@@ -83,6 +83,11 @@
       </exclusions>
     </dependency>
     <dependency>
+      <groupId>com.github.spotbugs</groupId>
+      <artifactId>spotbugs-annotations</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
       <groupId>com.google.errorprone</groupId>
       <artifactId>error_prone_annotations</artifactId>
       <scope>provided</scope>
@@ -301,6 +306,19 @@
                   <code>java.method.parameterTypeChanged</code>
                   <classQualifiedName>io.jenkins.plugins.datatables.TableConfiguration</classQualifiedName>
                   <justification>This enum is safe to be exposed.</justification>
+                </item>
+                <item>
+                  <ignore>true</ignore>
+                  <code>java.missing.oldSuperType</code>
+                  <classQualifiedName>io.jenkins.plugins.util.QualityGate</classQualifiedName>
+                  <justification>Superclass is deprecated</justification>
+                </item>
+                <item>
+                  <ignore>true</ignore>
+                  <regex>true</regex>
+                  <code>java.field.serialVersionUIDChanged</code>
+                  <classQualifiedName>.*</classQualifiedName>
+                  <justification>Use ArrayList rather than List</justification>
                 </item>
               </differences>
             </revapi.differences>

@@ -257,9 +257,9 @@ public abstract class AgentFileVisitor<T extends Serializable>
      */
     public static class FileVisitorResult<T extends Serializable> implements Serializable {
         @Serial
-        private static final long serialVersionUID = 2122230867938547733L;
-
+        private static final long serialVersionUID = 5094277468158899325L;
         private final FilteredLog log;
+        @SuppressWarnings("PMD.LooseCoupling")
         private final ArrayList<T> results;
 
         FileVisitorResult(final FilteredLog log) {

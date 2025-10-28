@@ -19,10 +19,11 @@ import hudson.model.Result;
  */
 public class QualityGateResult implements Serializable {
     @Serial
-    private static final long serialVersionUID = -4306601972076922976L;
+    private static final long serialVersionUID = 1626549055698872334L;
 
     private QualityGateStatus overallStatus;
-    private final List<QualityGateResultItem> items = new ArrayList<>();
+    @SuppressWarnings("PMD.LooseCoupling")
+    private final ArrayList<QualityGateResultItem> items = new ArrayList<>();
 
     /**
      * Creates a new instance of {@link QualityGateResult} that has its overall status set to
