@@ -25,10 +25,10 @@ rectangle "scm-api\n\n712.v8846fdd68c88" as org_jenkins_ci_plugins_scm_api_jar
 rectangle "commons-lang3-api\n\n3.19.0-104.v12125f33a_255" as io_jenkins_plugins_commons_lang3_api_jar
 rectangle "structs\n\n353.v261ea_40a_80fb_" as org_jenkins_ci_plugins_structs_jar
 rectangle "workflow-support\n\n1004.veee3a_d67cdb_9" as org_jenkins_ci_plugins_workflow_workflow_support_jar
-rectangle "script-security\n\n1378.vf25626395f49" as org_jenkins_ci_plugins_script_security_jar
+rectangle "script-security\n\n1385.v7d2d9ec4d909" as org_jenkins_ci_plugins_script_security_jar
 rectangle "groovy-sandbox\n\n1.34" as org_kohsuke_groovy_sandbox_jar
-rectangle "caffeine-api\n\n3.2.2-178.v353b_8428ed56" as io_jenkins_plugins_caffeine_api_jar
-rectangle "caffeine\n\n3.2.2" as com_github_ben_manes_caffeine_caffeine_jar
+rectangle "caffeine-api\n\n3.2.3-194.v31a_b_f7a_b_5a_81" as io_jenkins_plugins_caffeine_api_jar
+rectangle "caffeine\n\n3.2.3" as com_github_ben_manes_caffeine_caffeine_jar
 rectangle "jboss-marshalling-river\n\n2.2.2.Final" as org_jboss_marshalling_jboss_marshalling_river_jar
 rectangle "jboss-marshalling\n\n2.2.2.Final" as org_jboss_marshalling_jboss_marshalling_jar
 rectangle "slf4j-api\n\n2.0.17" as org_slf4j_slf4j_api_jar<<provided>>
