@@ -48,7 +48,7 @@
     <error-prone.version>2.36.0</error-prone.version>
     <j2html.version>1.4.0</j2html.version>
     <streamex.version>0.8.4</streamex.version>
-    <testcontainers.version>2.0.1</testcontainers.version>
+    <testcontainers.version>2.0.2</testcontainers.version>
     <codingstyle.library.version>5.24.0</codingstyle.library.version>
   </properties>
 
