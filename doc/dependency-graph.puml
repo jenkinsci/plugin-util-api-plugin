@@ -21,10 +21,10 @@ rectangle "asm-analysis\n\n9.9" as org_ow2_asm_asm_analysis_jar
 rectangle "asm-tree\n\n9.9" as org_ow2_asm_asm_tree_jar
 rectangle "asm-commons\n\n9.9" as org_ow2_asm_asm_commons_jar
 rectangle "asm-util\n\n9.9" as org_ow2_asm_asm_util_jar
-rectangle "scm-api\n\n712.v8846fdd68c88" as org_jenkins_ci_plugins_scm_api_jar
+rectangle "scm-api\n\n724.v7d839074eb_5c" as org_jenkins_ci_plugins_scm_api_jar
 rectangle "commons-lang3-api\n\n3.19.0-104.v12125f33a_255" as io_jenkins_plugins_commons_lang3_api_jar
-rectangle "structs\n\n353.v261ea_40a_80fb_" as org_jenkins_ci_plugins_structs_jar
-rectangle "workflow-support\n\n1004.veee3a_d67cdb_9" as org_jenkins_ci_plugins_workflow_workflow_support_jar
+rectangle "structs\n\n362.va_b_695ef4fdf9" as org_jenkins_ci_plugins_structs_jar
+rectangle "workflow-support\n\n1010.vb_b_39488a_9841" as org_jenkins_ci_plugins_workflow_workflow_support_jar
 rectangle "script-security\n\n1385.v7d2d9ec4d909" as org_jenkins_ci_plugins_script_security_jar
 rectangle "groovy-sandbox\n\n1.34" as org_kohsuke_groovy_sandbox_jar
 rectangle "caffeine-api\n\n3.2.3-194.v31a_b_f7a_b_5a_81" as io_jenkins_plugins_caffeine_api_jar
