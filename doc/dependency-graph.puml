@@ -7,7 +7,7 @@ skinparam rectangle {
   BackgroundColor<<provided>> lightGray
 }
 rectangle "plugin-util-api\n\n6.999999-SNAPSHOT" as io_jenkins_plugins_plugin_util_api_hpi
-rectangle "codingstyle\n\n5.25.0" as edu_hm_hafner_codingstyle_jar<<provided>>
+rectangle "codingstyle\n\n5.26.0" as edu_hm_hafner_codingstyle_jar<<provided>>
 rectangle "spotbugs-annotations\n\n4.9.3" as com_github_spotbugs_spotbugs_annotations_jar<<provided>>
 rectangle "jsr305\n\n3.0.1" as com_google_code_findbugs_jsr305_jar<<provided>><<optional>>
 rectangle "error_prone_annotations\n\n2.18.0" as com_google_errorprone_error_prone_annotations_jar<<provided>>
