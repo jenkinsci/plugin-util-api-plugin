@@ -223,7 +223,7 @@ public abstract class AgentFileVisitor<T extends Serializable>
          *
          * @return the file names of all found files
          */
-        public String[] find(final File workspace) {
+        String[] find(final File workspace) {
             try {
                 var fileSet = new FileSet();
                 var antProject = new Project();
