@@ -746,9 +746,18 @@ public abstract class IntegrationTest extends ResourceTest {
 
     private void setAccessModeOnWindows(final String path, final String command, final String accessMode) {
         try {
-            var process = Runtime.getRuntime()
-                    .exec("icacls \"" + path + "\" " + command + " *S-1-1-0:" + accessMode);
-            process.waitFor();
+            var process = new ProcessBuilder("icacls",
+                    path, command, "*S-1-1-0:" + accessMode)
+                    .redirectErrorStream(true)
+                    .start();
+            var exitCode = process.waitFor();
+            if (exitCode != 0) {
+                String output;
+                try (var in = process.getInputStream()) {
+                    output = new String(in.readAllBytes(), StandardCharsets.UTF_8);
+                }
+                throw new AssertionError("icacls failed with exit code " + exitCode + ": " + output);
+            }
         }
         catch (IOException | InterruptedException e) {
             throw new AssertionError(e);
