@@ -320,6 +320,20 @@
                   <classQualifiedName>.*</classQualifiedName>
                   <justification>Use ArrayList rather than List</justification>
                 </item>
+                <item>
+                  <ignore>true</ignore>
+                  <regex>true</regex>
+                  <code>java.annotation.*</code>
+                  <annotation>@edu.hm.hafner.util.SuppressMutation.*</annotation>
+                  <justification>PitMute Annotations are not relevant in API</justification>
+                </item>
+                <item>
+                  <ignore>true</ignore>
+                  <regex>true</regex>
+                  <code>java.annotation.*</code>
+                  <classQualifiedName>edu.hm.hafner.util.SuppressMutation.*</classQualifiedName>
+                  <justification>PitMute Annotations are not relevant in API</justification>
+                </item>
               </differences>
             </revapi.differences>
             <revapi.filter>
