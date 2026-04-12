@@ -11,7 +11,7 @@ rectangle "codingstyle\n\n6.6.0" as edu_hm_hafner_codingstyle_jar<<provided>>
 rectangle "spotbugs-annotations\n\n4.9.8" as com_github_spotbugs_spotbugs_annotations_jar<<provided>>
 rectangle "jsr305\n\n3.0.1" as com_google_code_findbugs_jsr305_jar<<provided>><<optional>>
 rectangle "error_prone_annotations\n\n2.18.0" as com_google_errorprone_error_prone_annotations_jar<<provided>>
-rectangle "j2html\n\n1.4.0" as com_j2html_j2html_jar<<provided>>
+rectangle "j2html\n\n1.6.0" as com_j2html_j2html_jar<<provided>>
 rectangle "streamex\n\n0.8.4" as one_util_streamex_jar<<provided>>
 rectangle "workflow-api\n\n1398.v67030756d3fb_" as org_jenkins_ci_plugins_workflow_workflow_api_jar
 rectangle "workflow-step-api\n\n710.v3e456cc85233" as org_jenkins_ci_plugins_workflow_workflow_step_api_jar
