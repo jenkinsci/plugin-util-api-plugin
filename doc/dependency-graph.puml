@@ -7,14 +7,14 @@ skinparam rectangle {
   BackgroundColor<<provided>> lightGray
 }
 rectangle "plugin-util-api\n\n7.999999-SNAPSHOT" as io_jenkins_plugins_plugin_util_api_hpi
-rectangle "codingstyle\n\n6.6.0" as edu_hm_hafner_codingstyle_jar<<provided>>
+rectangle "codingstyle\n\n6.9.0" as edu_hm_hafner_codingstyle_jar<<provided>>
 rectangle "spotbugs-annotations\n\n4.9.8" as com_github_spotbugs_spotbugs_annotations_jar<<provided>>
 rectangle "jsr305\n\n3.0.1" as com_google_code_findbugs_jsr305_jar<<provided>><<optional>>
 rectangle "error_prone_annotations\n\n2.18.0" as com_google_errorprone_error_prone_annotations_jar<<provided>>
 rectangle "j2html\n\n1.6.0" as com_j2html_j2html_jar<<provided>>
 rectangle "streamex\n\n0.8.4" as one_util_streamex_jar<<provided>>
-rectangle "workflow-api\n\n1398.v67030756d3fb_" as org_jenkins_ci_plugins_workflow_workflow_api_jar
-rectangle "workflow-step-api\n\n710.v3e456cc85233" as org_jenkins_ci_plugins_workflow_workflow_step_api_jar
+rectangle "workflow-api\n\n1413.v2ff1a_5e720fa_" as org_jenkins_ci_plugins_workflow_workflow_api_jar
+rectangle "workflow-step-api\n\n724.v538c2362b_dfb_" as org_jenkins_ci_plugins_workflow_workflow_step_api_jar
 rectangle "asm-api\n\n9.9.1-189.vb_5ef2964da_91" as io_jenkins_plugins_asm_api_jar
 rectangle "asm\n\n9.9.1" as org_ow2_asm_asm_jar
 rectangle "asm-analysis\n\n9.9.1" as org_ow2_asm_asm_analysis_jar
@@ -35,8 +35,8 @@ rectangle "slf4j-api\n\n2.0.17" as org_slf4j_slf4j_api_jar<<provided>>
 rectangle "commons-lang3\n\n3.20.0" as org_apache_commons_commons_lang3_jar
 rectangle "commons-text-api\n\n1.15.0-218.va_61573470393" as io_jenkins_plugins_commons_text_api_jar
 rectangle "commons-text\n\n1.15.0" as org_apache_commons_commons_text_jar
-rectangle "jenkins-core\n\n2.555" as org_jenkins_ci_main_jenkins_core_jar<<provided>>
-rectangle "cli\n\n2.555" as org_jenkins_ci_main_cli_jar<<provided>>
+rectangle "jenkins-core\n\n2.555.1" as org_jenkins_ci_main_jenkins_core_jar<<provided>>
+rectangle "cli\n\n2.555.1" as org_jenkins_ci_main_cli_jar<<provided>>
 rectangle "remoting\n\n3355.v388858a_47b_33" as org_jenkins_ci_main_remoting_jar<<provided>>
 rectangle "args4j\n\n2.37" as args4j_args4j_jar<<provided>>
 rectangle "guava\n\n33.5.0-jre" as com_google_guava_guava_jar<<provided>>
@@ -80,7 +80,7 @@ rectangle "memory-monitor\n\n1.13" as org_jenkins_ci_memory_monitor_jar<<provide
 rectangle "symbol-annotation\n\n1.26" as org_jenkins_ci_symbol_annotation_jar<<provided>>
 rectangle "task-reactor\n\n1.10" as org_jenkins_ci_task_reactor_jar<<provided>>
 rectangle "version-number\n\n1.14" as org_jenkins_ci_version_number_jar<<provided>>
-rectangle "websocket-spi\n\n2.555" as org_jenkins_ci_main_websocket_spi_jar<<provided>>
+rectangle "websocket-spi\n\n2.555.1" as org_jenkins_ci_main_websocket_spi_jar<<provided>>
 rectangle "jfreechart\n\n1.0.19" as org_jfree_jfreechart_jar<<provided>>
 rectangle "jcommon\n\n1.0.23" as org_jfree_jcommon_jar<<provided>>
 rectangle "commons-jelly-tags-define\n\n1.1-jenkins-20250731" as org_jvnet_hudson_commons_jelly_tags_define_jar<<provided>>
@@ -100,15 +100,15 @@ rectangle "dom4j\n\n2.2.0" as org_dom4j_dom4j_jar<<provided>>
 rectangle "stapler-groovy\n\n2076.v1b_a_c12445eb_e" as org_kohsuke_stapler_stapler_groovy_jar<<provided>>
 rectangle "jcl-over-slf4j\n\n2.0.17" as org_slf4j_jcl_over_slf4j_jar<<provided>>
 rectangle "log4j-over-slf4j\n\n2.0.17" as org_slf4j_log4j_over_slf4j_jar<<provided>>
-rectangle "spring-security-core\n\n6.5.8" as org_springframework_security_spring_security_core_jar<<provided>>
-rectangle "spring-security-crypto\n\n6.5.8" as org_springframework_security_spring_security_crypto_jar<<provided>>
-rectangle "spring-aop\n\n6.2.16" as org_springframework_spring_aop_jar<<provided>>
-rectangle "spring-beans\n\n6.2.16" as org_springframework_spring_beans_jar<<provided>>
-rectangle "spring-context\n\n6.2.16" as org_springframework_spring_context_jar<<provided>>
-rectangle "spring-core\n\n6.2.16" as org_springframework_spring_core_jar<<provided>>
-rectangle "spring-expression\n\n6.2.16" as org_springframework_spring_expression_jar<<provided>>
-rectangle "spring-security-web\n\n6.5.8" as org_springframework_security_spring_security_web_jar<<provided>>
-rectangle "spring-web\n\n6.2.16" as org_springframework_spring_web_jar<<provided>>
+rectangle "spring-security-core\n\n6.5.9" as org_springframework_security_spring_security_core_jar<<provided>>
+rectangle "spring-security-crypto\n\n6.5.9" as org_springframework_security_spring_security_crypto_jar<<provided>>
+rectangle "spring-aop\n\n6.2.17" as org_springframework_spring_aop_jar<<provided>>
+rectangle "spring-beans\n\n6.2.17" as org_springframework_spring_beans_jar<<provided>>
+rectangle "spring-context\n\n6.2.17" as org_springframework_spring_context_jar<<provided>>
+rectangle "spring-core\n\n6.2.17" as org_springframework_spring_core_jar<<provided>>
+rectangle "spring-expression\n\n6.2.17" as org_springframework_spring_expression_jar<<provided>>
+rectangle "spring-security-web\n\n6.5.9" as org_springframework_security_spring_security_web_jar<<provided>>
+rectangle "spring-web\n\n6.2.17" as org_springframework_spring_web_jar<<provided>>
 rectangle "xpp3\n\n1.1.4c" as xpp3_xpp3_jar<<provided>>
 rectangle "jakarta.servlet-api\n\n5.0.0" as jakarta_servlet_jakarta_servlet_api_jar<<provided>>
 io_jenkins_plugins_plugin_util_api_hpi -[#000000]-> edu_hm_hafner_codingstyle_jar
