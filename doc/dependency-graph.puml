@@ -15,12 +15,12 @@ rectangle "j2html\n\n1.4.0" as com_j2html_j2html_jar<<provided>>
 rectangle "streamex\n\n0.8.4" as one_util_streamex_jar<<provided>>
 rectangle "workflow-api\n\n1413.v2ff1a_5e720fa_" as org_jenkins_ci_plugins_workflow_workflow_api_jar
 rectangle "workflow-step-api\n\n724.v538c2362b_dfb_" as org_jenkins_ci_plugins_workflow_workflow_step_api_jar
-rectangle "asm-api\n\n9.9.1-189.vb_5ef2964da_91" as io_jenkins_plugins_asm_api_jar
+rectangle "asm-api\n\n9.10.1-216.va_9256d3b_844b_" as io_jenkins_plugins_asm_api_jar
 rectangle "asm\n\n9.9.1" as org_ow2_asm_asm_jar
-rectangle "asm-analysis\n\n9.9.1" as org_ow2_asm_asm_analysis_jar
-rectangle "asm-tree\n\n9.9.1" as org_ow2_asm_asm_tree_jar
-rectangle "asm-commons\n\n9.9.1" as org_ow2_asm_asm_commons_jar
-rectangle "asm-util\n\n9.9.1" as org_ow2_asm_asm_util_jar
+rectangle "asm-analysis\n\n9.10.1" as org_ow2_asm_asm_analysis_jar
+rectangle "asm-tree\n\n9.10.1" as org_ow2_asm_asm_tree_jar
+rectangle "asm-commons\n\n9.10.1" as org_ow2_asm_asm_commons_jar
+rectangle "asm-util\n\n9.10.1" as org_ow2_asm_asm_util_jar
 rectangle "scm-api\n\n728.vc30dcf7a_0df5" as org_jenkins_ci_plugins_scm_api_jar
 rectangle "commons-lang3-api\n\n3.20.0-109.ve43756e2d2b_4" as io_jenkins_plugins_commons_lang3_api_jar
 rectangle "structs\n\n362.va_b_695ef4fdf9" as org_jenkins_ci_plugins_structs_jar
@@ -35,8 +35,8 @@ rectangle "slf4j-api\n\n2.0.17" as org_slf4j_slf4j_api_jar<<provided>>
 rectangle "commons-lang3\n\n3.20.0" as org_apache_commons_commons_lang3_jar
 rectangle "commons-text-api\n\n1.15.0-218.va_61573470393" as io_jenkins_plugins_commons_text_api_jar
 rectangle "commons-text\n\n1.15.0" as org_apache_commons_commons_text_jar
-rectangle "jenkins-core\n\n2.555.1" as org_jenkins_ci_main_jenkins_core_jar<<provided>>
-rectangle "cli\n\n2.555.1" as org_jenkins_ci_main_cli_jar<<provided>>
+rectangle "jenkins-core\n\n2.555.3" as org_jenkins_ci_main_jenkins_core_jar<<provided>>
+rectangle "cli\n\n2.555.3" as org_jenkins_ci_main_cli_jar<<provided>>
 rectangle "remoting\n\n3355.v388858a_47b_33" as org_jenkins_ci_main_remoting_jar<<provided>>
 rectangle "args4j\n\n2.37" as args4j_args4j_jar<<provided>>
 rectangle "guava\n\n33.5.0-jre" as com_google_guava_guava_jar<<provided>>
@@ -80,7 +80,7 @@ rectangle "memory-monitor\n\n1.13" as org_jenkins_ci_memory_monitor_jar<<provide
 rectangle "symbol-annotation\n\n1.26" as org_jenkins_ci_symbol_annotation_jar<<provided>>
 rectangle "task-reactor\n\n1.10" as org_jenkins_ci_task_reactor_jar<<provided>>
 rectangle "version-number\n\n1.14" as org_jenkins_ci_version_number_jar<<provided>>
-rectangle "websocket-spi\n\n2.555.1" as org_jenkins_ci_main_websocket_spi_jar<<provided>>
+rectangle "websocket-spi\n\n2.555.3" as org_jenkins_ci_main_websocket_spi_jar<<provided>>
 rectangle "jfreechart\n\n1.0.19" as org_jfree_jfreechart_jar<<provided>>
 rectangle "jcommon\n\n1.0.23" as org_jfree_jcommon_jar<<provided>>
 rectangle "commons-jelly-tags-define\n\n1.1-jenkins-20250731" as org_jvnet_hudson_commons_jelly_tags_define_jar<<provided>>
