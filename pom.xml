@@ -272,6 +272,16 @@
         </executions>
       </plugin>
       <plugin>
+        <!-- Remove PMD exclusion once https://github.com/pmd/pmd/pull/6783 is released -->
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-pmd-plugin</artifactId>
+        <configuration combine.children="merge">
+          <excludes>
+            <exclude>**/ValidationUtilitiesTest.java</exclude>
+          </excludes>
+        </configuration>
+      </plugin>
+      <plugin>
         <groupId>org.assertj</groupId>
         <artifactId>assertj-assertions-generator-maven-plugin</artifactId>
         <configuration>
