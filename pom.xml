@@ -4,7 +4,7 @@
   <parent>
     <groupId>org.jvnet.hudson.plugins</groupId>
     <artifactId>analysis-pom</artifactId>
-    <version>12.3200.vc79dce20f68b_</version>
+    <version>12.3251.v465c8cec2c4e</version>
     <relativePath />
   </parent>
 
@@ -270,6 +270,16 @@
             </configuration>
           </execution>
         </executions>
+      </plugin>
+      <plugin>
+        <!-- Remove PMD exclusion once https://github.com/pmd/pmd/pull/6783 is released -->
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-pmd-plugin</artifactId>
+        <configuration combine.children="merge">
+          <excludes>
+            <exclude>**/ValidationUtilitiesTest.java</exclude>
+          </excludes>
+        </configuration>
       </plugin>
       <plugin>
         <groupId>org.assertj</groupId>
