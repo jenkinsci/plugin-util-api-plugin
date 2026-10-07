@@ -1,12 +1,11 @@
 package io.jenkins.plugins.util;
 
-import java.io.IOException;
-import java.util.Optional;
-
-import org.kohsuke.stapler.StaplerRequest2;
-import org.kohsuke.stapler.StaplerResponse2;
 import hudson.model.Action;
 import hudson.model.Job;
+import java.io.IOException;
+import java.util.Optional;
+import org.kohsuke.stapler.StaplerRequest2;
+import org.kohsuke.stapler.StaplerResponse2;
 
 /**
  * A job action displays a link on the side panel of a job that refers to the last build that contains results (i.e. a
@@ -64,9 +63,8 @@ public abstract class JobAction<T extends BuildAction<?>> implements Action {
         Optional<T> action = getLatestAction();
         if (action.isPresent()) {
             T buildAction = action.get();
-            response.sendRedirect2(String.format("../%d/%s",
-                    buildAction.getOwner().getNumber(),
-                    buildAction.getUrlName()));
+            response.sendRedirect2(
+                    String.format("../%d/%s", buildAction.getOwner().getNumber(), buildAction.getUrlName()));
         }
     }
 

@@ -1,13 +1,11 @@
 package io.jenkins.plugins.util;
 
-import java.util.List;
-
-import org.junit.jupiter.api.Test;
-
-import edu.hm.hafner.util.FilteredLog;
-
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
+
+import edu.hm.hafner.util.FilteredLog;
+import java.util.List;
+import org.junit.jupiter.api.Test;
 
 class QualityGateEvaluatorTest {
     private static final String FAILURE_MESSAGE = "-> Some quality gates have been missed: overall result is FAILURE";
@@ -19,8 +17,7 @@ class QualityGateEvaluatorTest {
 
         assertThat(result).hasToString("INACTIVE");
         assertThat(result.getOverallStatus()).isEqualTo(QualityGateStatus.INACTIVE);
-        assertThat(log.getInfoMessages())
-                .contains("No quality gates have been set - skipping");
+        assertThat(log.getInfoMessages()).contains("No quality gates have been set - skipping");
     }
 
     private QualityGateResult createEvaluator(final FilteredLog log) {
@@ -41,9 +38,7 @@ class QualityGateEvaluatorTest {
 
         assertThat(result).hasToString("INACTIVE");
         assertThat(result.getOverallStatus()).isEqualTo(QualityGateStatus.INACTIVE);
-        assertThat(log.getInfoMessages())
-                .contains("Evaluating quality gates",
-                        "-> All quality gates have been passed");
+        assertThat(log.getInfoMessages()).contains("Evaluating quality gates", "-> All quality gates have been passed");
         verifyNoInteractions(resultHandler);
     }
 
@@ -64,8 +59,7 @@ class QualityGateEvaluatorTest {
         var result = evaluator.evaluate(resultHandler, log);
 
         assertThat(result.getOverallStatus()).isEqualTo(QualityGateStatus.ERROR);
-        assertThat(log.getInfoMessages())
-                .contains("Evaluating quality gates", FAILURE_MESSAGE);
+        assertThat(log.getInfoMessages()).contains("Evaluating quality gates", FAILURE_MESSAGE);
         verify(resultHandler).publishResult(QualityGateStatus.ERROR, FAILURE_MESSAGE);
     }
 

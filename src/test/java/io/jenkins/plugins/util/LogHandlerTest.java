@@ -1,20 +1,17 @@
 package io.jenkins.plugins.util;
 
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.ValueSource;
+import static org.assertj.core.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 import edu.hm.hafner.util.FilteredLog;
-
+import hudson.model.TaskListener;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
-
-import hudson.model.TaskListener;
-
-import static org.assertj.core.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 /**
  * Tests the class {@link LogHandler}.
@@ -49,12 +46,11 @@ class LogHandlerTest {
 
             if (quiet) {
                 assertThat(outputStream.toString(StandardCharsets.UTF_8)).isEmpty();
-            }
-            else {
-                assertThat(outputStream).hasToString(String.format(
-                        "[%s] [-ERROR-] %s%n"
-                                + "[%s] %s%n",
-                        LOG_HANDLER_NAME, MESSAGE, LOG_HANDLER_NAME, MESSAGE));
+            } else {
+                assertThat(outputStream)
+                        .hasToString(String.format(
+                                "[%s] [-ERROR-] %s%n" + "[%s] %s%n",
+                                LOG_HANDLER_NAME, MESSAGE, LOG_HANDLER_NAME, MESSAGE));
             }
             logger.logInfo(ADDITIONAL_MESSAGE);
             logger.logError(ADDITIONAL_MESSAGE);
@@ -62,15 +58,18 @@ class LogHandlerTest {
 
             if (quiet) {
                 assertThat(outputStream.toString(StandardCharsets.UTF_8)).isEmpty();
-            }
-            else {
-                assertThat(outputStream).hasToString(String.format(
-                        "[%s] [-ERROR-] %s%n"
-                                + "[%s] %s%n"
-                                + "[%s] [-ERROR-] %s%n"
-                                + "[%s] %s%n",
-                        LOG_HANDLER_NAME, MESSAGE, LOG_HANDLER_NAME, MESSAGE, LOG_HANDLER_NAME,
-                        ADDITIONAL_MESSAGE, LOG_HANDLER_NAME, ADDITIONAL_MESSAGE));
+            } else {
+                assertThat(outputStream)
+                        .hasToString(String.format(
+                                "[%s] [-ERROR-] %s%n" + "[%s] %s%n" + "[%s] [-ERROR-] %s%n" + "[%s] %s%n",
+                                LOG_HANDLER_NAME,
+                                MESSAGE,
+                                LOG_HANDLER_NAME,
+                                MESSAGE,
+                                LOG_HANDLER_NAME,
+                                ADDITIONAL_MESSAGE,
+                                LOG_HANDLER_NAME,
+                                ADDITIONAL_MESSAGE));
             }
         }
     }

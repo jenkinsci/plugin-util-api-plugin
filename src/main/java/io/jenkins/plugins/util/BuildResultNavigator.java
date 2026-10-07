@@ -1,8 +1,7 @@
 package io.jenkins.plugins.util;
 
-import java.util.Optional;
-
 import hudson.model.Run;
+import java.util.Optional;
 
 /**
  * Navigates from the current results to the same results of any other build of the same job.
@@ -26,8 +25,11 @@ public class BuildResultNavigator {
      *
      * @return the URL to the results if possible
      */
-    public Optional<String> getSameUrlForOtherBuild(final Run<?, ?> currentBuild, final String currentAbsoluteBrowserUrl,
-            final String resultId, final String selectedBuildDisplayName) {
+    public Optional<String> getSameUrlForOtherBuild(
+            final Run<?, ?> currentBuild,
+            final String currentAbsoluteBrowserUrl,
+            final String resultId,
+            final String selectedBuildDisplayName) {
         for (Run<?, ?> run = currentBuild.getParent().getLastBuild(); run != null; run = run.getPreviousBuild()) {
             if (selectedBuildDisplayName.equals(run.getDisplayName())) {
                 return getSameUrlForOtherBuild(currentBuild, currentAbsoluteBrowserUrl, resultId, run);
@@ -50,12 +52,12 @@ public class BuildResultNavigator {
      *
      * @return the URL to the results if possible
      */
-    public Optional<String> getSameUrlForOtherBuild(final Run<?, ?> currentBuild, final String viewUrl,
-            final String resultId, final Run<?, ?> selectedBuild) {
+    public Optional<String> getSameUrlForOtherBuild(
+            final Run<?, ?> currentBuild, final String viewUrl, final String resultId, final Run<?, ?> selectedBuild) {
         var match = SLASH + currentBuild.getNumber() + SLASH + resultId;
         if (viewUrl.contains(match)) {
-            return Optional.of(viewUrl.replaceFirst(
-                    match + ".*", SLASH + selectedBuild.getNumber() + SLASH + resultId));
+            return Optional.of(
+                    viewUrl.replaceFirst(match + ".*", SLASH + selectedBuild.getNumber() + SLASH + resultId));
         }
         return Optional.empty();
     }

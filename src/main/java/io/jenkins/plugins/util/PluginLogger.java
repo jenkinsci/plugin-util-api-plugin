@@ -1,9 +1,8 @@
 package io.jenkins.plugins.util;
 
+import com.google.errorprone.annotations.FormatMethod;
 import java.io.PrintStream;
 import java.util.Collection;
-
-import com.google.errorprone.annotations.FormatMethod;
 
 /**
  * A simple logger that prefixes each message with the name of a plugin.
@@ -25,8 +24,7 @@ public class PluginLogger {
     public PluginLogger(final PrintStream logger, final String pluginName) {
         if (pluginName.contains("[")) {
             this.pluginName = pluginName + " ";
-        }
-        else {
+        } else {
             this.pluginName = "[%s] ".formatted(pluginName);
         }
         delegate = logger;

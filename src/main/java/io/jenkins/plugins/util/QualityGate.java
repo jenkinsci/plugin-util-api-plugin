@@ -1,20 +1,18 @@
 package io.jenkins.plugins.util;
 
 import edu.hm.hafner.util.VisibleForTesting;
-
-import java.io.Serial;
-import java.io.Serializable;
-
-import org.kohsuke.stapler.AncestorInPath;
-import org.kohsuke.stapler.DataBoundSetter;
-import org.kohsuke.stapler.verb.POST;
 import hudson.Extension;
 import hudson.model.BuildableItem;
 import hudson.model.Describable;
 import hudson.model.Descriptor;
 import hudson.model.FreeStyleProject;
 import hudson.util.ListBoxModel;
+import java.io.Serial;
+import java.io.Serializable;
 import jenkins.model.Jenkins;
+import org.kohsuke.stapler.AncestorInPath;
+import org.kohsuke.stapler.DataBoundSetter;
+import org.kohsuke.stapler.verb.POST;
 
 /**
  * Defines a quality gate based on a specific threshold of a selected property in the current build. After a build has
@@ -178,8 +176,7 @@ public abstract class QualityGate implements Describable<QualityGate>, Serializa
                 if (project instanceof FreeStyleProject) {
                     options.add(Messages.QualityGate_Unstable(), QualityGateCriticality.UNSTABLE.name());
                     options.add(Messages.QualityGate_Failure(), QualityGateCriticality.FAILURE.name());
-                }
-                else {
+                } else {
                     options.add(Messages.QualityGate_UnstableStage(), QualityGateCriticality.NOTE.name());
                     options.add(Messages.QualityGate_UnstableRun(), QualityGateCriticality.UNSTABLE.name());
                     options.add(Messages.QualityGate_FailureStage(), QualityGateCriticality.ERROR.name());

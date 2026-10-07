@@ -1,12 +1,11 @@
 package io.jenkins.plugins.util;
 
+import static org.mockito.Mockito.*;
+
+import hudson.FilePath;
 import java.io.File;
 import java.util.Arrays;
 import java.util.Collection;
-
-import hudson.FilePath;
-
-import static org.mockito.Mockito.*;
 
 /**
  * Several test utilities to create stubs of {@link FilePath} instances.

@@ -1,16 +1,15 @@
 package io.jenkins.plugins.util;
 
+import hudson.model.Result;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
-
+import org.jenkinsci.plugins.scriptsecurity.sandbox.whitelists.Whitelisted;
 import org.kohsuke.stapler.export.Exported;
 import org.kohsuke.stapler.export.ExportedBean;
-import org.jenkinsci.plugins.scriptsecurity.sandbox.whitelists.Whitelisted;
-import hudson.model.Result;
 
 /**
  * Result of a quality gate evaluation. Aggregates the individual results of the quality gates into an overall status.
@@ -22,6 +21,7 @@ public class QualityGateResult implements Serializable {
     private static final long serialVersionUID = 1626549055698872334L;
 
     private QualityGateStatus overallStatus;
+
     @SuppressWarnings("PMD.LooseCoupling")
     private final ArrayList<QualityGateResultItem> items = new ArrayList<>();
 
@@ -85,11 +85,12 @@ public class QualityGateResult implements Serializable {
     }
 
     private String createMessage(final QualityGateResultItem item) {
-        return "[%s]: ≪%s≫ - (Actual value: %s, Quality gate: %.2f)".formatted(
-                item.getQualityGate().getName(),
-                item.getStatus().getDescription(),
-                item.getActualValue(),
-                item.getQualityGate().getThreshold());
+        return "[%s]: ≪%s≫ - (Actual value: %s, Quality gate: %.2f)"
+                .formatted(
+                        item.getQualityGate().getName(),
+                        item.getStatus().getDescription(),
+                        item.getActualValue(),
+                        item.getQualityGate().getThreshold());
     }
 
     @Override
@@ -151,8 +152,7 @@ public class QualityGateResult implements Serializable {
 
         @Exported(inline = true)
         public Collection<QualityGateItemApi> getResultItems() {
-            return qualityGateResult.getResultItems()
-                    .stream()
+            return qualityGateResult.getResultItems().stream()
                     .map(QualityGateItemApi::new)
                     .collect(Collectors.toList());
         }

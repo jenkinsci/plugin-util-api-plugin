@@ -1,12 +1,9 @@
 package io.jenkins.plugins.util;
 
 import com.google.errorprone.annotations.FormatMethod;
-
 import edu.hm.hafner.util.FilteredLog;
-
-import java.util.List;
-
 import hudson.model.TaskListener;
+import java.util.List;
 
 /**
  * Handles logging of issues log and error messages to a {@link TaskListener} instance.
@@ -44,11 +41,15 @@ public class LogHandler {
      *         the logger that contains the actual log messages
      */
     public LogHandler(final TaskListener listener, final String name, final FilteredLog logger) {
-        this(listener, name, logger.getInfoMessages().size(), logger.getErrorMessages().size());
+        this(
+                listener,
+                name,
+                logger.getInfoMessages().size(),
+                logger.getErrorMessages().size());
     }
 
-    private LogHandler(final TaskListener listener, final String name, final int infoPosition,
-            final int errorPosition) {
+    private LogHandler(
+            final TaskListener listener, final String name, final int infoPosition, final int errorPosition) {
         infoLogger = createLogger(listener, name);
         errorLogger = createErrorLogger(listener, name);
         this.infoPosition = infoPosition;

@@ -1,7 +1,7 @@
 package io.jenkins.plugins.util;
 
-import org.jenkinsci.plugins.scriptsecurity.sandbox.whitelists.Whitelisted;
 import hudson.model.Result;
+import org.jenkinsci.plugins.scriptsecurity.sandbox.whitelists.Whitelisted;
 
 /**
  * Result of a quality gate evaluation performed by a subclass of {@link QualityGateEvaluator}.

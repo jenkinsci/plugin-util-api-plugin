@@ -1,21 +1,6 @@
 package io.jenkins.plugins.util;
 
-import org.apache.commons.lang3.StringUtils;
-import org.jenkins.ui.symbol.Symbol;
-import org.jenkins.ui.symbol.SymbolRequest;
-import org.springframework.security.access.AccessDeniedException;
-
 import edu.umd.cs.findbugs.annotations.CheckForNull;
-
-import java.io.Serial;
-import java.io.Serializable;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
-
-import org.kohsuke.stapler.Stapler;
-import org.kohsuke.stapler.StaplerRequest2;
 import hudson.DescriptorExtensionList;
 import hudson.ExtensionPoint;
 import hudson.model.AbstractItem;
@@ -28,7 +13,19 @@ import hudson.model.View;
 import hudson.security.AccessControlled;
 import hudson.security.AuthorizationStrategy;
 import hudson.security.Permission;
+import java.io.Serial;
+import java.io.Serializable;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 import jenkins.model.Jenkins;
+import org.apache.commons.lang3.StringUtils;
+import org.jenkins.ui.symbol.Symbol;
+import org.jenkins.ui.symbol.SymbolRequest;
+import org.kohsuke.stapler.Stapler;
+import org.kohsuke.stapler.StaplerRequest2;
+import org.springframework.security.access.AccessDeniedException;
 
 /**
  * Facade to Jenkins server. Encapsulates all calls to the running Jenkins server so that tests can replace this facade
@@ -203,8 +200,7 @@ public class JenkinsFacade implements Serializable {
     public Optional<Job<?, ?>> getJob(final String name) {
         try {
             return Optional.ofNullable(getJenkins().getItemByFullName(name, Job.class));
-        }
-        catch (AccessDeniedException ignored) {
+        } catch (AccessDeniedException ignored) {
             return Optional.empty();
         }
     }
@@ -221,8 +217,7 @@ public class JenkinsFacade implements Serializable {
     public Optional<Run<?, ?>> getBuild(final String id) {
         try {
             return Optional.ofNullable(Run.fromExternalizableId(id));
-        }
-        catch (AccessDeniedException ignored) {
+        } catch (AccessDeniedException ignored) {
             return Optional.empty();
         }
     }
@@ -278,8 +273,7 @@ public class JenkinsFacade implements Serializable {
             if (rootUrl != null) {
                 return rootUrl + url;
             }
-        }
-        catch (IllegalStateException ignored) {
+        } catch (IllegalStateException ignored) {
             // ignored
         }
         return url;

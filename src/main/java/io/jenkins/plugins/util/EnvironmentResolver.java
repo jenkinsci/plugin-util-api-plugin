@@ -1,12 +1,10 @@
 package io.jenkins.plugins.util;
 
-import org.apache.commons.lang3.StringUtils;
-
 import edu.hm.hafner.util.VisibleForTesting;
 import edu.umd.cs.findbugs.annotations.CheckForNull;
-
 import hudson.EnvVars;
 import hudson.Util;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * Resolves environment parameters in a string value.

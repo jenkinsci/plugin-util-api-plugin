@@ -1,12 +1,11 @@
 package io.jenkins.plugins.util;
 
-import org.junit.jupiter.api.Test;
+import static org.assertj.core.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 import hudson.model.FreeStyleBuild;
 import hudson.model.FreeStyleProject;
-
-import static org.assertj.core.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import org.junit.jupiter.api.Test;
 
 /**
  * Tests the class {@link BuildResultNavigator}.
@@ -28,16 +27,18 @@ class BuildResultNavigatorTest {
         when(lastBuild.getDisplayName()).thenReturn("last-build");
         when(lastBuild.getNumber()).thenReturn(111);
 
-        assertThat(navigator.getSameUrlForOtherBuild(current,
-                "http://localhost:8080/job/pipeline-analysis-model/100/spotbugs/",
-                "spotbugs",
-                "last-build"))
+        assertThat(navigator.getSameUrlForOtherBuild(
+                        current,
+                        "http://localhost:8080/job/pipeline-analysis-model/100/spotbugs/",
+                        "spotbugs",
+                        "last-build"))
                 .isNotEmpty()
                 .contains("http://localhost:8080/job/pipeline-analysis-model/111/spotbugs");
-        assertThat(navigator.getSameUrlForOtherBuild(current,
-                "http://localhost:8080/job/pipeline-analysis-model/different-url",
-                "spotbugs",
-                "last-build"))
+        assertThat(navigator.getSameUrlForOtherBuild(
+                        current,
+                        "http://localhost:8080/job/pipeline-analysis-model/different-url",
+                        "spotbugs",
+                        "last-build"))
                 .isEmpty();
     }
 
@@ -57,16 +58,12 @@ class BuildResultNavigatorTest {
         when(lastBuild.getNumber()).thenReturn(111);
         when(lastBuild.getPreviousBuild()).thenReturn(current);
 
-        assertThat(navigator.getSameUrlForOtherBuild(current,
-                "http://localhost:8080/job/pipeline-analysis-model/100/spotbugs/",
-                "spotbugs",
-                "#100"))
+        assertThat(navigator.getSameUrlForOtherBuild(
+                        current, "http://localhost:8080/job/pipeline-analysis-model/100/spotbugs/", "spotbugs", "#100"))
                 .isNotEmpty()
                 .contains("http://localhost:8080/job/pipeline-analysis-model/100/spotbugs");
-        assertThat(navigator.getSameUrlForOtherBuild(current,
-                "http://localhost:8080/job/pipeline-analysis-model/100/spotbugs/",
-                "spotbugs",
-                "#111"))
+        assertThat(navigator.getSameUrlForOtherBuild(
+                        current, "http://localhost:8080/job/pipeline-analysis-model/100/spotbugs/", "spotbugs", "#111"))
                 .isNotEmpty()
                 .contains("http://localhost:8080/job/pipeline-analysis-model/111/spotbugs");
     }
@@ -85,10 +82,11 @@ class BuildResultNavigatorTest {
         when(lastBuild.getDisplayName()).thenReturn("last-build");
         when(lastBuild.getNumber()).thenReturn(111);
 
-        assertThat(navigator.getSameUrlForOtherBuild(current,
-                "http://localhost:8080/job/pipeline-analysis-model/100/spotbugs/",
-                "spotbugs",
-                "wrong-selection"))
+        assertThat(navigator.getSameUrlForOtherBuild(
+                        current,
+                        "http://localhost:8080/job/pipeline-analysis-model/100/spotbugs/",
+                        "spotbugs",
+                        "wrong-selection"))
                 .isEmpty();
     }
 
@@ -101,10 +99,11 @@ class BuildResultNavigatorTest {
         when(current.getParent()).thenReturn(job);
         when(current.getNumber()).thenReturn(100);
 
-        assertThat(navigator.getSameUrlForOtherBuild(current,
-                "http://localhost:8080/job/pipeline-analysis-model/100/spotbugs/",
-                "spotbugs",
-                "wrong-selection"))
+        assertThat(navigator.getSameUrlForOtherBuild(
+                        current,
+                        "http://localhost:8080/job/pipeline-analysis-model/100/spotbugs/",
+                        "spotbugs",
+                        "wrong-selection"))
                 .isEmpty();
     }
 }
