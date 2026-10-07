@@ -1,21 +1,18 @@
 package io.jenkins.plugins.util;
 
+import edu.hm.hafner.util.VisibleForTesting;
+import edu.umd.cs.findbugs.annotations.CheckForNull;
+import hudson.FilePath;
+import hudson.model.AbstractProject;
+import hudson.util.ComboBoxModel;
+import hudson.util.FormValidation;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.charset.IllegalCharsetNameException;
 import java.nio.charset.UnsupportedCharsetException;
 import java.util.Set;
 import java.util.regex.Pattern;
-
 import org.apache.commons.lang3.StringUtils;
-
-import edu.hm.hafner.util.VisibleForTesting;
-import edu.umd.cs.findbugs.annotations.CheckForNull;
-
-import hudson.FilePath;
-import hudson.model.AbstractProject;
-import hudson.util.ComboBoxModel;
-import hudson.util.FormValidation;
 
 /**
  * Validates UI parameters. For the validated UI elements, also additional utility methods are provided.
@@ -49,8 +46,7 @@ public class ValidationUtilities {
             if (StringUtils.isNotBlank(charset)) {
                 return Charset.forName(charset);
             }
-        }
-        catch (UnsupportedCharsetException | IllegalCharsetNameException exception) {
+        } catch (UnsupportedCharsetException | IllegalCharsetNameException exception) {
             // ignore and return default
         }
         return Charset.defaultCharset();
@@ -69,8 +65,7 @@ public class ValidationUtilities {
             if (StringUtils.isBlank(reportEncoding) || Charset.isSupported(reportEncoding)) {
                 return FormValidation.ok();
             }
-        }
-        catch (IllegalCharsetNameException | UnsupportedCharsetException ignore) {
+        } catch (IllegalCharsetNameException | UnsupportedCharsetException ignore) {
             // throw a FormValidation error
         }
         return FormValidation.errorWithMarkup(createWrongEncodingErrorMessage());
@@ -136,8 +131,7 @@ public class ValidationUtilities {
                 if (workspace != null && workspace.exists()) {
                     return validatePatternInWorkspace(pattern, workspace);
                 }
-            }
-            catch (InterruptedException | IOException ignore) {
+            } catch (InterruptedException | IOException ignore) {
                 // ignore and return ok
             }
         }

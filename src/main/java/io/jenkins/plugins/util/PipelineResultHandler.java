@@ -1,9 +1,9 @@
 package io.jenkins.plugins.util;
 
-import org.jenkinsci.plugins.workflow.actions.WarningAction;
-import org.jenkinsci.plugins.workflow.graph.FlowNode;
 import hudson.model.Result;
 import hudson.model.Run;
+import org.jenkinsci.plugins.workflow.actions.WarningAction;
+import org.jenkinsci.plugins.workflow.graph.FlowNode;
 
 /**
  * A {@link ResultHandler} that sets the overall build result of the {@link Run} and annotates the given Pipeline
@@ -54,7 +54,7 @@ public class PipelineResultHandler implements ResultHandler {
                 publishResult(status.getResult(), message);
                 break;
             default:
-                // ignore and do nothing
+            // ignore and do nothing
         }
     }
 }

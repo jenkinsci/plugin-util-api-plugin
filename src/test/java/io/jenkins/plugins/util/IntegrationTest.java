@@ -1,36 +1,14 @@
 package io.jenkins.plugins.util;
 
-import org.junit.jupiter.api.Tag;
-import org.jvnet.hudson.test.JenkinsRule;
-import org.jvnet.hudson.test.JenkinsRule.JSONWebResponse;
-import org.testcontainers.containers.GenericContainer;
-import org.testcontainers.images.builder.ImageFromDockerfile;
-import org.w3c.dom.Document;
-import org.xml.sax.SAXException;
+import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assumptions.*;
 
 import com.cloudbees.jenkins.plugins.sshcredentials.impl.BasicSSHUserPrivateKey;
 import com.cloudbees.plugins.credentials.CredentialsScope;
 import com.cloudbees.plugins.credentials.SystemCredentialsProvider;
 import com.cloudbees.plugins.credentials.domains.Domain;
-
 import edu.hm.hafner.util.PathUtil;
 import edu.hm.hafner.util.ResourceTest;
-
-import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.IOException;
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Path;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Objects;
-import java.util.function.Function;
-
-import org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition;
-import org.jenkinsci.plugins.workflow.flow.FlowDefinition;
-import org.jenkinsci.plugins.workflow.job.WorkflowJob;
 import hudson.FilePath;
 import hudson.Functions;
 import hudson.model.Action;
@@ -51,10 +29,28 @@ import hudson.slaves.EnvironmentVariablesNodeProperty.Entry;
 import hudson.tasks.BatchFile;
 import hudson.tasks.Builder;
 import hudson.tasks.Shell;
+import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Path;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Objects;
+import java.util.function.Function;
 import jenkins.model.ParameterizedJobMixIn.ParameterizedJob;
-
-import static org.assertj.core.api.Assertions.*;
-import static org.assertj.core.api.Assumptions.*;
+import org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition;
+import org.jenkinsci.plugins.workflow.flow.FlowDefinition;
+import org.jenkinsci.plugins.workflow.job.WorkflowJob;
+import org.junit.jupiter.api.Tag;
+import org.jvnet.hudson.test.JenkinsRule;
+import org.jvnet.hudson.test.JenkinsRule.JSONWebResponse;
+import org.testcontainers.containers.GenericContainer;
+import org.testcontainers.images.builder.ImageFromDockerfile;
+import org.w3c.dom.Document;
+import org.xml.sax.SAXException;
 
 /**
  * Base class for integration tests in Jenkins.
@@ -62,12 +58,21 @@ import static org.assertj.core.api.Assumptions.*;
  * @author Ullrich Hafner
  */
 @Tag("IntegrationTest")
-@SuppressWarnings({"ClassDataAbstractionCoupling", "ClassFanOutComplexity", "SameParameterValue", "PMD.SystemPrintln", "PMD.CouplingBetweenObjects", "PMD.CyclomaticComplexity", "unused"})
+@SuppressWarnings({
+    "ClassDataAbstractionCoupling",
+    "ClassFanOutComplexity",
+    "SameParameterValue",
+    "PMD.SystemPrintln",
+    "PMD.CouplingBetweenObjects",
+    "PMD.CyclomaticComplexity",
+    "unused"
+})
 public abstract class IntegrationTest extends ResourceTest {
     private static final Charset UTF_8 = StandardCharsets.UTF_8;
 
     /** Name of the agent when used in a {@code node()} statement. */
     protected static final String DOCKER_AGENT_NAME = "docker-agent";
+
     private static final String SSH_CREDENTIALS_ID = "sshCredentialsId";
     private static final String USER = "jenkins";
     private static final String PASSPHRASE = "";
@@ -99,8 +104,7 @@ public abstract class IntegrationTest extends ResourceTest {
 
             var child = workspace.child(fileName);
             child.copyFrom(new ByteArrayInputStream(content.getBytes(UTF_8)));
-        }
-        catch (IOException | InterruptedException e) {
+        } catch (IOException | InterruptedException e) {
             throw new AssertionError(e);
         }
     }
@@ -158,8 +162,8 @@ public abstract class IntegrationTest extends ResourceTest {
      * @param fileNameMapper
      *         maps input file names to output file names
      */
-    protected void copyWorkspaceFiles(final TopLevelItem job, final String[] fileNames,
-            final Function<String, String> fileNameMapper) {
+    protected void copyWorkspaceFiles(
+            final TopLevelItem job, final String[] fileNames, final Function<String, String> fileNameMapper) {
         Arrays.stream(fileNames)
                 .forEach(fileName -> copySingleFileToWorkspace(job, fileName, fileNameMapper.apply(fileName)));
     }
@@ -175,8 +179,7 @@ public abstract class IntegrationTest extends ResourceTest {
     protected String getConsoleLog(final Run<?, ?> build) {
         try {
             return JenkinsRule.getLog(build);
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             throw new AssertionError(e);
         }
     }
@@ -236,10 +239,11 @@ public abstract class IntegrationTest extends ResourceTest {
             var resource = getTestResourceClass().getResource(directory);
             assertThat(resource).as("No such file: %s", directory).isNotNull();
             var destination = new FilePath(new File(resource.getFile()));
-            assertThat(destination.exists()).as("Directory %s does not exist", resource.getFile()).isTrue();
+            assertThat(destination.exists())
+                    .as("Directory %s does not exist", resource.getFile())
+                    .isTrue();
             destination.copyRecursiveTo(getWorkspace(job));
-        }
-        catch (IOException | InterruptedException e) {
+        } catch (IOException | InterruptedException e) {
             throw new AssertionError(e);
         }
     }
@@ -248,8 +252,7 @@ public abstract class IntegrationTest extends ResourceTest {
         try {
             workspace.child(to).copyFrom(asInputStream(from));
             System.out.format("Copying file '%s' as workspace file '%s'%n", from, to);
-        }
-        catch (IOException | InterruptedException e) {
+        } catch (IOException | InterruptedException e) {
             throw new AssertionError(e);
         }
     }
@@ -286,8 +289,7 @@ public abstract class IntegrationTest extends ResourceTest {
         try {
             workspace.child(to).copyFrom(asInputStream(from));
             System.out.format("Copying file '%s' as workspace file '%s'%n (workspace '%s')", from, to, workspace);
-        }
-        catch (IOException | InterruptedException e) {
+        } catch (IOException | InterruptedException e) {
             throw new AssertionError(e);
         }
     }
@@ -304,8 +306,7 @@ public abstract class IntegrationTest extends ResourceTest {
     protected Slave createAgent(final String label) {
         try {
             return getJenkins().createOnlineSlave(new LabelAtom(label));
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             throw new AssertionError(e);
         }
     }
@@ -325,8 +326,7 @@ public abstract class IntegrationTest extends ResourceTest {
             var agent = createDockerAgent(agentContainer);
             agent.setLabelString(label);
             return agent;
-        }
-        catch (IOException exception) {
+        } catch (IOException exception) {
             throw new AssertionError(exception);
         }
     }
@@ -344,8 +344,7 @@ public abstract class IntegrationTest extends ResourceTest {
             var node = createPermanentAgent(agentContainer.getHost(), agentContainer.getMappedPort(SSH_PORT));
             waitForAgentConnected(node);
             return node;
-        }
-        catch (FormException | IOException | InterruptedException exception) {
+        } catch (FormException | IOException | InterruptedException exception) {
             throw new AssertionError(exception);
         }
     }
@@ -354,14 +353,21 @@ public abstract class IntegrationTest extends ResourceTest {
             throws Descriptor.FormException, IOException {
         var privateKey = toString("/ssh/rsa_private_key");
         var privateKeySource = new BasicSSHUserPrivateKey.DirectEntryPrivateKeySource(privateKey);
-        var credentials = new BasicSSHUserPrivateKey(CredentialsScope.SYSTEM, SSH_CREDENTIALS_ID, USER, privateKeySource,
-                PASSPHRASE, "Private Key ssh credentials");
-        SystemCredentialsProvider.getInstance().getDomainCredentialsMap().put(Domain.global(),
-                Collections.singletonList(credentials));
+        var credentials = new BasicSSHUserPrivateKey(
+                CredentialsScope.SYSTEM,
+                SSH_CREDENTIALS_ID,
+                USER,
+                privateKeySource,
+                PASSPHRASE,
+                "Private Key ssh credentials");
+        SystemCredentialsProvider.getInstance()
+                .getDomainCredentialsMap()
+                .put(Domain.global(), Collections.singletonList(credentials));
         var launcher = new SSHLauncher(host, sshPort, SSH_CREDENTIALS_ID);
         launcher.setSshHostKeyVerificationStrategy(new NonVerifyingKeyVerificationStrategy());
         var agent = new DumbSlave(DOCKER_AGENT_NAME, AGENT_WORK_DIR, launcher);
-        agent.setNodeProperties(Collections.singletonList(new EnvironmentVariablesNodeProperty(new Entry("JAVA_HOME", "/usr/lib/jvm/java-11-openjdk-amd64"))));
+        agent.setNodeProperties(Collections.singletonList(
+                new EnvironmentVariablesNodeProperty(new Entry("JAVA_HOME", "/usr/lib/jvm/java-11-openjdk-amd64"))));
         var jenkins = getJenkins().jenkins;
         jenkins.addNode(agent);
         return jenkins.getNode(agent.getNodeName());
@@ -390,15 +396,12 @@ public abstract class IntegrationTest extends ResourceTest {
         try {
             var agent = createAgent(label);
 
-            var child = getJenkins().getInstance()
-                    .getRootPath()
-                    .child("secrets/filepath-filters.d/30-default.conf");
+            var child = getJenkins().getInstance().getRootPath().child("secrets/filepath-filters.d/30-default.conf");
             child.delete();
             child.write("", "ISO_8859_1");
             getJenkins().jenkins.save();
             return agent;
-        }
-        catch (IOException | InterruptedException e) {
+        } catch (IOException | InterruptedException e) {
             throw new AssertionError(e);
         }
     }
@@ -431,14 +434,13 @@ public abstract class IntegrationTest extends ResourceTest {
      * @param content
      *         the content to write
      */
-    protected void createFileInAgentWorkspace(final Node agent, final TopLevelItem job, final String fileName,
-            final String content) {
+    protected void createFileInAgentWorkspace(
+            final Node agent, final TopLevelItem job, final String fileName, final String content) {
         try {
             var workspace = getAgentWorkspace(agent, job);
             var child = workspace.child(fileName);
             child.copyFrom(new ByteArrayInputStream(content.getBytes(StandardCharsets.UTF_8)));
-        }
-        catch (IOException | InterruptedException e) {
+        } catch (IOException | InterruptedException e) {
             throw new AssertionError(e);
         }
     }
@@ -454,8 +456,7 @@ public abstract class IntegrationTest extends ResourceTest {
      * @param fileName
      *         the file to copy
      */
-    protected void copySingleFileToAgentWorkspace(final Node agent, final TopLevelItem job,
-            final String fileName) {
+    protected void copySingleFileToAgentWorkspace(final Node agent, final TopLevelItem job, final String fileName) {
         copySingleFileToAgentWorkspace(agent, job, fileName, fileName);
     }
 
@@ -472,8 +473,8 @@ public abstract class IntegrationTest extends ResourceTest {
      * @param to
      *         the file name in the workspace
      */
-    protected void copySingleFileToAgentWorkspace(final Node agent, final TopLevelItem job,
-            final String from, final String to) {
+    protected void copySingleFileToAgentWorkspace(
+            final Node agent, final TopLevelItem job, final String from, final String to) {
         var workspace = getAgentWorkspace(agent, job);
 
         copyFileToWorkspace(workspace, from, to);
@@ -516,8 +517,7 @@ public abstract class IntegrationTest extends ResourceTest {
     protected <T extends TopLevelItem> T createProject(final Class<T> type) {
         try {
             return getJenkins().createProject(type);
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             throw new AssertionError(e);
         }
     }
@@ -537,8 +537,7 @@ public abstract class IntegrationTest extends ResourceTest {
     protected <T extends TopLevelItem> T createProject(final Class<T> type, final String name) {
         try {
             return getJenkins().createProject(type, name);
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             throw new AssertionError(e);
         }
     }
@@ -627,8 +626,7 @@ public abstract class IntegrationTest extends ResourceTest {
     protected CpsFlowDefinition createPipelineScript(final String script) {
         try {
             return new CpsFlowDefinition(script, true);
-        }
-        catch (FormException exception) {
+        } catch (FormException exception) {
             throw new AssertionError(exception);
         }
     }
@@ -656,8 +654,7 @@ public abstract class IntegrationTest extends ResourceTest {
     protected void assertSuccessfulBuild(final Run<?, ?> run) {
         try {
             getJenkins().assertBuildStatus(Result.SUCCESS, run);
-        }
-        catch (Exception exception) {
+        } catch (Exception exception) {
             throw new AssertionError(exception);
         }
     }
@@ -676,10 +673,9 @@ public abstract class IntegrationTest extends ResourceTest {
     @SuppressWarnings({"illegalcatch", "OverlyBroadCatchBlock"})
     protected Run<?, ?> buildWithResult(final ParameterizedJob<?, ?> job, final Result expectedResult) {
         try {
-            return getJenkins().assertBuildStatus(expectedResult,
-                    Objects.requireNonNull(job.scheduleBuild2(0, new Action[0])));
-        }
-        catch (Exception e) {
+            return getJenkins()
+                    .assertBuildStatus(expectedResult, Objects.requireNonNull(job.scheduleBuild2(0, new Action[0])));
+        } catch (Exception e) {
             throw new AssertionError(e);
         }
     }
@@ -709,8 +705,7 @@ public abstract class IntegrationTest extends ResourceTest {
             try (var bufferedReader = new BufferedReader(reader)) {
                 bufferedReader.lines().forEach(System.out::println);
             }
-        }
-        catch (IOException exception) {
+        } catch (IOException exception) {
             throw new AssertionError(exception);
         }
     }
@@ -735,8 +730,7 @@ public abstract class IntegrationTest extends ResourceTest {
         var nonReadableFile = new File(absolutePath);
         if (Functions.isWindows()) {
             setAccessModeOnWindows(absolutePath, WINDOWS_FILE_DENY, WINDOWS_FILE_ACCESS_READ_ONLY);
-        }
-        else {
+        } else {
             assertThat(nonReadableFile.setReadable(false, false)).isTrue();
             assumeThat(nonReadableFile.canRead())
                     .as("File ´%s´ could not be made unreadable (OS configuration problem?)", absolutePath)
@@ -746,8 +740,7 @@ public abstract class IntegrationTest extends ResourceTest {
 
     private void setAccessModeOnWindows(final String path, final String command, final String accessMode) {
         try {
-            var process = new ProcessBuilder("icacls",
-                    path, command, "*S-1-1-0:" + accessMode)
+            var process = new ProcessBuilder("icacls", path, command, "*S-1-1-0:" + accessMode)
                     .redirectErrorStream(true)
                     .start();
             var exitCode = process.waitFor();
@@ -758,8 +751,7 @@ public abstract class IntegrationTest extends ResourceTest {
                 }
                 throw new AssertionError("icacls failed with exit code " + exitCode + ": " + output);
             }
-        }
-        catch (IOException | InterruptedException e) {
+        } catch (IOException | InterruptedException e) {
             throw new AssertionError(e);
         }
     }
@@ -778,8 +770,7 @@ public abstract class IntegrationTest extends ResourceTest {
         Builder item;
         if (Functions.isWindows()) {
             item = new BatchFile(script);
-        }
-        else {
+        } else {
             item = new Shell(script);
         }
         project.getBuildersList().add(item);
@@ -795,8 +786,7 @@ public abstract class IntegrationTest extends ResourceTest {
     protected void cleanWorkspace(final TopLevelItem job) {
         try {
             getWorkspace(job).deleteContents();
-        }
-        catch (IOException | InterruptedException e) {
+        } catch (IOException | InterruptedException e) {
             throw new AssertionError(e);
         }
     }
@@ -859,8 +849,7 @@ public abstract class IntegrationTest extends ResourceTest {
     protected JSONWebResponse callJsonRemoteApi(final String url) {
         try {
             return getJenkins().getJSON(url);
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             throw new AssertionError(e);
         }
     }
@@ -878,8 +867,7 @@ public abstract class IntegrationTest extends ResourceTest {
             try (var webClient = getJenkins().createWebClient()) {
                 return webClient.goToXml(url).getXmlDocument();
             }
-        }
-        catch (IOException | SAXException e) {
+        } catch (IOException | SAXException e) {
             throw new AssertionError(e);
         }
     }

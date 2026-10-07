@@ -1,12 +1,12 @@
 package io.jenkins.plugins.util;
 
-import java.io.PrintStream;
-
-import org.junit.jupiter.api.Test;
-
-import static java.util.Arrays.*;
-import static java.util.Collections.*;
+import static java.util.Arrays.asList;
+import static java.util.Collections.emptyList;
+import static java.util.Collections.singletonList;
 import static org.mockito.Mockito.*;
+
+import java.io.PrintStream;
+import org.junit.jupiter.api.Test;
 
 /**
  * Tests the class {@link PluginLogger}.
@@ -21,7 +21,6 @@ class PluginLoggerTest {
     private static final String SECOND_MESSAGE = "Two";
 
     @Test
-    @SuppressWarnings("PMD.CloseResource")
     void shouldLogSingleAndMultipleLines() {
         PrintStream printStream = mock(PrintStream.class);
         var logger = new PluginLogger(printStream, TOOL_NAME);

@@ -1,18 +1,17 @@
 package io.jenkins.plugins.util;
 
-import java.io.IOException;
-import java.io.Serial;
-import java.nio.charset.Charset;
-import java.util.Optional;
-
-import org.jenkinsci.plugins.workflow.graph.FlowNode;
-import org.jenkinsci.plugins.workflow.steps.StepContext;
-import org.jenkinsci.plugins.workflow.steps.SynchronousNonBlockingStepExecution;
 import hudson.FilePath;
 import hudson.model.Computer;
 import hudson.model.Run;
 import hudson.model.TaskListener;
 import hudson.remoting.VirtualChannel;
+import java.io.IOException;
+import java.io.Serial;
+import java.nio.charset.Charset;
+import java.util.Optional;
+import org.jenkinsci.plugins.workflow.graph.FlowNode;
+import org.jenkinsci.plugins.workflow.steps.StepContext;
+import org.jenkinsci.plugins.workflow.steps.SynchronousNonBlockingStepExecution;
 
 /**
  * Base class for step executions. Provides several helper methods to obtain the defined {@link StepContext context}

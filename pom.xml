@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
@@ -26,8 +27,8 @@
 
   <developers>
     <developer>
-      <name>Ullrich Hafner</name>
       <id>uhafner</id>
+      <name>Ullrich Hafner</name>
       <email>ullrich.hafner@gmail.com</email>
     </developer>
   </developers>
@@ -35,8 +36,8 @@
   <scm>
     <connection>scm:git:https://github.com/jenkinsci/${project.artifactId}-plugin.git</connection>
     <developerConnection>scm:git:git@github.com:jenkinsci/${project.artifactId}-plugin.git</developerConnection>
-    <url>https://github.com/jenkinsci/${project.artifactId}-plugin</url>
     <tag>${scmTag}</tag>
+    <url>https://github.com/jenkinsci/${project.artifactId}-plugin</url>
   </scm>
 
   <properties>
@@ -53,34 +54,19 @@
   </properties>
 
   <dependencies>
-    <!-- Library Dependencies -->
+
+    <!-- Plugin Dependencies -->
     <dependency>
-      <groupId>edu.hm.hafner</groupId>
-      <artifactId>codingstyle</artifactId>
-      <version>${codingstyle.library.version}</version>
-      <scope>provided</scope>
-      <exclusions>
-        <exclusion>
-          <groupId>com.github.spotbugs</groupId>
-          <artifactId>spotbugs-annotations</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>commons-io</groupId>
-          <artifactId>commons-io</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>javax.annotation</groupId>
-          <artifactId>javax.annotation-api</artifactId>
-        </exclusion>
-        <exclusion>
-          <artifactId>commons-lang3</artifactId>
-          <groupId>org.apache.commons</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>error_prone_annotations</artifactId>
-          <groupId>com.google.errorprone</groupId>
-        </exclusion>
-      </exclusions>
+      <groupId>org.jenkins-ci.plugins.workflow</groupId>
+      <artifactId>workflow-api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.jenkins-ci.plugins.workflow</groupId>
+      <artifactId>workflow-step-api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.jenkins-ci.plugins.workflow</groupId>
+      <artifactId>workflow-support</artifactId>
     </dependency>
     <dependency>
       <groupId>com.github.spotbugs</groupId>
@@ -98,39 +84,20 @@
       <version>${j2html.version}</version>
       <scope>provided</scope>
     </dependency>
-    <dependency>
-      <groupId>one.util</groupId>
-      <artifactId>streamex</artifactId>
-      <version>${streamex.version}</version>
-      <scope>provided</scope>
-    </dependency>
-
-    <!-- Plugin Dependencies -->
-    <dependency>
-      <groupId>org.jenkins-ci.plugins.workflow</groupId>
-      <artifactId>workflow-api</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.jenkins-ci.plugins.workflow</groupId>
-      <artifactId>workflow-step-api</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.jenkins-ci.plugins.workflow</groupId>
-      <artifactId>workflow-support</artifactId>
-    </dependency>
-
-    <!-- Library Test Dependencies -->
+    <!-- Library Dependencies -->
     <dependency>
       <groupId>edu.hm.hafner</groupId>
       <artifactId>codingstyle</artifactId>
       <version>${codingstyle.library.version}</version>
-      <scope>test</scope>
-      <type>test-jar</type>
+      <scope>provided</scope>
       <exclusions>
-        <!-- Provided by Jenkins core -->
         <exclusion>
           <groupId>com.github.spotbugs</groupId>
           <artifactId>spotbugs-annotations</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>com.google.errorprone</groupId>
+          <artifactId>error_prone_annotations</artifactId>
         </exclusion>
         <exclusion>
           <groupId>commons-io</groupId>
@@ -141,26 +108,58 @@
           <artifactId>javax.annotation-api</artifactId>
         </exclusion>
         <exclusion>
-          <artifactId>commons-lang3</artifactId>
           <groupId>org.apache.commons</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>error_prone_annotations</artifactId>
-          <groupId>com.google.errorprone</groupId>
+          <artifactId>commons-lang3</artifactId>
         </exclusion>
       </exclusions>
     </dependency>
     <dependency>
-      <groupId>org.testcontainers</groupId>
-      <artifactId>testcontainers</artifactId>
-      <version>${testcontainers.version}</version>
+      <groupId>one.util</groupId>
+      <artifactId>streamex</artifactId>
+      <version>${streamex.version}</version>
+      <scope>provided</scope>
+    </dependency>
+
+    <!-- Library Test Dependencies -->
+    <dependency>
+      <groupId>edu.hm.hafner</groupId>
+      <artifactId>codingstyle</artifactId>
+      <version>${codingstyle.library.version}</version>
+      <type>test-jar</type>
       <scope>test</scope>
       <exclusions>
+        <!-- Provided by Jenkins core -->
+        <exclusion>
+          <groupId>com.github.spotbugs</groupId>
+          <artifactId>spotbugs-annotations</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>com.google.errorprone</groupId>
+          <artifactId>error_prone_annotations</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>commons-io</groupId>
+          <artifactId>commons-io</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>javax.annotation</groupId>
+          <artifactId>javax.annotation-api</artifactId>
+        </exclusion>
         <exclusion>
           <groupId>org.apache.commons</groupId>
-          <artifactId>commons-compress</artifactId>
+          <artifactId>commons-lang3</artifactId>
         </exclusion>
       </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.jenkins-ci.plugins</groupId>
+      <artifactId>ssh-credentials</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.jenkins-ci.plugins</groupId>
+      <artifactId>ssh-slaves</artifactId>
+      <scope>test</scope>
     </dependency>
 
     <!-- Plugin Test Dependencies -->
@@ -175,14 +174,16 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>org.jenkins-ci.plugins</groupId>
-      <artifactId>ssh-credentials</artifactId>
+      <groupId>org.testcontainers</groupId>
+      <artifactId>testcontainers</artifactId>
+      <version>${testcontainers.version}</version>
       <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.jenkins-ci.plugins</groupId>
-      <artifactId>ssh-slaves</artifactId>
-      <scope>test</scope>
+      <exclusions>
+        <exclusion>
+          <groupId>org.apache.commons</groupId>
+          <artifactId>commons-compress</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
 
   </dependencies>
@@ -226,10 +227,10 @@
         <executions>
           <execution>
             <id>unpack-dependencies</id>
-            <phase>generate-resources</phase>
             <goals>
               <goal>unpack-dependencies</goal>
             </goals>
+            <phase>generate-resources</phase>
             <configuration>
               <outputDirectory>${project.build.directory}/classes</outputDirectory>
               <includeArtifactIds>codingstyle,error_prone_annotations,streamex,j2html</includeArtifactIds>
@@ -239,10 +240,10 @@
           </execution>
           <execution>
             <id>unpack-test-dependencies</id>
-            <phase>generate-resources</phase>
             <goals>
               <goal>unpack-dependencies</goal>
             </goals>
+            <phase>generate-resources</phase>
             <configuration>
               <outputDirectory>${project.build.directory}/test-classes</outputDirectory>
               <includeArtifactIds>codingstyle</includeArtifactIds>

@@ -1,10 +1,9 @@
 package io.jenkins.plugins.util;
 
+import edu.hm.hafner.util.FilteredLog;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.Objects;
-
-import edu.hm.hafner.util.FilteredLog;
 
 /**
  * A serializable result combined with a logger. Enables remote calls to return a result and a corresponding log.

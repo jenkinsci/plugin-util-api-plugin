@@ -1,28 +1,25 @@
 package io.jenkins.plugins.util;
 
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.io.TempDir;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.CsvSource;
+import static org.assertj.core.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 import edu.hm.hafner.util.FilteredLog;
 import edu.hm.hafner.util.SerializableTest;
 import edu.hm.hafner.util.VisibleForTesting;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-
+import io.jenkins.plugins.util.AgentFileVisitor.FileSystemFacade;
+import io.jenkins.plugins.util.AgentFileVisitor.FileVisitorResult;
+import io.jenkins.plugins.util.AgentFileVisitorTest.StringScanner;
 import java.io.File;
 import java.io.Serial;
 import java.nio.charset.Charset;
 import java.nio.file.Path;
 import java.util.Optional;
-
-import io.jenkins.plugins.util.AgentFileVisitor.FileSystemFacade;
-import io.jenkins.plugins.util.AgentFileVisitor.FileVisitorResult;
-import io.jenkins.plugins.util.AgentFileVisitorTest.StringScanner;
-
-import static org.assertj.core.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 
 /**
  * Tests the class {@link AgentFileVisitor}.
@@ -41,18 +38,18 @@ class AgentFileVisitorTest extends SerializableTest<StringScanner> {
     @CsvSource({"true, enabled", "false, disabled"})
     @ParameterizedTest(name = "{index} => followSymbolicLinks={0}, message={1}")
     void shouldReportErrorOnEmptyResults(final boolean followLinks, final String message) {
-        var scanner = new StringScanner(PATTERN, ENCODING, followLinks, true,
-                createFileSystemFacade(followLinks));
+        var scanner = new StringScanner(PATTERN, ENCODING, followLinks, true, createFileSystemFacade(followLinks));
 
         FileVisitorResult<String> actualResult = scanner.invoke(workspace, null);
 
         assertThat(actualResult.getResults()).isEmpty();
-        assertThat(actualResult.getLog().getInfoMessages()).containsExactly(
-                "Searching for all files in '/absolute/path' that match the pattern '" + PATTERN + "'",
-                "Traversing of symbolic links: " + message);
-        assertThat(actualResult.getLog().getErrorMessages()).containsExactly(
-                "Errors during parsing",
-                "No files found for pattern '**/*.txt'. Configuration error?");
+        assertThat(actualResult.getLog().getInfoMessages())
+                .containsExactly(
+                        "Searching for all files in '/absolute/path' that match the pattern '" + PATTERN + "'",
+                        "Traversing of symbolic links: " + message);
+        assertThat(actualResult.getLog().getErrorMessages())
+                .containsExactly(
+                        "Errors during parsing", "No files found for pattern '**/*.txt'. Configuration error?");
         assertThat(actualResult.hasErrors()).isTrue();
     }
 
@@ -60,16 +57,17 @@ class AgentFileVisitorTest extends SerializableTest<StringScanner> {
     @CsvSource({"true, enabled", "false, disabled"})
     @ParameterizedTest(name = "{index} => followSymbolicLinks={0}, message={1}")
     void shouldReturnSingleResult(final boolean followLinks, final String message) {
-        var scanner = new StringScanner(PATTERN, ENCODING, followLinks, true,
-                createFileSystemFacade(followLinks, "/one.txt"));
+        var scanner = new StringScanner(
+                PATTERN, ENCODING, followLinks, true, createFileSystemFacade(followLinks, "/one.txt"));
 
         FileVisitorResult<String> actualResult = scanner.invoke(workspace, null);
         assertThat(actualResult.getResults()).containsExactly(CONTENT + 1);
-        assertThat(actualResult.getLog().getInfoMessages()).containsExactly(
-                "Searching for all files in '/absolute/path' that match the pattern '**/*.txt'",
-                "Traversing of symbolic links: " + message,
-                "-> found 1 file",
-                "Successfully processed file '/one.txt'");
+        assertThat(actualResult.getLog().getInfoMessages())
+                .containsExactly(
+                        "Searching for all files in '/absolute/path' that match the pattern '**/*.txt'",
+                        "Traversing of symbolic links: " + message,
+                        "-> found 1 file",
+                        "Successfully processed file '/one.txt'");
         assertThat(actualResult.getLog().getErrorMessages()).isEmpty();
         assertThat(actualResult.hasErrors()).isFalse();
     }
@@ -78,17 +76,18 @@ class AgentFileVisitorTest extends SerializableTest<StringScanner> {
     @CsvSource({"true, enabled", "false, disabled"})
     @ParameterizedTest(name = "{index} => followSymbolicLinks={0}, message={1}")
     void shouldReturnMultipleResults(final boolean followLinks, final String message) {
-        var scanner = new StringScanner(PATTERN, ENCODING, followLinks, true,
-                createFileSystemFacade(followLinks, "/one.txt", "/two.txt"));
+        var scanner = new StringScanner(
+                PATTERN, ENCODING, followLinks, true, createFileSystemFacade(followLinks, "/one.txt", "/two.txt"));
 
         FileVisitorResult<String> actualResult = scanner.invoke(workspace, null);
         assertThat(actualResult.getResults()).containsExactly(CONTENT + 1, CONTENT + 2);
-        assertThat(actualResult.getLog().getInfoMessages()).containsExactly(
-                "Searching for all files in '/absolute/path' that match the pattern '**/*.txt'",
-                "Traversing of symbolic links: " + message,
-                "-> found 2 files",
-                "Successfully processed file '/one.txt'",
-                "Successfully processed file '/two.txt'");
+        assertThat(actualResult.getLog().getInfoMessages())
+                .containsExactly(
+                        "Searching for all files in '/absolute/path' that match the pattern '**/*.txt'",
+                        "Traversing of symbolic links: " + message,
+                        "-> found 2 files",
+                        "Successfully processed file '/one.txt'",
+                        "Successfully processed file '/two.txt'");
         assertThat(actualResult.getLog().getErrorMessages()).isEmpty();
         assertThat(actualResult.hasErrors()).isFalse();
     }
@@ -96,8 +95,7 @@ class AgentFileVisitorTest extends SerializableTest<StringScanner> {
     @Test
     @DisplayName("Should log error for empty or forbidden files")
     void shouldLogErrorForEmptyAndForbiddenFiles() {
-        var fileSystemFacade = createFileSystemFacade(true,
-                "/one.txt", "/two.txt", "empty.txt", "not-readable.txt");
+        var fileSystemFacade = createFileSystemFacade(true, "/one.txt", "/two.txt", "empty.txt", "not-readable.txt");
 
         var empty = workspace.toPath().resolve("empty.txt");
         when(fileSystemFacade.resolve(workspace, "empty.txt")).thenReturn(empty);
@@ -107,43 +105,44 @@ class AgentFileVisitorTest extends SerializableTest<StringScanner> {
         when(fileSystemFacade.resolve(workspace, "not-readable.txt")).thenReturn(notReadable);
         when(fileSystemFacade.isNotReadable(notReadable)).thenReturn(true);
 
-        var scanner = new StringScanner(PATTERN, ENCODING, true, true,
-                fileSystemFacade);
+        var scanner = new StringScanner(PATTERN, ENCODING, true, true, fileSystemFacade);
 
         FileVisitorResult<String> actualResult = scanner.invoke(workspace, null);
         assertThat(actualResult.getResults()).containsExactly(CONTENT + 1, CONTENT + 2);
-        assertThat(actualResult.getLog().getInfoMessages()).contains(
-                "Searching for all files in '/absolute/path' that match the pattern '**/*.txt'",
-                "-> found 4 files",
-                "Successfully processed file '/one.txt'",
-                "Successfully processed file '/two.txt'");
+        assertThat(actualResult.getLog().getInfoMessages())
+                .contains(
+                        "Searching for all files in '/absolute/path' that match the pattern '**/*.txt'",
+                        "-> found 4 files",
+                        "Successfully processed file '/one.txt'",
+                        "Successfully processed file '/two.txt'");
         assertThat(actualResult.hasErrors()).isTrue();
-        assertThat(actualResult.getLog().getErrorMessages()).containsExactly("Errors during parsing",
-                "Skipping file 'empty.txt' because it's empty",
-                "Skipping file 'not-readable.txt' because Jenkins has no permission to read the file");
+        assertThat(actualResult.getLog().getErrorMessages())
+                .containsExactly(
+                        "Errors during parsing",
+                        "Skipping file 'empty.txt' because it's empty",
+                        "Skipping file 'not-readable.txt' because Jenkins has no permission to read the file");
     }
 
     @Test
     @DisplayName("Should skip logging of errors when parsing empty files")
     void shouldSkipLoggingOfErrorsForEmptyFiles() {
-        var fileSystemFacade = createFileSystemFacade(true,
-                "/one.txt", "/two.txt", "empty.txt");
+        var fileSystemFacade = createFileSystemFacade(true, "/one.txt", "/two.txt", "empty.txt");
 
         var empty = workspace.toPath().resolve("empty.txt");
         when(fileSystemFacade.resolve(workspace, "empty.txt")).thenReturn(empty);
         when(fileSystemFacade.isEmpty(empty)).thenReturn(true);
 
-        var scanner = new StringScanner(PATTERN, ENCODING, true, false,
-                fileSystemFacade);
+        var scanner = new StringScanner(PATTERN, ENCODING, true, false, fileSystemFacade);
 
         FileVisitorResult<String> actualResult = scanner.invoke(workspace, null);
         assertThat(actualResult.getResults()).containsExactly(CONTENT + 1, CONTENT + 2);
-        assertThat(actualResult.getLog().getInfoMessages()).contains(
-                "Searching for all files in '/absolute/path' that match the pattern '**/*.txt'",
-                "-> found 3 files",
-                "Successfully processed file '/one.txt'",
-                "Successfully processed file '/two.txt'",
-                "Skipping file 'empty.txt' because it's empty");
+        assertThat(actualResult.getLog().getInfoMessages())
+                .contains(
+                        "Searching for all files in '/absolute/path' that match the pattern '**/*.txt'",
+                        "-> found 3 files",
+                        "Successfully processed file '/one.txt'",
+                        "Successfully processed file '/two.txt'",
+                        "Skipping file 'empty.txt' because it's empty");
         assertThat(actualResult.hasErrors()).isFalse();
         assertThat(actualResult.getLog().getErrorMessages()).isEmpty();
     }
@@ -157,13 +156,14 @@ class AgentFileVisitorTest extends SerializableTest<StringScanner> {
 
         FileVisitorResult<String> actualResult = scanner.invoke(workspace, null);
         assertThat(actualResult.getResults()).isEmpty();
-        assertThat(actualResult.getLog().getInfoMessages()).containsExactly(
-                "Searching for all files in '/absolute/path' that match the pattern '**/*.txt'",
-                "Traversing of symbolic links: disabled",
-                "-> found 1 file");
+        assertThat(actualResult.getLog().getInfoMessages())
+                .containsExactly(
+                        "Searching for all files in '/absolute/path' that match the pattern '**/*.txt'",
+                        "Traversing of symbolic links: disabled",
+                        "-> found 1 file");
         assertThat(actualResult.hasErrors()).isTrue();
-        assertThat(actualResult.getLog().getErrorMessages()).containsExactly("Errors during parsing",
-                "No result created for file '/one.txt' due to some errors");
+        assertThat(actualResult.getLog().getErrorMessages())
+                .containsExactly("Errors during parsing", "No result created for file '/one.txt' due to some errors");
     }
 
     private FileSystemFacade createFileSystemFacade(final boolean followLinks, final String... files) {
@@ -183,10 +183,16 @@ class AgentFileVisitorTest extends SerializableTest<StringScanner> {
     static class StringScanner extends AgentFileVisitor<String> {
         @Serial
         private static final long serialVersionUID = -6902473746775046311L;
+
         private int counter = 1;
 
         @VisibleForTesting
-        protected StringScanner(final String filePattern, final String encoding, final boolean followSymbolicLinks, final boolean errorOnEmptyFiles, final FileSystemFacade fileSystemFacade) {
+        protected StringScanner(
+                final String filePattern,
+                final String encoding,
+                final boolean followSymbolicLinks,
+                final boolean errorOnEmptyFiles,
+                final FileSystemFacade fileSystemFacade) {
             super(filePattern, encoding, followSymbolicLinks, errorOnEmptyFiles, fileSystemFacade);
         }
 

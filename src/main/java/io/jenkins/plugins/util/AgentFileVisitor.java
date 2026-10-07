@@ -1,15 +1,9 @@
 package io.jenkins.plugins.util;
 
-import org.apache.commons.lang3.StringUtils;
-import org.apache.tools.ant.BuildException;
-import org.apache.tools.ant.Project;
-import org.apache.tools.ant.types.FileSet;
-import org.apache.tools.ant.types.selectors.TypeSelector;
-import org.apache.tools.ant.types.selectors.TypeSelector.FileType;
-
 import edu.hm.hafner.util.FilteredLog;
 import edu.hm.hafner.util.VisibleForTesting;
-
+import hudson.remoting.VirtualChannel;
+import io.jenkins.plugins.util.AgentFileVisitor.FileVisitorResult;
 import java.io.File;
 import java.io.IOException;
 import java.io.Serial;
@@ -21,11 +15,13 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-
-import hudson.remoting.VirtualChannel;
 import jenkins.MasterToSlaveFileCallable;
-
-import io.jenkins.plugins.util.AgentFileVisitor.FileVisitorResult;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.tools.ant.BuildException;
+import org.apache.tools.ant.Project;
+import org.apache.tools.ant.types.FileSet;
+import org.apache.tools.ant.types.selectors.TypeSelector;
+import org.apache.tools.ant.types.selectors.TypeSelector.FileType;
 
 /**
  * Finds all files that match a specified Ant file pattern and visits these files with the processing method
@@ -37,8 +33,7 @@ import io.jenkins.plugins.util.AgentFileVisitor.FileVisitorResult;
  *
  * @author Ullrich Hafner
  */
-public abstract class AgentFileVisitor<T extends Serializable>
-        extends MasterToSlaveFileCallable<FileVisitorResult<T>> {
+public abstract class AgentFileVisitor<T extends Serializable> extends MasterToSlaveFileCallable<FileVisitorResult<T>> {
     @Serial
     private static final long serialVersionUID = 2216842481400265078L;
 
@@ -61,12 +56,21 @@ public abstract class AgentFileVisitor<T extends Serializable>
      * @param errorOnEmptyFiles
      *         determines whether the visitor should log errors if a file is empty
      */
-    protected AgentFileVisitor(final String filePattern, final String encoding, final boolean followSymbolicLinks, final boolean errorOnEmptyFiles) {
+    protected AgentFileVisitor(
+            final String filePattern,
+            final String encoding,
+            final boolean followSymbolicLinks,
+            final boolean errorOnEmptyFiles) {
         this(filePattern, encoding, followSymbolicLinks, errorOnEmptyFiles, new FileSystemFacade());
     }
 
     @VisibleForTesting
-    AgentFileVisitor(final String filePattern, final String encoding, final boolean followSymbolicLinks, final boolean errorOnEmptyFiles, final FileSystemFacade fileSystemFacade) {
+    AgentFileVisitor(
+            final String filePattern,
+            final String encoding,
+            final boolean followSymbolicLinks,
+            final boolean errorOnEmptyFiles,
+            final FileSystemFacade fileSystemFacade) {
         super();
 
         this.filePattern = filePattern;
@@ -79,7 +83,8 @@ public abstract class AgentFileVisitor<T extends Serializable>
     @Override
     public final FileVisitorResult<T> invoke(final File workspace, final VirtualChannel channel) {
         var log = new FilteredLog("Errors during parsing");
-        log.logInfo("Searching for all files in '%s' that match the pattern '%s'",
+        log.logInfo(
+                "Searching for all files in '%s' that match the pattern '%s'",
                 fileSystemFacade.getAbsolutePath(workspace), filePattern);
         log.logInfo("Traversing of symbolic links: %s", followSymbolicLinks ? "enabled" : "disabled");
 
@@ -88,8 +93,7 @@ public abstract class AgentFileVisitor<T extends Serializable>
             log.logError("No files found for pattern '%s'. Configuration error?", filePattern);
 
             return new FileVisitorResult<>(log);
-        }
-        else {
+        } else {
             log.logInfo("-> found %s", plural(fileNames.length, "file"));
 
             return new FileVisitorResult<>(log, scanFiles(workspace, fileNames, log));
@@ -103,22 +107,18 @@ public abstract class AgentFileVisitor<T extends Serializable>
 
             if (fileSystemFacade.isNotReadable(file)) {
                 log.logError("Skipping file '%s' because Jenkins has no permission to read the file", fileName);
-            }
-            else if (fileSystemFacade.isEmpty(file)) {
+            } else if (fileSystemFacade.isEmpty(file)) {
                 if (errorOnEmptyFiles) {
                     log.logError(EMPTY_FILE, fileName);
-                }
-                else {
+                } else {
                     log.logInfo(EMPTY_FILE, fileName);
                 }
-            }
-            else {
+            } else {
                 Optional<T> result = processFile(file, new ValidationUtilities().getCharset(encoding), log);
                 if (result.isPresent()) {
                     results.add(result.get());
                     log.logInfo("Successfully processed file '%s'", fileName);
-                }
-                else {
+                } else {
                     log.logError("No result created for file '%s' due to some errors", fileName);
                 }
             }
@@ -168,8 +168,7 @@ public abstract class AgentFileVisitor<T extends Serializable>
         boolean isEmpty(final Path file) {
             try {
                 return Files.size(file) <= 0;
-            }
-            catch (IOException e) {
+            } catch (IOException e) {
                 return true;
             }
         }
@@ -241,8 +240,7 @@ public abstract class AgentFileVisitor<T extends Serializable>
                 fileSet.setFollowSymlinks(followSymbolicLinks);
 
                 return fileSet.getDirectoryScanner(antProject).getIncludedFiles();
-            }
-            catch (BuildException ignored) {
+            } catch (BuildException ignored) {
                 return new String[0]; // as fallback do not return any file
             }
         }
@@ -258,7 +256,9 @@ public abstract class AgentFileVisitor<T extends Serializable>
     public static class FileVisitorResult<T extends Serializable> implements Serializable {
         @Serial
         private static final long serialVersionUID = 5094277468158899325L;
+
         private final FilteredLog log;
+
         @SuppressWarnings("PMD.LooseCoupling")
         private final ArrayList<T> results;
 

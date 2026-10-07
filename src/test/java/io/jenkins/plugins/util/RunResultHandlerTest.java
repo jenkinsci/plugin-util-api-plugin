@@ -1,11 +1,10 @@
 package io.jenkins.plugins.util;
 
-import org.junit.jupiter.api.Test;
+import static org.mockito.Mockito.*;
 
 import hudson.model.Result;
 import hudson.model.Run;
-
-import static org.mockito.Mockito.*;
+import org.junit.jupiter.api.Test;
 
 class RunResultHandlerTest {
     private static final String MESSAGE = "message";

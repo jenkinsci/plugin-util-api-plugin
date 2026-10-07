@@ -1,15 +1,14 @@
 package io.jenkins.plugins.util;
 
-import org.junit.jupiter.api.Test;
-import org.junitpioneer.jupiter.Issue;
+import static org.mockito.Mockito.*;
 
-import org.jenkinsci.plugins.workflow.actions.WarningAction;
-import org.jenkinsci.plugins.workflow.graph.FlowNode;
 import hudson.model.Action;
 import hudson.model.Result;
 import hudson.model.Run;
-
-import static org.mockito.Mockito.*;
+import org.jenkinsci.plugins.workflow.actions.WarningAction;
+import org.jenkinsci.plugins.workflow.graph.FlowNode;
+import org.junit.jupiter.api.Test;
+import org.junitpioneer.jupiter.Issue;
 
 class PipelineResultHandlerTest {
     private static final String MESSAGE = "message";
@@ -49,7 +48,8 @@ class PipelineResultHandlerTest {
         verify(flowNode).addOrReplaceAction(argThat(action -> hasFlowNode(action, Result.FAILURE)));
     }
 
-    @Test @Issue("JENKINS-72059")
+    @Test
+    @Issue("JENKINS-72059")
     void shouldSetStageResult() {
         var run = mock(Run.class);
         var flowNode = mock(FlowNode.class);

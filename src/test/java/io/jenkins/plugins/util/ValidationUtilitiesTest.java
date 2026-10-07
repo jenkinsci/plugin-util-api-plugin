@@ -1,17 +1,16 @@
 package io.jenkins.plugins.util;
 
+import static io.jenkins.plugins.util.FormValidationAssert.assertThat;
+import static io.jenkins.plugins.util.ValidationUtilities.*;
+import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
+
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
-
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
-
-import static io.jenkins.plugins.util.FormValidationAssert.assertThat;
-import static io.jenkins.plugins.util.ValidationUtilities.*;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.*;
 
 /**
  * Tests the class {@link ValidationUtilities}.
@@ -27,9 +26,7 @@ class ValidationUtilitiesTest {
 
         assertThat(model.validateCharset("")).isOk();
         assertThat(model.validateCharset("UTF-8")).isOk();
-        assertThat(model.validateCharset("Some wrong text"))
-                .isError()
-                .hasMessage(createWrongEncodingErrorMessage());
+        assertThat(model.validateCharset("Some wrong text")).isError().hasMessage(createWrongEncodingErrorMessage());
     }
 
     @Test

@@ -6,18 +6,15 @@ import com.thoughtworks.xstream.converters.MarshallingContext;
 import com.thoughtworks.xstream.converters.UnmarshallingContext;
 import com.thoughtworks.xstream.io.HierarchicalStreamReader;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
-
 import edu.hm.hafner.util.TreeString;
 import edu.hm.hafner.util.TreeStringBuilder;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-
+import hudson.XmlFile;
+import hudson.util.XStream2;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import hudson.XmlFile;
-import hudson.util.XStream2;
 
 /**
  * Base class that provides the basic setup to read and write entities of a given type using {@link XStream}.
@@ -90,8 +87,7 @@ public abstract class AbstractXmlStream<T> {
     public void write(final Path file, final T entity) {
         try {
             createFile(file).write(entity);
-        }
-        catch (IOException exception) {
+        } catch (IOException exception) {
             LOGGER.log(Level.SEVERE, "Failed to write entity to file " + file, exception);
         }
     }
@@ -110,8 +106,7 @@ public abstract class AbstractXmlStream<T> {
                 return type.cast(restored);
             }
             LOGGER.log(Level.SEVERE, "Failed to load " + dataFile + ", wrong type: " + restored);
-        }
-        catch (IOException exception) {
+        } catch (IOException exception) {
             LOGGER.log(Level.SEVERE, "Failed to load " + dataFile, exception);
         }
         return defaultValue; // fallback
@@ -122,8 +117,8 @@ public abstract class AbstractXmlStream<T> {
      */
     private static final class TreeStringConverter implements Converter {
         @Override
-        public void marshal(final Object source, final HierarchicalStreamWriter writer,
-                final MarshallingContext context) {
+        public void marshal(
+                final Object source, final HierarchicalStreamWriter writer, final MarshallingContext context) {
             writer.setValue(source == null ? null : source.toString());
         }
 

@@ -2,11 +2,9 @@ package io.jenkins.plugins.util;
 
 import edu.hm.hafner.util.VisibleForTesting;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-
-import net.sf.json.JSONObject;
-
-import org.kohsuke.stapler.StaplerRequest2;
 import jenkins.model.GlobalConfiguration;
+import net.sf.json.JSONObject;
+import org.kohsuke.stapler.StaplerRequest2;
 
 /**
  * Testable base class for items of the {@link GlobalConfiguration} page.

@@ -3,7 +3,8 @@ package io.jenkins.plugins.util;
 import edu.hm.hafner.util.VisibleForTesting;
 import edu.umd.cs.findbugs.annotations.CheckForNull;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-
+import hudson.model.Action;
+import hudson.model.Run;
 import java.io.Serial;
 import java.io.Serializable;
 import java.lang.ref.WeakReference;
@@ -12,9 +13,6 @@ import java.util.Collection;
 import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.locks.ReentrantLock;
-
-import hudson.model.Action;
-import hudson.model.Run;
 import jenkins.model.RunAction2;
 import jenkins.tasks.SimpleBuildStep.LastBuildAction;
 
@@ -61,7 +59,9 @@ public abstract class BuildAction<T> implements LastBuildAction, RunAction2, Ser
      * @param canSerialize
      *         determines whether the result should be persisted in the build folder
      */
-    @SuppressFBWarnings(value = "MC", justification = "getResultXmlPath() is a factory method and overridable by design")
+    @SuppressFBWarnings(
+            value = "MC",
+            justification = "getResultXmlPath() is a factory method and overridable by design")
     @SuppressWarnings({"PMD.ConstructorCallsOverridableMethod", "this-escape"})
     @VisibleForTesting
     public BuildAction(final Run<?, ?> owner, final T result, final boolean canSerialize) {
@@ -133,8 +133,7 @@ public abstract class BuildAction<T> implements LastBuildAction, RunAction2, Ser
                 return readResult();
             }
             return result;
-        }
-        finally {
+        } finally {
             lock.unlock();
         }
     }

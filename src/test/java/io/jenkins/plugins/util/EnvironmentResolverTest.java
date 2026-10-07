@@ -1,12 +1,10 @@
 package io.jenkins.plugins.util;
 
-import java.util.Arrays;
-
-import org.junit.jupiter.api.Test;
+import static org.assertj.core.api.Assertions.*;
 
 import hudson.EnvVars;
-
-import static org.assertj.core.api.Assertions.*;
+import java.util.Arrays;
+import org.junit.jupiter.api.Test;
 
 /**
  * Unit test for {@link EnvironmentResolver}.
@@ -171,8 +169,11 @@ class EnvironmentResolverTest {
         return new String(chars);
     }
 
-    private void checkLoopWithNumberOfRuns(final int resolveVariablesDepth, final EnvVars environment,
-            final String nonExpanded, final String expected) {
+    private void checkLoopWithNumberOfRuns(
+            final int resolveVariablesDepth,
+            final EnvVars environment,
+            final String nonExpanded,
+            final String expected) {
         var environmentResolver = new EnvironmentResolver(resolveVariablesDepth);
         var expanded = environmentResolver.expandEnvironmentVariables(environment, nonExpanded);
 
