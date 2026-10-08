@@ -6,13 +6,6 @@ skinparam rectangle {
   BackgroundColor<<runtime>> lightBlue
   BackgroundColor<<provided>> lightGray
 }
-rectangle "plugin-util-api\n\n7.999999-SNAPSHOT" as io_jenkins_plugins_plugin_util_api_hpi
-rectangle "codingstyle\n\n7.5.0" as edu_hm_hafner_codingstyle_jar<<provided>>
-rectangle "spotbugs-annotations\n\n4.9.8" as com_github_spotbugs_spotbugs_annotations_jar<<provided>>
-rectangle "jsr305\n\n3.0.1" as com_google_code_findbugs_jsr305_jar<<provided>><<optional>>
-rectangle "error_prone_annotations\n\n2.18.0" as com_google_errorprone_error_prone_annotations_jar<<provided>>
-rectangle "j2html\n\n1.4.0" as com_j2html_j2html_jar<<provided>>
-rectangle "streamex\n\n0.9.0" as one_util_streamex_jar<<provided>>
 rectangle "workflow-api\n\n1413.v2ff1a_5e720fa_" as org_jenkins_ci_plugins_workflow_workflow_api_jar
 rectangle "workflow-step-api\n\n724.v538c2362b_dfb_" as org_jenkins_ci_plugins_workflow_workflow_step_api_jar
 rectangle "asm-api\n\n9.10.1-216.va_9256d3b_844b_" as io_jenkins_plugins_asm_api_jar
@@ -24,13 +17,20 @@ rectangle "asm-util\n\n9.10.1" as org_ow2_asm_asm_util_jar
 rectangle "scm-api\n\n728.vc30dcf7a_0df5" as org_jenkins_ci_plugins_scm_api_jar
 rectangle "commons-lang3-api\n\n3.20.0-109.ve43756e2d2b_4" as io_jenkins_plugins_commons_lang3_api_jar
 rectangle "structs\n\n362.va_b_695ef4fdf9" as org_jenkins_ci_plugins_structs_jar
+rectangle "plugin-util-api\n\n7.999999-SNAPSHOT" as io_jenkins_plugins_plugin_util_api_hpi
 rectangle "workflow-support\n\n1015.v785e5a_b_b_8b_22" as org_jenkins_ci_plugins_workflow_workflow_support_jar
-rectangle "script-security\n\n1402.v94c9ce464861" as org_jenkins_ci_plugins_script_security_jar
-rectangle "groovy-sandbox\n\n1.34" as org_kohsuke_groovy_sandbox_jar
-rectangle "caffeine-api\n\n3.2.3-194.v31a_b_f7a_b_5a_81" as io_jenkins_plugins_caffeine_api_jar
-rectangle "caffeine\n\n3.2.3" as com_github_ben_manes_caffeine_caffeine_jar
+rectangle "script-security\n\n1422.v06869826dd9b_" as org_jenkins_ci_plugins_script_security_jar
+rectangle "groovy-sandbox\n\n1.34.2" as org_kohsuke_groovy_sandbox_jar
+rectangle "caffeine-api\n\n3.2.4-208.v7e2da_a_7db_82b_" as io_jenkins_plugins_caffeine_api_jar
+rectangle "caffeine\n\n3.2.4" as com_github_ben_manes_caffeine_caffeine_jar
 rectangle "jboss-marshalling-river\n\n2.3.0" as org_jboss_marshalling_jboss_marshalling_river_jar
 rectangle "jboss-marshalling\n\n2.3.0" as org_jboss_marshalling_jboss_marshalling_jar
+rectangle "spotbugs-annotations\n\n4.9.8" as com_github_spotbugs_spotbugs_annotations_jar<<provided>>
+rectangle "jsr305\n\n3.0.1" as com_google_code_findbugs_jsr305_jar<<provided>><<optional>>
+rectangle "error_prone_annotations\n\n2.18.0" as com_google_errorprone_error_prone_annotations_jar<<provided>>
+rectangle "j2html\n\n1.4.0" as com_j2html_j2html_jar<<provided>>
+rectangle "codingstyle\n\n7.5.0" as edu_hm_hafner_codingstyle_jar<<provided>>
+rectangle "streamex\n\n0.9.0" as one_util_streamex_jar<<provided>>
 rectangle "slf4j-api\n\n2.0.17" as org_slf4j_slf4j_api_jar<<provided>>
 rectangle "commons-lang3\n\n3.20.0" as org_apache_commons_commons_lang3_jar
 rectangle "commons-text-api\n\n1.15.0-218.va_61573470393" as io_jenkins_plugins_commons_text_api_jar
@@ -111,12 +111,6 @@ rectangle "spring-security-web\n\n6.5.9" as org_springframework_security_spring_
 rectangle "spring-web\n\n6.2.17" as org_springframework_spring_web_jar<<provided>>
 rectangle "xpp3\n\n1.1.4c" as xpp3_xpp3_jar<<provided>>
 rectangle "jakarta.servlet-api\n\n5.0.0" as jakarta_servlet_jakarta_servlet_api_jar<<provided>>
-io_jenkins_plugins_plugin_util_api_hpi -[#000000]-> edu_hm_hafner_codingstyle_jar
-com_github_spotbugs_spotbugs_annotations_jar -[#000000]-> com_google_code_findbugs_jsr305_jar
-io_jenkins_plugins_plugin_util_api_hpi -[#000000]-> com_github_spotbugs_spotbugs_annotations_jar
-io_jenkins_plugins_plugin_util_api_hpi -[#000000]-> com_google_errorprone_error_prone_annotations_jar
-io_jenkins_plugins_plugin_util_api_hpi -[#000000]-> com_j2html_j2html_jar
-io_jenkins_plugins_plugin_util_api_hpi -[#000000]-> one_util_streamex_jar
 org_jenkins_ci_plugins_workflow_workflow_api_jar .[#ABABAB].> org_jenkins_ci_plugins_workflow_workflow_step_api_jar
 io_jenkins_plugins_asm_api_jar -[#000000]-> org_ow2_asm_asm_jar
 org_ow2_asm_asm_analysis_jar .[#ABABAB].> org_ow2_asm_asm_tree_jar
@@ -148,6 +142,12 @@ org_jenkins_ci_plugins_workflow_workflow_support_jar -[#000000]-> io_jenkins_plu
 org_jboss_marshalling_jboss_marshalling_river_jar -[#000000]-> org_jboss_marshalling_jboss_marshalling_jar
 org_jenkins_ci_plugins_workflow_workflow_support_jar -[#000000]-> org_jboss_marshalling_jboss_marshalling_river_jar
 io_jenkins_plugins_plugin_util_api_hpi -[#000000]-> org_jenkins_ci_plugins_workflow_workflow_support_jar
+com_github_spotbugs_spotbugs_annotations_jar -[#000000]-> com_google_code_findbugs_jsr305_jar
+io_jenkins_plugins_plugin_util_api_hpi -[#000000]-> com_github_spotbugs_spotbugs_annotations_jar
+io_jenkins_plugins_plugin_util_api_hpi -[#000000]-> com_google_errorprone_error_prone_annotations_jar
+io_jenkins_plugins_plugin_util_api_hpi -[#000000]-> com_j2html_j2html_jar
+io_jenkins_plugins_plugin_util_api_hpi -[#000000]-> edu_hm_hafner_codingstyle_jar
+io_jenkins_plugins_plugin_util_api_hpi -[#000000]-> one_util_streamex_jar
 io_jenkins_plugins_plugin_util_api_hpi -[#000000]-> org_slf4j_slf4j_api_jar
 io_jenkins_plugins_commons_lang3_api_jar -[#000000]-> org_apache_commons_commons_lang3_jar
 io_jenkins_plugins_plugin_util_api_hpi -[#000000]-> io_jenkins_plugins_commons_lang3_api_jar
