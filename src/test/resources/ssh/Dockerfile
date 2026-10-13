@@ -1,27 +1,22 @@
-FROM ubuntu:20.04
+FROM ubuntu:24.04
 USER root
 
 ENV TZ=Etc/UTC
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 RUN DEBIAN_FRONTEND="noninteractive" apt-get update -y -qq \
-  &&  apt-get install -y -qq \
+  && apt-get install -y -qq \
     --no-install-recommends \
     openssh-server \
-    software-properties-common \
-    openjdk-8-jre-headless \
-    openjdk-8-jdk-headless \
+    openjdk-21-jdk-headless \
     curl \
     maven \
     git \
     build-essential \
-    make
-
-RUN add-apt-repository ppa:openjdk-r/ppa -y \
-  && apt-get update -y -qq \
-  && apt-get install -y -qq \
-    openjdk-11-jdk \
+    make \
   && rm -rf /var/lib/apt/lists/*
 
+# Ubuntu 24.04 ships with a default user 'ubuntu' that already uses UID 1000
+RUN userdel -r ubuntu || true
 RUN useradd --password password --shell /bin/bash --uid 1000 jenkins \
   && mkdir /home/jenkins \
   && chown -R jenkins:jenkins /home/jenkins
@@ -44,9 +39,9 @@ RUN echo "password\npassword" | passwd root \
 
 EXPOSE 22
 
-ENV PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/lib/jvm/java-11-openjdk-amd64/jre/bin:/usr/lib/jvm/java-11-openjdk-amd64/bin
+ENV PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/lib/jvm/java-21-openjdk-amd64/bin
 
-ENV JAVA_HOME /usr/lib/jvm/java-11-openjdk-amd64
+ENV JAVA_HOME=/usr/lib/jvm/java-21-openjdk-amd64
 
 RUN echo "PATH=${PATH}" >> /etc/environment
 RUN echo "JAVA_HOME=${JAVA_HOME}" >> /etc/environment
