@@ -367,7 +367,7 @@ public abstract class IntegrationTest extends ResourceTest {
         launcher.setSshHostKeyVerificationStrategy(new NonVerifyingKeyVerificationStrategy());
         var agent = new DumbSlave(DOCKER_AGENT_NAME, AGENT_WORK_DIR, launcher);
         agent.setNodeProperties(Collections.singletonList(
-                new EnvironmentVariablesNodeProperty(new Entry("JAVA_HOME", "/usr/lib/jvm/java-11-openjdk-amd64"))));
+                new EnvironmentVariablesNodeProperty(new Entry("JAVA_HOME", "/usr/lib/jvm/java-21-openjdk-amd64"))));
         var jenkins = getJenkins().jenkins;
         jenkins.addNode(agent);
         return jenkins.getNode(agent.getNodeName());
