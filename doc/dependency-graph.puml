@@ -6,7 +6,7 @@ skinparam rectangle {
   BackgroundColor<<runtime>> lightBlue
   BackgroundColor<<provided>> lightGray
 }
-rectangle "workflow-api\n\n1413.v2ff1a_5e720fa_" as org_jenkins_ci_plugins_workflow_workflow_api_jar
+rectangle "workflow-api\n\n1429.v7a_1b_efb_a_f7c5" as org_jenkins_ci_plugins_workflow_workflow_api_jar
 rectangle "workflow-step-api\n\n724.v538c2362b_dfb_" as org_jenkins_ci_plugins_workflow_workflow_step_api_jar
 rectangle "asm-api\n\n9.11.1-226.vff833a_e4c58e" as io_jenkins_plugins_asm_api_jar
 rectangle "asm\n\n9.9.1" as org_ow2_asm_asm_jar
